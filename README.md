@@ -9,7 +9,11 @@ of the living, they must out compete their opponent.
 
 ## Developers
 Adam Flores
+
 Raymond Chin
+
 Luciano Vega
+
 Carlos Lomeli
+
 Marco Tran
