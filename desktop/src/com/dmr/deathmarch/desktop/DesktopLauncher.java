@@ -7,6 +7,9 @@ import com.dmr.deathmarch.DeathMarch;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.title="Death March";
+		config.width=1280;
+		config.height=720;
 		new LwjglApplication(new DeathMarch(), config);
 	}
 }
