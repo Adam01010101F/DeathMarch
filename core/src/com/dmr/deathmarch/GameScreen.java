@@ -25,11 +25,19 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false, 1280, 720);
 
         pOneTex = new Texture(Gdx.files.internal("player1.png"));
+        pTwoTex = new Texture(Gdx.files.internal("player2.png"));
         pOne = new Rectangle();
-        pOne.x = 720/2 - 64/2;
-        pOne.y = 1280/2;
-        pOne.width = 120;
-        pOne.height = 120;
+        pTwo = new Rectangle();
+
+        pOne.x = 1280/2 - 64/2;
+        pOne.y = 720/2;
+        pOne.width = 100;
+        pOne.height = 100;
+
+        pTwo.x = 1280/2 - 32/2;
+        pTwo.y = 720/2;
+        pTwo.width = 120;
+        pTwo.height = 120;
 
 
     }
@@ -46,7 +54,9 @@ public class GameScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
+        game.font.draw(game.batch, "P1 x: "+pOne.x+" y: "+pOne.y, 100, 150);
         game.batch.draw(pOneTex, pOne.x, pOne.y);
+        game.batch.draw(pTwoTex, pTwo.x, pTwo.y);
         game.batch.end();
 
         //Player 1 Keybindings
@@ -62,7 +72,9 @@ public class GameScreen implements Screen {
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
             pOne.y -= 350 *Gdx.graphics.getDeltaTime();
         }
-        //boundaries
+        //Player Boundaries
+        if(pOne.x<0){pOne.x = 0;}
+        if(pOne.x>1280-64){pOne.x = 1280-64;}
     }
 
     @Override
