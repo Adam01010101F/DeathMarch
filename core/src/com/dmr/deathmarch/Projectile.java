@@ -14,6 +14,10 @@ public class Projectile extends Rectangle{
 
     public Projectile(Direction x, Direction y){
         //Might need to add None Condition
+        if(x == Direction.None)
+            this.xVel = 0;
+        if(y == Direction.None)
+            this.yVel = 0;
         if(y == Direction.Up) {
             this.yVel = 1;
         }
@@ -43,6 +47,5 @@ public class Projectile extends Rectangle{
     public void setyVel(float yVel) {
         this.yVel = yVel;
     }
-
 
 }

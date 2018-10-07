@@ -23,7 +23,7 @@ public class BeamCannon extends Rectangle {
         return cooldown;
     }
 
-    public Rectangle shoot(Rectangle player, Direction dir[]){
+    public Projectile shoot(Rectangle player, Direction dir[]){
         Projectile laserBeam = new Projectile(dir[0], dir[1]);
         laserBeam.x = player.x;
         laserBeam.y = player.y;

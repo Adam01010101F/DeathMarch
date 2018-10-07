@@ -27,7 +27,7 @@ public class GameScreen implements Screen {
     private Rectangle pOne;
     private Goblin pTwo;
     private BeamCannon beamCannon;
-    private Array<Rectangle> projectiles;
+    private Array<Projectile> projectiles;
     private long lastBeamShot;
     private Array<Goblin> goblins;
     private LogicModel lm;
@@ -60,7 +60,7 @@ public class GameScreen implements Screen {
 //        pTwo.width = 120;
 //        pTwo.height = 120;
         lastDirection = new Direction[2];       // Tracks the direction of the user.
-        projectiles = new Array<Rectangle>();
+        projectiles = new Array<Projectile>();
         goblins = new Array<Goblin>();
         createGoblin();
     }
@@ -82,10 +82,11 @@ public class GameScreen implements Screen {
         lastDirection[1] = Direction.None;
 
         // Bullet Physics|Destruction
-        for(Iterator<Rectangle> iter = projectiles.iterator(); iter.hasNext();){
-            Rectangle projectile = iter.next();
-            projectile.x += 350 * Gdx.graphics.getDeltaTime();
-            if(projectile.x>1280){
+        for(Iterator<Projectile> iter = projectiles.iterator(); iter.hasNext();){
+            Projectile projectile = iter.next();
+            projectile.x += 350* projectile.getxVel()* Gdx.graphics.getDeltaTime();
+            projectile.y += 350 * projectile.getyVel() * Gdx.graphics.getDeltaTime();
+            if(projectile.x>1280 | projectile.y>720 || projectile.x < 0 || projectile.y < 0){
                 iter.remove();
             }
             for(Goblin goblin: goblins){
@@ -108,7 +109,7 @@ public class GameScreen implements Screen {
         // Load Objects onto Screen
         game.batch.begin();
         game.font.draw(game.batch, "P1 x: "+pOne.x+" y: "+pOne.y, 100, 150);
-        game.font.draw(game.batch, "Enum" + lastDirection[0]+" " +lastDirection[1], 100, 200);
+        game.font.draw(game.batch, "Projectiles: " + delta/100, 100, 200);
         game.batch.draw(pOneTex, pOne.x, pOne.y);
         for(Rectangle goblin: goblins){
             game.batch.draw(pTwoTex, goblin.x, goblin.y);
@@ -121,19 +122,19 @@ public class GameScreen implements Screen {
         //Player 1 Key bindings
         if(Gdx.input.isKeyPressed(Input.Keys.D)){
             pOne.x += 350 * Gdx.graphics.getDeltaTime();
-            lastDirection[1] = Direction.Right;
+            lastDirection[0] = Direction.Right;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
             pOne.x -= 350 * Gdx.graphics.getDeltaTime();
-            lastDirection[1] = Direction.Left;
+            lastDirection[0] = Direction.Left;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.W)){
             pOne.y += 350 * Gdx.graphics.getDeltaTime();
-            lastDirection[0] = Direction.Up;
+            lastDirection[1] = Direction.Up;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.S)){
             pOne.y -= 350 *Gdx.graphics.getDeltaTime();
-            lastDirection[0] = Direction.Down;
+            lastDirection[1] = Direction.Down;
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
             if(TimeUtils.nanoTime() - beamCannon.getLastBeamShot() > beamCannon.getCooldown()){
