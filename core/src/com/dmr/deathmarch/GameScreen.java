@@ -78,8 +78,6 @@ public class GameScreen implements Screen {
 
         camera.update();
 
-        lastDirection[0] = Direction.None;
-        lastDirection[1] = Direction.None;
 
         // Bullet Physics|Destruction
         for(Iterator<Projectile> iter = projectiles.iterator(); iter.hasNext();){
@@ -120,22 +118,26 @@ public class GameScreen implements Screen {
         game.batch.end();
 
         //Player 1 Key bindings
-        if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            pOne.x += 350 * Gdx.graphics.getDeltaTime();
-            lastDirection[0] = Direction.Right;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            pOne.x -= 350 * Gdx.graphics.getDeltaTime();
-            lastDirection[0] = Direction.Left;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.W)){
-            pOne.y += 350 * Gdx.graphics.getDeltaTime();
-            lastDirection[1] = Direction.Up;
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.S)){
-            pOne.y -= 350 *Gdx.graphics.getDeltaTime();
-            lastDirection[1] = Direction.Down;
-        }
+        if(Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.D) ||
+                Gdx.input.isKeyPressed(Input.Keys.A)|| Gdx.input.isKeyPressed(Input.Keys.S)){
+            lastDirection[0] = Direction.None;
+            lastDirection[1] = Direction.None;
+            if(Gdx.input.isKeyPressed(Input.Keys.D)){
+                pOne.x += 350 * Gdx.graphics.getDeltaTime();
+                lastDirection[0] = Direction.Right;
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.A)){
+                pOne.x -= 350 * Gdx.graphics.getDeltaTime();
+                lastDirection[0] = Direction.Left;
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.W)){
+                pOne.y += 350 * Gdx.graphics.getDeltaTime();
+                lastDirection[1] = Direction.Up;
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.S)){
+                pOne.y -= 350 *Gdx.graphics.getDeltaTime();
+                lastDirection[1] = Direction.Down;
+        }}
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
             if(TimeUtils.nanoTime() - beamCannon.getLastBeamShot() > beamCannon.getCooldown()){
             projectiles.add(beamCannon.shoot(pOne, lastDirection));}
