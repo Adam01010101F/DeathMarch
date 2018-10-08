@@ -6,12 +6,9 @@ import com.badlogic.gdx.math.Rectangle;
 public class Goblin extends Rectangle{
     private float health;
     private float speed;
-    private float damage;
     public Goblin(){
         health = 25;
         speed = 1;
-        this.width = 50;
-        this.height = 50;
     }
     public void takeDamage(float dmg){
         health-=dmg;
@@ -24,9 +21,5 @@ public class Goblin extends Rectangle{
     }
     public float getHealth(){
         return health;
-    }
-
-    public void loop(){
-
     }
 }

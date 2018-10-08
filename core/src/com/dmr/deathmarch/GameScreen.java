@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+//import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.dmr.deathmarch.npc.Goblin;
@@ -31,7 +31,7 @@ public class GameScreen implements Screen {
     private long lastBeamShot;
     private Array<Goblin> goblins;
     private LogicModel lm;
-    private Box2DDebugRenderer dbr;
+    //private Box2DDebugRenderer dbr;
     private Direction lastDirection[];
 
     public GameScreen(final DeathMarch game){
@@ -137,10 +137,10 @@ public class GameScreen implements Screen {
             if(Gdx.input.isKeyPressed(Input.Keys.S)){
                 pOne.y -= 350 *Gdx.graphics.getDeltaTime();
                 lastDirection[1] = Direction.Down;
-        }}
+            }}
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
             if(TimeUtils.nanoTime() - beamCannon.getLastBeamShot() > beamCannon.getCooldown()){
-            projectiles.add(beamCannon.shoot(pOne, lastDirection));}
+                projectiles.add(beamCannon.shoot(pOne, lastDirection));}
             beamCannon.setLastBeamShot(TimeUtils.nanoTime());
         }
 

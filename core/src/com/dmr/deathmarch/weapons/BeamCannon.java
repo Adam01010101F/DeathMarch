@@ -9,7 +9,7 @@ public class BeamCannon extends Rectangle {
     private int damage;
     private float cooldown;
     private float lastBeamShot;
-//    private Direction
+    //    private Direction
     public BeamCannon(){
         damage = 25;
         cooldown = 100000000;
