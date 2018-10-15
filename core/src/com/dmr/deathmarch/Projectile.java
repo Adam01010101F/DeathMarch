@@ -1,9 +1,11 @@
 package com.dmr.deathmarch;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import java.util.ArrayList;
 
-public class Projectile extends Rectangle{
+public class Projectile extends Sprite {
     private float xVel;
     private float yVel;
 
@@ -12,8 +14,9 @@ public class Projectile extends Rectangle{
         yVel = 0;
     }
 
-    public Projectile(Direction x, Direction y){
+    public Projectile(Texture tex, Direction x, Direction y){
         //Might need to add None Condition
+        super(tex);
         if(x == Direction.None)
             this.xVel = 0;
         if(y == Direction.None)
@@ -46,6 +49,11 @@ public class Projectile extends Rectangle{
 
     public void setyVel(float yVel) {
         this.yVel = yVel;
+    }
+
+    public float[] getVel(){
+        float[] vel ={ xVel,   yVel};
+        return vel;
     }
 
 }

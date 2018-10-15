@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
@@ -33,6 +34,7 @@ public class GameScreen implements Screen {
     private LogicModel lm;
     private Box2DDebugRenderer dbr;
     private Direction lastDirection[];
+    private Sprite beamProjectile;
 
     public GameScreen(final DeathMarch game){
         this.game = game;
@@ -82,13 +84,13 @@ public class GameScreen implements Screen {
         // Bullet Physics|Destruction
         for(Iterator<Projectile> iter = projectiles.iterator(); iter.hasNext();){
             Projectile projectile = iter.next();
-            projectile.x += 350* projectile.getxVel()* Gdx.graphics.getDeltaTime();
-            projectile.y += 350 * projectile.getyVel() * Gdx.graphics.getDeltaTime();
-            if(projectile.x>1280 | projectile.y>720 || projectile.x < 0 || projectile.y < 0){
+            projectile.setPosition(projectile.getX() +350 * projectile.getxVel() * Gdx.graphics.getDeltaTime()
+                    , projectile.getY() + 350 * projectile.getyVel() * Gdx.graphics.getDeltaTime());
+            if(projectile.getX()>1280 | projectile.getY()>720 || projectile.getX() < 0 || projectile.getY() < 0){
                 iter.remove();
             }
             for(Goblin goblin: goblins){
-                if(projectile.overlaps(goblin)){
+                if(projectile.getBoundingRectangle().overlaps(goblin)){
                     goblin.takeDamage(beamCannon.getDamage());
                 }
             }
@@ -98,6 +100,7 @@ public class GameScreen implements Screen {
         for(Iterator<Goblin> iter = goblins.iterator(); iter.hasNext();){
             Goblin goblin = iter.next();
             if(goblin.isDead() == true){
+                System.out.print("Goblin is dead.");
                 iter.remove();
             }
         }
@@ -107,13 +110,14 @@ public class GameScreen implements Screen {
         // Load Objects onto Screen
         game.batch.begin();
         game.font.draw(game.batch, "P1 x: "+pOne.x+" y: "+pOne.y, 100, 150);
-        game.font.draw(game.batch, "Projectiles: " + delta/100, 100, 200);
+        game.font.draw(game.batch, "Projectiles: " + projectiles.size, 100, 200);
         game.batch.draw(pOneTex, pOne.x, pOne.y);
+        game.batch.draw(bmTex, pOne.x, pOne.y-8);
         for(Rectangle goblin: goblins){
             game.batch.draw(pTwoTex, goblin.x, goblin.y);
         }
-        for (Rectangle beam: projectiles){
-            game.batch.draw(lbTex, beam.x, beam.y);
+        for (Sprite beam: projectiles){
+            beam.draw(game.batch);
         }
         game.batch.end();
 
@@ -123,25 +127,26 @@ public class GameScreen implements Screen {
             lastDirection[0] = Direction.None;
             lastDirection[1] = Direction.None;
             if(Gdx.input.isKeyPressed(Input.Keys.D)){
-                pOne.x += 350 * Gdx.graphics.getDeltaTime();
+                pOne.x += 150 * Gdx.graphics.getDeltaTime();
                 lastDirection[0] = Direction.Right;
             }
             if(Gdx.input.isKeyPressed(Input.Keys.A)){
-                pOne.x -= 350 * Gdx.graphics.getDeltaTime();
+                pOne.x -= 150 * Gdx.graphics.getDeltaTime();
                 lastDirection[0] = Direction.Left;
             }
             if(Gdx.input.isKeyPressed(Input.Keys.W)){
-                pOne.y += 350 * Gdx.graphics.getDeltaTime();
+                pOne.y += 150 * Gdx.graphics.getDeltaTime();
                 lastDirection[1] = Direction.Up;
             }
             if(Gdx.input.isKeyPressed(Input.Keys.S)){
-                pOne.y -= 350 *Gdx.graphics.getDeltaTime();
+                pOne.y -= 150 *Gdx.graphics.getDeltaTime();
                 lastDirection[1] = Direction.Down;
         }}
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
             if(TimeUtils.nanoTime() - beamCannon.getLastBeamShot() > beamCannon.getCooldown()){
-            projectiles.add(beamCannon.shoot(pOne, lastDirection));}
-            beamCannon.setLastBeamShot(TimeUtils.nanoTime());
+                beamCannon.setLastBeamShot(TimeUtils.nanoTime());
+                projectiles.add(beamCannon.shoot(pOne, lbTex, lastDirection));
+            }
         }
 
         //Player Boundaries
@@ -173,16 +178,6 @@ public class GameScreen implements Screen {
     public void dispose() {
 
     }
-
-//    public void shootBeam(){
-//        Rectangle laserBeam = new Rectangle();
-//        laserBeam.x = pOne.x;
-//        laserBeam.y = pOne.y;
-//        laserBeam.height = 32;
-//        laserBeam.width = 64;
-//        laserBeams.add(laserBeam);
-//        lastBeamShot = TimeUtils.nanoTime();
-//    }
 
     public void createGoblin(){
         Goblin goblin = new Goblin();
