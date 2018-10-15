@@ -3,17 +3,19 @@ package com.dmr.deathmarch;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.dmr.deathmarch.npc.Goblin;
 import com.dmr.deathmarch.weapons.BeamCannon;
-import org.w3c.dom.css.Rect;
 
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class GameScreen implements Screen {
@@ -26,12 +28,18 @@ public class GameScreen implements Screen {
     private Rectangle pOne;
     private Goblin pTwo;
     private BeamCannon beamCannon;
-    private Array<Rectangle> projectiles;
+    private Array<Projectile> projectiles;
     private long lastBeamShot;
     private Array<Goblin> goblins;
+    private LogicModel lm;
+    private Box2DDebugRenderer dbr;
+    private Direction lastDirection[];
+    private Sprite beamProjectile;
 
     public GameScreen(final DeathMarch game){
         this.game = game;
+//        lm = new LogicModel();
+//        dbr = new Box2DDebugRenderer();
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1280, 720);
@@ -46,15 +54,15 @@ public class GameScreen implements Screen {
 
         pOne.x = 1280/2 - 64/2;
         pOne.y = 720/2;
-        pOne.width = 100;
-        pOne.height = 100;
+        pOne.width = 50;
+        pOne.height = 50;
 
 //        pTwo.x = 1280/2 - 16/2;
 //        pTwo.y = 720/2;
 //        pTwo.width = 120;
 //        pTwo.height = 120;
-
-        projectiles = new Array<Rectangle>();
+        lastDirection = new Direction[2];       // Tracks the direction of the user.
+        projectiles = new Array<Projectile>();
         goblins = new Array<Goblin>();
         createGoblin();
     }
@@ -65,20 +73,24 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(139,141, 122, 0);
+//        lm.logicStep(delta);
+        Gdx.gl.glClearColor(0,0.3f, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//        dbr.render(lm.world, camera.combined);
 
         camera.update();
 
+
         // Bullet Physics|Destruction
-        for(Iterator<Rectangle> iter = projectiles.iterator(); iter.hasNext();){
-            Rectangle projectile = iter.next();
-            projectile.x += 350*Gdx.graphics.getDeltaTime();
-            if(projectile.x>1280){
+        for(Iterator<Projectile> iter = projectiles.iterator(); iter.hasNext();){
+            Projectile projectile = iter.next();
+            projectile.setPosition(projectile.getX() +350 * projectile.getxVel() * Gdx.graphics.getDeltaTime()
+                    , projectile.getY() + 350 * projectile.getyVel() * Gdx.graphics.getDeltaTime());
+            if(projectile.getX()>1280 | projectile.getY()>720 || projectile.getX() < 0 || projectile.getY() < 0){
                 iter.remove();
             }
             for(Goblin goblin: goblins){
-                if(projectile.overlaps(goblin)){
+                if(projectile.getBoundingRectangle().overlaps(goblin)){
                     goblin.takeDamage(beamCannon.getDamage());
                 }
             }
@@ -88,6 +100,7 @@ public class GameScreen implements Screen {
         for(Iterator<Goblin> iter = goblins.iterator(); iter.hasNext();){
             Goblin goblin = iter.next();
             if(goblin.isDead() == true){
+                System.out.print("Goblin is dead.");
                 iter.remove();
             }
         }
@@ -97,32 +110,45 @@ public class GameScreen implements Screen {
         // Load Objects onto Screen
         game.batch.begin();
         game.font.draw(game.batch, "P1 x: "+pOne.x+" y: "+pOne.y, 100, 150);
+        game.font.draw(game.batch, "Projectiles: " + projectiles.size, 100, 200);
         game.batch.draw(pOneTex, pOne.x, pOne.y);
+        game.batch.draw(bmTex, pOne.x, pOne.y-8);
         for(Rectangle goblin: goblins){
             game.batch.draw(pTwoTex, goblin.x, goblin.y);
         }
-        for (Rectangle beam: projectiles){
-            game.batch.draw(lbTex, beam.x, beam.y);
+        for (Sprite beam: projectiles){
+            beam.draw(game.batch);
         }
         game.batch.end();
 
         //Player 1 Key bindings
-        if(Gdx.input.isKeyPressed(Input.Keys.D)){
-            pOne.x += 350 * Gdx.graphics.getDeltaTime();
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.A)){
-            pOne.x -= 350 * Gdx.graphics.getDeltaTime();
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.W)){
-            pOne.y += 350 * Gdx.graphics.getDeltaTime();
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.S)){
-            pOne.y -= 350 *Gdx.graphics.getDeltaTime();
-        }
+        if(Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.D) ||
+                Gdx.input.isKeyPressed(Input.Keys.A)|| Gdx.input.isKeyPressed(Input.Keys.S)){
+            lastDirection[0] = Direction.None;
+            lastDirection[1] = Direction.None;
+            if(Gdx.input.isKeyPressed(Input.Keys.D)){
+                pOne.x += 150 * Gdx.graphics.getDeltaTime();
+                lastDirection[0] = Direction.Right;
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.A)){
+                pOne.x -= 150 * Gdx.graphics.getDeltaTime();
+                lastDirection[0] = Direction.Left;
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.W)){
+                pOne.y += 150 * Gdx.graphics.getDeltaTime();
+                lastDirection[1] = Direction.Up;
+            }
+            if(Gdx.input.isKeyPressed(Input.Keys.S)){
+                pOne.y -= 150 *Gdx.graphics.getDeltaTime();
+                lastDirection[1] = Direction.Down;
+        }}
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
-            if(TimeUtils.nanoTime() - beamCannon.getLastBeamShot() >beamCannon.getCooldown()){
-            projectiles.add(beamCannon.shoot(pOne));}
+            if(TimeUtils.nanoTime() - beamCannon.getLastBeamShot() > beamCannon.getCooldown()){
+                beamCannon.setLastBeamShot(TimeUtils.nanoTime());
+                projectiles.add(beamCannon.shoot(pOne, lbTex, lastDirection));
+            }
         }
+
         //Player Boundaries
         if(pOne.x<0){pOne.x = 0;}
         if(pOne.x>1280-120){pOne.x = 1280-120;}
@@ -153,22 +179,10 @@ public class GameScreen implements Screen {
 
     }
 
-//    public void shootBeam(){
-//        Rectangle laserBeam = new Rectangle();
-//        laserBeam.x = pOne.x;
-//        laserBeam.y = pOne.y;
-//        laserBeam.height = 32;
-//        laserBeam.width = 64;
-//        laserBeams.add(laserBeam);
-//        lastBeamShot = TimeUtils.nanoTime();
-//    }
-
     public void createGoblin(){
         Goblin goblin = new Goblin();
         goblin.x = 1280/2 - 16/2;
         goblin.y = 720/2;
-        goblin.width = 120;
-        goblin.height = 120;
         goblins.add(goblin);
     }
 }
