@@ -14,17 +14,21 @@ public class DeathMarch extends Game {
 	public BitmapFont font;
 	public Stage stage;
 
+	TiledTest test1;
+
 	private SplashScreen splashScreen;
 	private PreferencesScreen preferencesScreen;
 	private MainMenuScreen menuScreen;
 	private GameScreen mainScreen;
 	//private EndScreen endScreen;
 	private AppPreferences preferences;
+	private TileMapScreen tileMap;
 
 	public final static int MENU = 0;
 	public final static int PREFERENCES = 1;
 	public final static int APPLICATION = 2;
 	public final static int ENDGAME = 3;
+	public final static int APP2 = 4;
 
 
 	public AppPreferences getPreferences(){
@@ -32,7 +36,7 @@ public class DeathMarch extends Game {
 		return this.preferences;
 
 	}
-	
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -53,7 +57,7 @@ public class DeathMarch extends Game {
 //		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 //		stage.draw();
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();
@@ -94,6 +98,15 @@ public class DeathMarch extends Game {
 				break;
 
 
+			case APP2:
+
+				if(mainScreen == null){
+					//test1.create();
+					tileMap = new TileMapScreen(this);
+				}
+				this.setScreen(tileMap);
+
+				break;
 		}
 
 	}

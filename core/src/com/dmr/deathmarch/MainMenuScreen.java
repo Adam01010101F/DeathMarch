@@ -17,6 +17,8 @@ public class MainMenuScreen implements Screen {
     public OrthographicCamera camera;
     public Stage stage;
 
+    public TiledTest testTile;
+
     public MainMenuScreen(final DeathMarch game){
         this.game = game;
         camera = new OrthographicCamera();
@@ -134,7 +136,7 @@ public class MainMenuScreen implements Screen {
         newGame2.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(DeathMarch.APPLICATION);
+                game.changeScreen(DeathMarch.APP2);
             }
         });
 

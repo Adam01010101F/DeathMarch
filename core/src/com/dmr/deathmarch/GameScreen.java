@@ -2,14 +2,27 @@ package com.dmr.deathmarch;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 //import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.dmr.deathmarch.npc.Goblin;
 import com.dmr.deathmarch.weapons.BeamCannon;
 
@@ -33,14 +46,57 @@ public class GameScreen implements Screen {
     private LogicModel lm;
     //private Box2DDebugRenderer dbr;
     private Direction lastDirection[];
+    private Stage stage;
+    AssetManager assetManager;
+    TiledMap tiledMap;
+    TiledMapRenderer tiledMapRenderer;
+
+    private OrthographicCamera cam;
+    private OrthogonalTiledMapRenderer renderer;
+    private TiledMap map;
+
+    private Table table;
+
+    private Skin skin;
+
+    private Dialog dialog;
+
+
 
     public GameScreen(final DeathMarch game){
         this.game = game;
 //        lm = new LogicModel();
 //        dbr = new Box2DDebugRenderer();
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1280, 720);
+          camera = new OrthographicCamera();
+          camera.setToOrtho(false, 1280, 720);
+
+          stage = new Stage(new ScreenViewport());
+
+
+
+
+
+
+
+
+        //TiledMap map = new TmxMapLoader().load("demoMap.tmx");
+
+//        // only needed once
+//        assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+//        assetManager.load("level1.tmx", TiledMap.class);
+//
+//// once the asset manager is done loading
+//        TiledMap map = assetManager.get("level1.tmx");
+//
+//        float unitScale = 1 / 16f;
+//        OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map, unitScale);
+
+        //OrthographicCamera camera = new OrthographicCamera();
+        //camera.setToOrtho(true);
+
+        Skin skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
+
 
         lbTex = new Texture(Gdx.files.internal("laserBeam.png"));
         bmTex = new Texture(Gdx.files.internal("BeamCannon.png"));
@@ -49,6 +105,17 @@ public class GameScreen implements Screen {
         pOne = new Rectangle();
         pTwo = new Goblin();
         beamCannon = new BeamCannon();
+
+//        Window pause = new Window("Paused", skin);
+//        //pause.setMoveable(false); //So the user can't move the window
+//        pause.add(new TextButton("Unpause", skin)); //Add a new text button that unpauses the game.
+//        pause.pack(); //Important! Correctly scales the window after adding new elements.
+//        float newWidth = 400, newHeight = 200;
+//        pause.setBounds((Gdx.graphics.getWidth() - newWidth ) / 2,
+//                (Gdx.graphics.getHeight() - newHeight ) / 2, newWidth , newHeight ); //Center on screen.
+//        stage.addActor(pause);
+
+
 
         pOne.x = 1280/2 - 64/2;
         pOne.y = 720/2;
@@ -64,13 +131,34 @@ public class GameScreen implements Screen {
         goblins = new Array<Goblin>();
         createGoblin();
     }
+
+
+    public void create(){
+
+    }
     @Override
     public void show() {
+        //TiledMap map = new TmxMapLoader().load("demoMap.tmx");
+
+
+
+
 
     }
 
     @Override
     public void render(float delta) {
+
+
+        stage.clear();
+        Gdx.input.setInputProcessor(stage);
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
+
+
+
+
+
 //        lm.logicStep(delta);
         Gdx.gl.glClearColor(0,0.3f, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -144,7 +232,7 @@ public class GameScreen implements Screen {
             beamCannon.setLastBeamShot(TimeUtils.nanoTime());
         }
 
-        //Player Boundaries
+            //Player Boundaries
         if(pOne.x<0){pOne.x = 0;}
         if(pOne.x>1280-120){pOne.x = 1280-120;}
     }
@@ -189,5 +277,28 @@ public class GameScreen implements Screen {
         goblin.x = 1280/2 - 16/2;
         goblin.y = 720/2;
         goblins.add(goblin);
+    }
+
+    public void showDialog() {
+
+
+        dialog = new Dialog("Quit?", skin) {
+
+            @Override
+            protected void result(Object object) {
+                boolean exit = (Boolean) object;
+                if (exit) {
+                    Gdx.app.exit();
+                } else {
+                    remove();
+                }
+            }
+
+        };
+        dialog.button("Yes", true);
+        dialog.button("No", false);
+        dialog.key(Input.Keys.ENTER, true);
+        dialog.key(Input.Keys.ESCAPE, false);
+        dialog.show(stage);
     }
 }
