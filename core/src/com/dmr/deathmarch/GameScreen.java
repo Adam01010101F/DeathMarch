@@ -26,7 +26,8 @@ public class GameScreen implements Screen {
     private Texture bmTex;
     private Texture lbTex;
     private Rectangle pOne;
-    private Goblin pTwo;
+    private Player pTwo;
+    private Goblin Gobbi;
     private BeamCannon beamCannon;
     private Array<Projectile> projectiles;
     private long lastBeamShot;
@@ -49,13 +50,16 @@ public class GameScreen implements Screen {
         pOneTex = new Texture(Gdx.files.internal("player1.png"));
         pTwoTex = new Texture(Gdx.files.internal("player2.png"));
         pOne = new Rectangle();
-        pTwo = new Goblin();
+        Gobbi = new Goblin();
         beamCannon = new BeamCannon();
 
         pOne.x = 1280/2 - 64/2;
         pOne.y = 720/2;
         pOne.width = 50;
         pOne.height = 50;
+
+        pTwo = new Player("Adam", false, pTwoTex);
+        pTwo.setPosition((1280/2 -120/2), 720/2);
 
 //        pTwo.x = 1280/2 - 16/2;
 //        pTwo.y = 720/2;
@@ -70,13 +74,11 @@ public class GameScreen implements Screen {
     public void show() {
 
     }
-
+    //TODO: Fix textures. They judder because they aren't perfectly centered.
     @Override
     public void render(float delta) {
-//        lm.logicStep(delta);
         Gdx.gl.glClearColor(0,0.3f, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        dbr.render(lm.world, camera.combined);
 
         camera.update();
 
@@ -109,9 +111,10 @@ public class GameScreen implements Screen {
 
         // Load Objects onto Screen
         game.batch.begin();
-        game.font.draw(game.batch, "P1 x: "+pOne.x+" y: "+pOne.y, 100, 150);
+        game.font.draw(game.batch, "P2 x: "+pTwo.getX()+" y: "+pTwo.getY(), 100, 150);
         game.font.draw(game.batch, "Projectiles: " + projectiles.size, 100, 200);
         game.batch.draw(pOneTex, pOne.x, pOne.y);
+        pTwo.draw(game.batch);
         game.batch.draw(bmTex, pOne.x, pOne.y-8);
         for(Rectangle goblin: goblins){
             game.batch.draw(pTwoTex, goblin.x, goblin.y);
@@ -121,7 +124,7 @@ public class GameScreen implements Screen {
         }
         game.batch.end();
 
-        //Player 1 Key bindings
+        //Player 1 Keybindings
         if(Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.D) ||
                 Gdx.input.isKeyPressed(Input.Keys.A)|| Gdx.input.isKeyPressed(Input.Keys.S)){
             lastDirection[0] = Direction.None;
@@ -141,13 +144,34 @@ public class GameScreen implements Screen {
             if(Gdx.input.isKeyPressed(Input.Keys.S)){
                 pOne.y -= 150 *Gdx.graphics.getDeltaTime();
                 lastDirection[1] = Direction.Down;
-        }}
+            }
+
+        }
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
             if(TimeUtils.nanoTime() - beamCannon.getLastBeamShot() > beamCannon.getCooldown()){
-                beamCannon.setLastBeamShot(TimeUtils.nanoTime());
+//                beamCannon.setLastBeamShot(TimeUtils.nanoTime());
                 projectiles.add(beamCannon.shoot(pOne, lbTex, lastDirection));
             }
         }
+
+        //Player 2 Keybindings
+        if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+            pTwo.setRotation(90);
+            pTwo.setPosition(pTwo.getX(), pTwo.getY()+150*Gdx.graphics.getDeltaTime());
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+            pTwo.setRotation(270);
+            pTwo.setPosition(pTwo.getX(), pTwo.getY()-150*Gdx.graphics.getDeltaTime());
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+            pTwo.setRotation(0);
+            pTwo.setPosition(pTwo.getX()+150*Gdx.graphics.getDeltaTime(), pTwo.getY());
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+            pTwo.setRotation(180);
+            pTwo.setPosition(pTwo.getX()-150*Gdx.graphics.getDeltaTime(), pTwo.getY());
+        }
+
 
         //Player Boundaries
         if(pOne.x<0){pOne.x = 0;}

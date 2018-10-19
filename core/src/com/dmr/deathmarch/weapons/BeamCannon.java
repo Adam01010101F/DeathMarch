@@ -34,6 +34,8 @@ public class BeamCannon extends Rectangle {
     public Projectile shoot(Rectangle player,Texture lbTex, Direction dir[]){
         Projectile laserBeam = new Projectile(lbTex, dir[0], dir[1]);
         laserBeam.setPosition(player.x, player.y);
+
+        //Laser Direction Logic
         if(laserBeam.getxVel()==0&&laserBeam.getyVel()==1
                 ||laserBeam.getxVel()==0&&laserBeam.getyVel()==-1)
             laserBeam.rotate(90);
@@ -48,15 +50,11 @@ public class BeamCannon extends Rectangle {
         else {
             laserBeam.rotate(0);
         }
+        //Set Shoot time;
         lastBeamShot = TimeUtils.nanoTime();
         return laserBeam;
     }
 
-//    public Sprite spShoot(Rectangle player, Direction dir[]){
-//        Sprite lbeam = new Sprite(laserBeamTex);
-//        lbeam.setPosition(player.x, player.y);
-//        lbeam.setRotation(dir );
-//    }
 
     public float getLastBeamShot(){
         return lastBeamShot;
