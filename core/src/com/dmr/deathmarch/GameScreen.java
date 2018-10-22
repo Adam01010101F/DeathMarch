@@ -2,13 +2,23 @@ package com.dmr.deathmarch;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+//import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
@@ -36,23 +46,63 @@ public class GameScreen implements Screen {
     private long lastBeamShot;
     private Array<Goblin> goblins;
     private LogicModel lm;
-    private Box2DDebugRenderer dbr;
+    //private Box2DDebugRenderer dbr;
     private Direction lastDirection[];
+    private Stage stage;
+    AssetManager assetManager;
+    TiledMap tiledMap;
+    TiledMapRenderer tiledMapRenderer;
     private Sprite beamProjectile;
     private Table table;
     private TextButton buttonPlay;
     private TextButton buttonQuit;
-    private Stage stage;
     private Rectangle npc;
     private Texture npcTex;
     private boolean gamePaused;
+
+    private OrthographicCamera cam;
+    private OrthogonalTiledMapRenderer renderer;
+    private TiledMap map;
+
+
+    private Skin skin;
+
+    private Dialog dialog;
+
 
 
     public GameScreen(final DeathMarch game){
         this.game = game;
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1280, 720);
+          camera = new OrthographicCamera();
+          camera.setToOrtho(false, 1280, 720);
+
+          stage = new Stage(new ScreenViewport());
+
+
+
+
+
+
+
+
+        //TiledMap map = new TmxMapLoader().load("demoMap.tmx");
+
+//        // only needed once
+//        assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+//        assetManager.load("level1.tmx", TiledMap.class);
+//
+//// once the asset manager is done loading
+//        TiledMap map = assetManager.get("level1.tmx");
+//
+//        float unitScale = 1 / 16f;
+//        OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map, unitScale);
+
+        //OrthographicCamera camera = new OrthographicCamera();
+        //camera.setToOrtho(true);
+
+        Skin skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
+
 
         lbTex = new Texture(Gdx.files.internal("laserBeam.png"));
         bmTex = new Texture(Gdx.files.internal("BeamCannon.png"));
@@ -92,14 +142,28 @@ public class GameScreen implements Screen {
 
         createGoblin();
     }
+
+
+    public void create(){
+
+    }
     @Override
     public void show() {
+        //TiledMap map = new TmxMapLoader().load("demoMap.tmx");
+
+
+
+
 
     }
 
     //TODO: Fix textures. They judder because they aren't perfectly centered in png file.
     @Override
     public void render(float delta) {
+        stage.clear();
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        Gdx.input.setInputProcessor(stage);
+        stage.draw();
         Gdx.gl.glClearColor(0,0.3f, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -203,7 +267,8 @@ public class GameScreen implements Screen {
             //TODO:: Give ownership of projectile to count score.
             for(Goblin goblin: goblins){
                 if(projectile.getBoundingRectangle().overlaps(goblin)){
-                    goblin.takeDamage(beamCannon.getDamage());
+//                    goblin.takeDamage(beamCannon.getDamage());
+                    System.out.println("Goblin takes damage");
                 }
             }
         }
@@ -291,6 +356,7 @@ public class GameScreen implements Screen {
                 projectiles.add(pOne.getWeapon().shoot(pOne, lbTex, pOne.getLastDirection()));
             }
         }
+
         // TABLE/WINDOW
         if (Gdx.input.isKeyPressed(Input.Keys.P)) {
             if (gamePaused == false)
@@ -376,5 +442,28 @@ public class GameScreen implements Screen {
     private void checkBoundary(Player player){
         if(player.getX()<0)player.setX(0);
         if(player.getX()>1280-120)player.setX(1280-120);
+    }
+
+    public void showDialog() {
+
+
+        dialog = new Dialog("Quit?", skin) {
+
+            @Override
+            protected void result(Object object) {
+                boolean exit = (Boolean) object;
+                if (exit) {
+                    Gdx.app.exit();
+                } else {
+                    remove();
+                }
+            }
+
+        };
+        dialog.button("Yes", true);
+        dialog.button("No", false);
+        dialog.key(Input.Keys.ENTER, true);
+        dialog.key(Input.Keys.ESCAPE, false);
+        dialog.show(stage);
     }
 }
