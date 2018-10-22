@@ -1,6 +1,7 @@
 package com.dmr.deathmarch.weapons;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.dmr.deathmarch.Direction;
 import com.dmr.deathmarch.Player;
@@ -8,7 +9,7 @@ import com.dmr.deathmarch.Projectile;
 
 import java.awt.*;
 
-public abstract class Weapon extends Rectangle {
+public abstract class Weapon extends Sprite {
     private String  name;
     private int damage;
     private float lastShot;
@@ -20,7 +21,8 @@ public abstract class Weapon extends Rectangle {
         lastShot = 0f;
         cooldown = 0f;
     }
-    public Weapon(String name, int damage, float lastShot, float cooldown){
+    public Weapon(String name,Texture tex, int damage, float lastShot, float cooldown){
+        super(tex);
         this.name = name;
         this.damage = damage;
         this.lastShot = lastShot;

@@ -41,6 +41,7 @@ public class Player extends Sprite {
     }
     public int getKills(){return kills;}
 
+    public void takeDmg(float dmg){this.health -= dmg;}
     public void addKill(){kills++;}
     public void addHealth(float hp){health = health + hp;}
     public void setDirection(Direction[] directions){
@@ -57,6 +58,5 @@ public class Player extends Sprite {
     }
 
     public void setWeapon(Weapon weapon){this.weapon = weapon;}
-
     public Weapon getWeapon(){return weapon;}
 }

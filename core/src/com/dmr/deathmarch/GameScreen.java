@@ -48,12 +48,12 @@ public class GameScreen implements Screen {
         pOneTex = new Texture(Gdx.files.internal("player1.png"));
         pTwoTex = new Texture(Gdx.files.internal("player2.png"));
         Gobbi = new Goblin();
-        beamCannon = new BeamCannon();
 
         //Player Creation
-        pOne = new Player("Adam", false, pOneTex);
+        pOne = new Player("Shredder", false, pOneTex);
         pOne.setPosition(1280/2f - 120/2f, 720/2f);
-        pTwo = new Player("Adam", false, pTwoTex);
+        pOne.setWeapon(new BeamCannon(bmTex));
+        pTwo = new Player("Donatello", false, pTwoTex);
         pTwo.setPosition((1280/2f -120/2f), 720/2f);
 
         // Ghetto Managers
@@ -85,6 +85,7 @@ public class GameScreen implements Screen {
             if(projectile.getX()>1280 | projectile.getY()>720 || projectile.getX() < 0 || projectile.getY() < 0){
                 iter.remove();
             }
+            //TODO:: Give ownership of projectile to count score.
             for(Goblin goblin: goblins){
                 if(projectile.getBoundingRectangle().overlaps(goblin)){
                     goblin.takeDamage(beamCannon.getDamage());
@@ -109,7 +110,8 @@ public class GameScreen implements Screen {
         game.font.draw(game.batch, "Projectiles: " + projectiles.size, 100, 200);
         pOne.draw(game.batch);
         pTwo.draw(game.batch);
-        game.batch.draw(bmTex, pOne.getX(), pOne.getY()-8);
+//        game.batch.draw(bmTex, pOne.getX(), pOne.getY()-8);
+        pOne.getWeapon().draw(game.batch);
         for(Rectangle goblin: goblins){
             game.batch.draw(pTwoTex, goblin.x, goblin.y);
         }
@@ -126,28 +128,49 @@ public class GameScreen implements Screen {
                 pOne.setRotation(90);
                 pOne.setY(pOne.getY()+150*Gdx.graphics.getDeltaTime());
                 pOne.setYDirection(Direction.Up);
+                System.out.println(pOne.getWeapon().getRotation());
+
+                if(pOne.getWeapon().getRotation()!=90.0) {
+                    pOne.getWeapon().rotate(90);
+                }
+                pOne.getWeapon().setPosition(pOne.getX()+64, pOne.getY()+92);
             }
             if(Gdx.input.isKeyPressed(Input.Keys.S)){
                 pOne.setRotation(270);
                 pOne.setY(pOne.getY()-150*Gdx.graphics.getDeltaTime());
                 pOne.setYDirection(Direction.Down);
+                System.out.println(pOne.getWeapon().getRotation());
+
+                if(pOne.getWeapon().getRotation()!=90.0) {
+                    pOne.getWeapon().rotate(90);
+                }
+                pOne.getWeapon().setPosition(pOne.getX()-8, pOne.getY());
             }
             if(Gdx.input.isKeyPressed(Input.Keys.D)){
                 pOne.setRotation(0);
                 pOne.setX(pOne.getX()+150*Gdx.graphics.getDeltaTime());
                 pOne.setXDirection(Direction.Right);
+                System.out.println(pOne.getWeapon().getRotation());
+                if(pOne.getWeapon().getRotation()!=0) {
+                    pOne.getWeapon().rotate(90);
+                }
+                pOne.getWeapon().setPosition(pOne.getX(), pOne.getY());
             }
             if(Gdx.input.isKeyPressed(Input.Keys.A)){
                 pOne.setRotation(180);
                 pOne.setX(pOne.getX()-150*Gdx.graphics.getDeltaTime());
                 pOne.setXDirection(Direction.Left);
+                System.out.println(pOne.getWeapon().getRotation());
+                if(pOne.getWeapon().getRotation()!=0.0) {
+                    pOne.getWeapon().rotate(90);
+                }
+                pOne.getWeapon().setPosition(pOne.getX(), pOne.getY());
             }
 
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
-            if(TimeUtils.nanoTime() - beamCannon.getLastShot() > beamCannon.getCooldown()){
-//                beamCannon.setLastBeamShot(TimeUtils.nanoTime());
-                projectiles.add(beamCannon.shoot(pOne, lbTex, pOne.getLastDirection()));
+            if(TimeUtils.nanoTime() - pOne.getWeapon().getLastShot() > pOne.getWeapon().getCooldown()){
+                projectiles.add(pOne.getWeapon().shoot(pOne, lbTex, pOne.getLastDirection()));
             }
         }
 
