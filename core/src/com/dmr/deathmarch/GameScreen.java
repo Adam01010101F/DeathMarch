@@ -9,8 +9,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.dmr.deathmarch.npc.Goblin;
 import com.dmr.deathmarch.weapons.BeamCannon;
 
@@ -35,6 +38,14 @@ public class GameScreen implements Screen {
     private Box2DDebugRenderer dbr;
     private Direction lastDirection[];
     private Sprite beamProjectile;
+    private Table table;
+    private TextButton buttonPlay;
+    private TextButton buttonQuit;
+    private Stage stage;
+    private Rectangle npc;
+    private Texture npcTex;
+    private boolean gamePaused;
+
 
     public GameScreen(final DeathMarch game){
         this.game = game;
@@ -51,16 +62,29 @@ public class GameScreen implements Screen {
         pOne = new Rectangle();
         pTwo = new Goblin();
         beamCannon = new BeamCannon();
+        stage = new Stage(new ScreenViewport());
 
         pOne.x = 1280/2 - 64/2;
         pOne.y = 720/2;
         pOne.width = 50;
         pOne.height = 50;
 
+        //npc
+        npcTex = new Texture(Gdx.files.internal("npc.png"));
+        npc = new Rectangle();
+
+
 //        pTwo.x = 1280/2 - 16/2;
 //        pTwo.y = 720/2;
 //        pTwo.width = 120;
 //        pTwo.height = 120;
+
+        //npc
+        npc.x = 1100;
+        npc.y = 10;
+        npc.width = 150;
+        npc.height = 150;
+
         lastDirection = new Direction[2];       // Tracks the direction of the user.
         projectiles = new Array<Projectile>();
         goblins = new Array<Goblin>();
@@ -77,6 +101,92 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0,0.3f, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 //        dbr.render(lm.world, camera.combined);
+
+        //table
+        Skin shopSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
+
+        //window
+           /* Window window = new Window("ShopKeeper", shopSkin );
+            window.setPosition(400,200);
+            window.pack();*/
+
+        //table
+        stage.clear();
+        Gdx.input.setInputProcessor(stage);
+
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1/30f));
+        stage.draw();
+
+        //constrains table size
+        Container<Table> tableContainer = new Container<Table>();
+        float sw = Gdx.graphics.getWidth();
+        float sh = Gdx.graphics.getHeight();
+
+        float cw = sw * 0.7f;
+        float ch = sh * 0.5f;
+
+        //creates container restraints
+        tableContainer.setSize(cw, ch);
+        tableContainer.setPosition((sw - cw) / 2.0f, (sh - ch) / 2.0f);
+        tableContainer.fillX();
+
+        //creates table
+        Table table = new Table();
+        table.setFillParent(true);
+        table.setDebug(true);
+        stage.addActor(table);
+
+        //creates subTable so that exit button is center
+        Table subTable = new Table();
+        table.setFillParent(true);
+        table.setDebug(true);
+        stage.addActor(subTable);
+
+
+        //sets size of table
+        table.setSize(800,480);
+        subTable.setSize(800,480);
+
+        //label for table includes items and title
+        Label topLabel = new Label("Shop Keeper",shopSkin);
+        Label grenades = new Label("Grenades",shopSkin);
+        Label health = new Label("Health Booster",shopSkin);
+        //buttons to buy itesm
+        TextButton buyg = new TextButton("Buy",shopSkin);
+        TextButton buyh = new TextButton("Buy",shopSkin);
+        //button to exit
+        TextButton buttonExit = new TextButton("Exit" , shopSkin);
+        table.add(buttonExit);
+        //adds the rows for Title Label
+        table.row().colspan(2).expandX().fillX();
+        table.add(topLabel).fillX();
+        table.row().colspan(2).expandX().fillX();
+        //adds the rows for grenades
+        table.row().colspan(2).expandX().fillX();
+        table.add(grenades).expandX().fillX();
+        //the following commented changes size of button.
+        //table.add(buyg).width(Value.percentWidth(.25F,table));
+        table.add(buyg).expandX().fillX();
+        //adds the rows for health booster
+        table.row().colspan(2).expandX().fillX();
+        table.add(health).expandX().fillX();
+        table.add(buyh).expandX().fillX();
+        //adds the row and separate table for exit button
+        table.row().colspan(2).expandX().fillX();
+        table.add(subTable);
+        subTable.pad(16);
+        subTable.row().fillX().expandX();
+
+        subTable.add(buttonExit).width(cw/3.0f);
+
+
+
+
+
+
+        /*TextButton buttonQuit = new TextButton("Quit", shopSkin);
+        table.add(buttonQuit);
+        table.row();*/
 
         camera.update();
 
@@ -112,6 +222,8 @@ public class GameScreen implements Screen {
         game.font.draw(game.batch, "P1 x: "+pOne.x+" y: "+pOne.y, 100, 150);
         game.font.draw(game.batch, "Projectiles: " + projectiles.size, 100, 200);
         game.batch.draw(pOneTex, pOne.x, pOne.y);
+        //npc to draw so it appears, constantly draws over and over.
+        game.batch.draw(npcTex, npc.x, npc.y);
         game.batch.draw(bmTex, pOne.x, pOne.y-8);
         for(Rectangle goblin: goblins){
             game.batch.draw(pTwoTex, goblin.x, goblin.y);
@@ -147,6 +259,17 @@ public class GameScreen implements Screen {
                 beamCannon.setLastBeamShot(TimeUtils.nanoTime());
                 projectiles.add(beamCannon.shoot(pOne, lbTex, lastDirection));
             }
+        }
+        // TABLE/WINDOW
+        if (Gdx.input.isKeyPressed(Input.Keys.P)) {
+            if (gamePaused == false)
+                gamePaused = true;
+            else
+                gamePaused = false;
+        }
+        if(gamePaused == true) {
+            table.setVisible(true);
+            stage.draw();
         }
 
         //Player Boundaries
