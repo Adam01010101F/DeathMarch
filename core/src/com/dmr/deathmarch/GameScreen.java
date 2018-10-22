@@ -176,6 +176,7 @@ public class GameScreen implements Screen {
         //Player Boundaries
         if(pOne.x<0){pOne.x = 0;}
         if(pOne.x>1280-120){pOne.x = 1280-120;}
+        
     }
 
     @Override
