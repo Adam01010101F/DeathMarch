@@ -118,6 +118,7 @@ public class GameScreen implements Screen {
 //        pOne.scale(1.5f);
         pTwo = new Player("Donatello", false, pTwoTex);
         pTwo.setPosition((1280/2f -120/2f), 720/2f);
+        pTwo.setWeapon(new BeamCannon(bmTex));
 
         // Ghetto Managers
         //npc
@@ -395,9 +396,9 @@ public class GameScreen implements Screen {
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-            if(TimeUtils.nanoTime() - beamCannon.getLastShot() > beamCannon.getCooldown()){
+            if(TimeUtils.nanoTime() - pTwo.getWeapon().getLastShot() > pTwo.getWeapon().getCooldown()){
 //                beamCannon.setLastBeamShot(TimeUtils.nanoTime());
-                projectiles.add(beamCannon.shoot(pTwo, lbTex, pTwo.getLastDirection()));
+                projectiles.add(pTwo.getWeapon() .shoot(pTwo, lbTex, pTwo.getLastDirection()));
             }
         }
 
