@@ -53,6 +53,7 @@ public class GameScreen implements Screen {
         pOne = new Player("Shredder", false, pOneTex);
         pOne.setPosition(1280/2f - 120/2f, 720/2f);
         pOne.setWeapon(new BeamCannon(bmTex));
+//        pOne.scale(1.5f);
         pTwo = new Player("Donatello", false, pTwoTex);
         pTwo.setPosition((1280/2f -120/2f), 720/2f);
 
@@ -124,13 +125,14 @@ public class GameScreen implements Screen {
         if(Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.D) ||
                 Gdx.input.isKeyPressed(Input.Keys.A)|| Gdx.input.isKeyPressed(Input.Keys.S)){
             pOne.clearDirections();
+//            int condRot = (pOne.getWeapon().getRotation()/90)%2==0 ? -90: 90;
             if(Gdx.input.isKeyPressed(Input.Keys.W)){
                 pOne.setRotation(90);
                 pOne.setY(pOne.getY()+150*Gdx.graphics.getDeltaTime());
                 pOne.setYDirection(Direction.Up);
                 System.out.println(pOne.getWeapon().getRotation());
 
-                if(pOne.getWeapon().getRotation()!=90.0) {
+                if(((pOne.getWeapon().getRotation()/90)%2) == 0) {
                     pOne.getWeapon().rotate(90);
                 }
                 pOne.getWeapon().setPosition(pOne.getX()+64, pOne.getY()+92);
@@ -141,7 +143,7 @@ public class GameScreen implements Screen {
                 pOne.setYDirection(Direction.Down);
                 System.out.println(pOne.getWeapon().getRotation());
 
-                if(pOne.getWeapon().getRotation()!=90.0) {
+                if(((pOne.getWeapon().getRotation()/90)%2) == 0) {
                     pOne.getWeapon().rotate(90);
                 }
                 pOne.getWeapon().setPosition(pOne.getX()-8, pOne.getY());
@@ -151,8 +153,9 @@ public class GameScreen implements Screen {
                 pOne.setX(pOne.getX()+150*Gdx.graphics.getDeltaTime());
                 pOne.setXDirection(Direction.Right);
                 System.out.println(pOne.getWeapon().getRotation());
-                if(pOne.getWeapon().getRotation()!=0) {
-                    pOne.getWeapon().rotate(90);
+                if(((pOne.getWeapon().getRotation()/90)%2) != 0) {
+
+                    pOne.getWeapon().rotate(-90);
                 }
                 pOne.getWeapon().setPosition(pOne.getX(), pOne.getY());
             }
@@ -161,8 +164,8 @@ public class GameScreen implements Screen {
                 pOne.setX(pOne.getX()-150*Gdx.graphics.getDeltaTime());
                 pOne.setXDirection(Direction.Left);
                 System.out.println(pOne.getWeapon().getRotation());
-                if(pOne.getWeapon().getRotation()!=0.0) {
-                    pOne.getWeapon().rotate(90);
+                if(((pOne.getWeapon().getRotation()/90)%2) != 0) {
+                    pOne.getWeapon().rotate(-90);
                 }
                 pOne.getWeapon().setPosition(pOne.getX(), pOne.getY());
             }
