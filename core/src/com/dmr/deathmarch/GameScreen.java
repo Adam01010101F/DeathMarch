@@ -87,18 +87,18 @@ public class GameScreen implements Screen {
                 iter.remove();
             }
             //TODO:: Give ownership of projectile to count score.
-            for(Goblin goblin: goblins){
-                if(projectile.getBoundingRectangle().overlaps(goblin)){
-                    goblin.takeDamage(beamCannon.getDamage());
-                }
-            }
+           //for(Goblin goblin: goblins){
+          //      if(projectile.getBoundingRectangle().overlaps(goblin)){
+           //         goblin.takeDamage(beamCannon.getDamage());
+        //        }
+          //  }
         }
 
         // Goblin Destruction
         for(Iterator<Goblin> iter = goblins.iterator(); iter.hasNext();){
             Goblin goblin = iter.next();
-            float playerX = pOne.getX();
-            float playerY = pOne.getY();
+            float playerX = pTwo.getX();
+            float playerY = pTwo.getY();
             float x = playerX - goblin.getX();
             float y = playerY - goblin.getY();
             float distance = (float) Math.sqrt((x*x) - (y*y));
@@ -108,9 +108,11 @@ public class GameScreen implements Screen {
             }
             else
             {
-                goblin.x = ((150*(x/distance)) * Gdx.graphics.getDeltaTime());
-                goblin.y = ((150*(y/distance)) * Gdx.graphics.getDeltaTime());
-                goblin.setRotation();
+                float gX = goblin.getX();
+                float gY = goblin.getY();
+                goblin.setX(gX + ((30*(x/distance)) * Gdx.graphics.getDeltaTime()));
+                goblin.setY(gY + ((30*(y/distance)) * Gdx.graphics.getDeltaTime()));
+                goblin.setRotation((float) Math.toDegrees(Math.atan2(playerY - goblin.getY(), playerX - goblin.getX())));
             }
         }
 
@@ -124,8 +126,8 @@ public class GameScreen implements Screen {
         pTwo.draw(game.batch);
 //        game.batch.draw(bmTex, pOne.getX(), pOne.getY()-8);
         pOne.getWeapon().draw(game.batch);
-        for(Rectangle goblin: goblins){
-            game.batch.draw(pTwoTex, goblin.x, goblin.y);
+        for(Sprite goblin: goblins){
+            game.batch.draw(pTwoTex, goblin.getX(), goblin.getY());
         }
         for (Sprite beam: projectiles){
             beam.draw(game.batch);
@@ -256,8 +258,8 @@ public class GameScreen implements Screen {
 
     private void createGoblin(){
         Goblin goblin = new Goblin();
-        goblin.x = 1280/2f - 16/2f;
-        goblin.y = 720/2f;
+        goblin.setX(1280/2f - 16/2f);
+        goblin.setY(720/2f);
         goblins.add(goblin);
     }
 
