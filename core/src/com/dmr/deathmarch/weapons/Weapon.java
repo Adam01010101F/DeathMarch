@@ -7,8 +7,6 @@ import com.dmr.deathmarch.Direction;
 import com.dmr.deathmarch.Player;
 import com.dmr.deathmarch.Projectile;
 
-import java.awt.*;
-
 public abstract class Weapon extends Sprite {
     private String  name;
     private int damage;
@@ -37,9 +35,9 @@ public abstract class Weapon extends Sprite {
     }
 
     //TODO:: Make Rotation logic less ugly? Does it impact perf?
-    public Projectile shoot(Player player, Texture lbTex, Direction dir[]){
+    public Projectile shoot(Weapon weapon, Texture lbTex, Direction dir[]){
         Projectile projectile = new Projectile(lbTex, dir[0], dir[1]);
-        projectile.setPosition(player.getX(), player.getY());
+        projectile.setPosition(weapon.getX(), weapon.getY());
 
         //Laser Direction Logic
         if(projectile.getxVel()==0&&projectile.getyVel()==1

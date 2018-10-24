@@ -6,6 +6,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -34,7 +35,7 @@ import java.util.Iterator;
 public class GameScreen implements Screen {
     final DeathMarch game;
     private OrthographicCamera camera;
-    private Texture pOneTex;
+    private Texture playerTex;
     private Texture pTwoTex;
     private Texture bmTex;
     private Texture lbTex;
@@ -59,6 +60,7 @@ public class GameScreen implements Screen {
     private Rectangle npc;
     private Texture npcTex;
     private boolean gamePaused;
+    Skin shopSkin;
 
     private OrthographicCamera cam;
     private OrthogonalTiledMapRenderer renderer;
@@ -74,10 +76,11 @@ public class GameScreen implements Screen {
     public GameScreen(final DeathMarch game){
         this.game = game;
 
-          camera = new OrthographicCamera();
-          camera.setToOrtho(false, 1280, 720);
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, 1280, 720);
 
-          stage = new Stage(new ScreenViewport());
+        stage = new Stage(new ScreenViewport());
+        shopSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
 
 
@@ -101,23 +104,27 @@ public class GameScreen implements Screen {
         //OrthographicCamera camera = new OrthographicCamera();
         //camera.setToOrtho(true);
 
-        Skin skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
-
 
         lbTex = new Texture(Gdx.files.internal("laserBeam.png"));
+
         bmTex = new Texture(Gdx.files.internal("BeamCannon.png"));
-        pOneTex = new Texture(Gdx.files.internal("player1.png"));
+        playerTex = new Texture(Gdx.files.internal("survivor-shoot_rifle_0.png"));
         pTwoTex = new Texture(Gdx.files.internal("player2.png"));
         Gobbi = new Goblin();
         stage = new Stage(new ScreenViewport());
 
         //Player Creation
-        pOne = new Player("Shredder", false, pOneTex);
-        pOne.setPosition(1280/2f - 120/2f, 720/2f);
+        pOne = new Player("Shredder", false, playerTex, 23, 38, 293, 191);
+        pOne.setOriginCenter();
+        System.out.println(pOne.getOriginX()+ " " + pOne.getOriginY());
+        pOne.setColor(Color.GRAY);
+        pOne.setBounds(1280/2f - 120/2f, 720/2f, 104, 69);
         pOne.setWeapon(new BeamCannon(bmTex));
-//        pOne.scale(1.5f);
-        pTwo = new Player("Donatello", false, pTwoTex);
-        pTwo.setPosition((1280/2f -120/2f), 720/2f);
+        pOne.getBoundingRectangle().setSize(104,69);
+
+        pTwo = new Player("Donatello", false, playerTex, 23, 38, 293, 191);
+        pTwo.setColor(Color.PURPLE);
+        pTwo.setBounds(1280/2f - 120/2f + 32, 720/2f, 104, 69);
         pTwo.setWeapon(new BeamCannon(bmTex));
 
         // Ghetto Managers
@@ -165,11 +172,10 @@ public class GameScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         Gdx.input.setInputProcessor(stage);
         stage.draw();
-        Gdx.gl.glClearColor(0,0.3f, 0, 0);
+        Gdx.gl.glClearColor(1,1, 1, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //table
-        Skin shopSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
         //window
            /* Window window = new Window("ShopKeeper", shopSkin );
@@ -269,7 +275,6 @@ public class GameScreen implements Screen {
             for(Goblin goblin: goblins){
                 if(projectile.getBoundingRectangle().overlaps(goblin)){
 //                    goblin.takeDamage(beamCannon.getDamage());
-                    System.out.println("Goblin takes damage");
                 }
             }
         }
@@ -278,7 +283,6 @@ public class GameScreen implements Screen {
         for(Iterator<Goblin> iter = goblins.iterator(); iter.hasNext();){
             Goblin goblin = iter.next();
             if(goblin.isDead()){
-                System.out.print("Goblin is dead.");
                 iter.remove();
             }
         }
@@ -306,12 +310,10 @@ public class GameScreen implements Screen {
         if(Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.D) ||
                 Gdx.input.isKeyPressed(Input.Keys.A)|| Gdx.input.isKeyPressed(Input.Keys.S)){
             pOne.clearDirections();
-//            int condRot = (pOne.getWeapon().getRotation()/90)%2==0 ? -90: 90;
             if(Gdx.input.isKeyPressed(Input.Keys.W)){
                 pOne.setRotation(90);
                 pOne.setY(pOne.getY()+150*Gdx.graphics.getDeltaTime());
                 pOne.setYDirection(Direction.Up);
-                System.out.println(pOne.getWeapon().getRotation());
 
                 if(((pOne.getWeapon().getRotation()/90)%2) == 0) {
                     pOne.getWeapon().rotate(90);
@@ -322,7 +324,6 @@ public class GameScreen implements Screen {
                 pOne.setRotation(270);
                 pOne.setY(pOne.getY()-150*Gdx.graphics.getDeltaTime());
                 pOne.setYDirection(Direction.Down);
-                System.out.println(pOne.getWeapon().getRotation());
 
                 if(((pOne.getWeapon().getRotation()/90)%2) == 0) {
                     pOne.getWeapon().rotate(90);
@@ -333,28 +334,25 @@ public class GameScreen implements Screen {
                 pOne.setRotation(0);
                 pOne.setX(pOne.getX()+150*Gdx.graphics.getDeltaTime());
                 pOne.setXDirection(Direction.Right);
-                System.out.println(pOne.getWeapon().getRotation());
                 if(((pOne.getWeapon().getRotation()/90)%2) != 0) {
-
                     pOne.getWeapon().rotate(-90);
                 }
-                pOne.getWeapon().setPosition(pOne.getX(), pOne.getY());
+                pOne.getWeapon().setPosition(pOne.getX()+64, pOne.getY()+8);
             }
             if(Gdx.input.isKeyPressed(Input.Keys.A)){
                 pOne.setRotation(180);
                 pOne.setX(pOne.getX()-150*Gdx.graphics.getDeltaTime());
                 pOne.setXDirection(Direction.Left);
-                System.out.println(pOne.getWeapon().getRotation());
                 if(((pOne.getWeapon().getRotation()/90)%2) != 0) {
                     pOne.getWeapon().rotate(-90);
                 }
-                pOne.getWeapon().setPosition(pOne.getX(), pOne.getY());
+                pOne.getWeapon().setPosition(pOne.getX(), pOne.getY()+64);
             }
 
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
             if(TimeUtils.nanoTime() - pOne.getWeapon().getLastShot() > pOne.getWeapon().getCooldown()){
-                projectiles.add(pOne.getWeapon().shoot(pOne, lbTex, pOne.getLastDirection()));
+                projectiles.add(pOne.getWeapon().shoot(pOne.getWeapon(), lbTex, pOne.getLastDirection()));
             }
         }
 
@@ -397,8 +395,7 @@ public class GameScreen implements Screen {
         }
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
             if(TimeUtils.nanoTime() - pTwo.getWeapon().getLastShot() > pTwo.getWeapon().getCooldown()){
-//                beamCannon.setLastBeamShot(TimeUtils.nanoTime());
-                projectiles.add(pTwo.getWeapon() .shoot(pTwo, lbTex, pTwo.getLastDirection()));
+                projectiles.add(pTwo.getWeapon() .shoot(pTwo.getWeapon(), lbTex, pTwo.getLastDirection()));
             }
         }
 
