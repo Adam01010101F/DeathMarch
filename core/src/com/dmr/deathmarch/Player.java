@@ -2,6 +2,7 @@ package com.dmr.deathmarch;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.dmr.deathmarch.weapons.Weapon;
 
 public class Player extends Sprite {
     private String name;
@@ -12,6 +13,7 @@ public class Player extends Sprite {
     private Boolean isPlayerOne;
     private Texture playerTex;
     private Direction lastDirection[];
+    private Weapon weapon;
 
     public Player(String name, Boolean pone, Texture texture){
         super(texture);
@@ -39,6 +41,7 @@ public class Player extends Sprite {
     }
     public int getKills(){return kills;}
 
+    public void takeDmg(float dmg){this.health -= dmg;}
     public void addKill(){kills++;}
     public void addHealth(float hp){health = health + hp;}
     public void setDirection(Direction[] directions){
@@ -48,6 +51,12 @@ public class Player extends Sprite {
     public void setXDirection(Direction x){lastDirection[0]=x;}
     public Direction getYDirection(){return lastDirection[1];}
     public void setYDirection(Direction y){lastDirection[1]=y;}
+    public Direction[] getLastDirection(){return lastDirection;}
+    public void clearDirections(){
+        lastDirection[0] = Direction.None;
+        lastDirection[1] = Direction.None;
+    }
 
-
+    public void setWeapon(Weapon weapon){this.weapon = weapon;}
+    public Weapon getWeapon(){return weapon;}
 }
