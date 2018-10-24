@@ -110,6 +110,7 @@ public class GameScreen implements Screen {
             {
                 goblin.x = ((150*(x/distance)) * Gdx.graphics.getDeltaTime());
                 goblin.y = ((150*(y/distance)) * Gdx.graphics.getDeltaTime());
+                goblin.setRotation();
             }
         }
 
@@ -221,8 +222,8 @@ public class GameScreen implements Screen {
 
 
         //Player Boundaries
-        if(pOne.x<0){pOne.x = 0;}
-        if(pOne.x>1280-120){pOne.x = 1280-120;}
+        if(pOne.getX()<0){pOne.setX(0);}
+        if(pOne.getX()>1280-120){pOne.setX(1280-120);}
 
         checkBoundary(pOne);
         checkBoundary(pTwo);
