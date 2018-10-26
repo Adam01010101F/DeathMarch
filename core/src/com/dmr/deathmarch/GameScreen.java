@@ -291,7 +291,7 @@ public class GameScreen implements Screen {
 //            stage.draw();
 //        }
         //shopScreen open
-        if (Gdx.input.isKeyPressed(Input.Keys.P)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.P) && npc.overlaps(pOne.getBoundingRectangle())&& npc.overlaps(pTwo.getBoundingRectangle())) {
             game.changeScreen(DeathMarch.SHOP);
 
         }
