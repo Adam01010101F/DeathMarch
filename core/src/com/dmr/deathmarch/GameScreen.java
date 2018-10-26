@@ -68,7 +68,6 @@ public class GameScreen implements Screen {
 
 
     private Skin skin;
-    private Skin shopSkin;
 
     private Dialog dialog;
 
@@ -302,7 +301,7 @@ public class GameScreen implements Screen {
                 float gY = goblin.getY();
                 if(distance2 > distance1)
                 {
-                    goblin.setX(gX + ((40*(x/distance1)) * Gdx.graphics.getDeltaTime()));
+                    goblin.setX(goblin.getX() + ((40*(x/distance1)) * Gdx.graphics.getDeltaTime()));
                     goblin.setY(gY + ((40*(y/distance1)) * Gdx.graphics.getDeltaTime()));
                     float angle = (float) Math.toDegrees(Math.atan2(pOne.getY() - goblin.getY(), pOne.getX() - goblin.getX()));
                     if(angle  < 0)
@@ -442,11 +441,9 @@ public class GameScreen implements Screen {
 
 
         //Player Boundaries
-        if(pOne.getX()<0){pOne.setX(0);}
-        if(pOne.getX()>1280-120){pOne.setX(1280-120);}
-
         checkBoundary(pOne);
         checkBoundary(pTwo);
+
     }
 
     @Override
@@ -484,6 +481,8 @@ public class GameScreen implements Screen {
     private void checkBoundary(Player player){
         if(player.getX()<0)player.setX(0);
         if(player.getX()>1280-120)player.setX(1280-120);
+        if(player.getY()<0)player.setY(0);
+        if(player.getY()>720-120)player.setY(720-120);
     }
 
     public void showDialog() {
