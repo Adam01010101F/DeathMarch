@@ -113,14 +113,24 @@ public class GameScreen implements Screen {
                 float gY = goblin.getY();
                 if(distance2 > distance1)
                 {
-                    goblin.setX(gX + ((30*(x/distance1)) * Gdx.graphics.getDeltaTime()));
-                    goblin.setY(gY + ((30*(y/distance1)) * Gdx.graphics.getDeltaTime()));
-                    goblin.setRotation((float) Math.toDegrees(Math.atan2(pOne.getY() - goblin.getY(), pOne.getX() - goblin.getX())));
+                    goblin.setX(gX + ((40*(x/distance1)) * Gdx.graphics.getDeltaTime()));
+                    goblin.setY(gY + ((40*(y/distance1)) * Gdx.graphics.getDeltaTime()));
+                    float angle = (float) Math.toDegrees(Math.atan2(pOne.getY() - goblin.getY(), pOne.getX() - goblin.getX()));
+                    if(angle  < 0)
+                    {
+                        angle = angle + 360;
+                    }
+                    goblin.setRotation(angle);
                 }
                 else {
-                    goblin.setX(gX + ((30*(x/distance2)) * Gdx.graphics.getDeltaTime()));
-                    goblin.setY(gY + ((30*(y/distance2)) * Gdx.graphics.getDeltaTime()));
-                    goblin.setRotation((float) Math.toDegrees(Math.atan2(pOne.getY() - goblin.getY(), pOne.getX() - goblin.getX())));
+                    goblin.setX(gX + ((40*(x2/distance2)) * Gdx.graphics.getDeltaTime()));
+                    goblin.setY(gY + ((40*(y2/distance2)) * Gdx.graphics.getDeltaTime()));
+                    float angle = (float) Math.toDegrees(Math.atan2(pTwo.getY() - goblin.getY(), pTwo.getX() - goblin.getX()));
+                    if(angle < 0)
+                    {
+                        angle = angle + 360;
+                    }
+                    goblin.setRotation(angle);
                 }
             }
         }
