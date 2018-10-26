@@ -97,11 +97,12 @@ public class GameScreen implements Screen {
         // Goblin Destruction
         for(Iterator<Goblin> iter = goblins.iterator(); iter.hasNext();){
             Goblin goblin = iter.next();
-            float playerX = pTwo.getX();
-            float playerY = pTwo.getY();
-            float x = playerX - goblin.getX();
-            float y = playerY - goblin.getY();
-            float distance = (float) Math.sqrt((x*x) - (y*y));
+            float x = pOne.getX() - goblin.getX();
+            float y = pOne.getY() - goblin.getY();
+            float distance1 = (float) Math.sqrt((x*x) - (y*y));
+            float x2 = pTwo.getX() - goblin.getX();
+            float y2 = pTwo.getY() - goblin.getY();
+            float distance2 = (float) Math.sqrt((x2*x2) - (y2*y2));
             if(goblin.isDead()){
                 System.out.print("Goblin is dead.");
                 iter.remove();
@@ -110,9 +111,17 @@ public class GameScreen implements Screen {
             {
                 float gX = goblin.getX();
                 float gY = goblin.getY();
-                goblin.setX(gX + ((30*(x/distance)) * Gdx.graphics.getDeltaTime()));
-                goblin.setY(gY + ((30*(y/distance)) * Gdx.graphics.getDeltaTime()));
-                goblin.setRotation((float) Math.toDegrees(Math.atan2(playerY - goblin.getY(), playerX - goblin.getX())));
+                if(distance2 > distance1)
+                {
+                    goblin.setX(gX + ((30*(x/distance1)) * Gdx.graphics.getDeltaTime()));
+                    goblin.setY(gY + ((30*(y/distance1)) * Gdx.graphics.getDeltaTime()));
+                    goblin.setRotation((float) Math.toDegrees(Math.atan2(pOne.getY() - goblin.getY(), pOne.getX() - goblin.getX())));
+                }
+                else {
+                    goblin.setX(gX + ((30*(x/distance2)) * Gdx.graphics.getDeltaTime()));
+                    goblin.setY(gY + ((30*(y/distance2)) * Gdx.graphics.getDeltaTime()));
+                    goblin.setRotation((float) Math.toDegrees(Math.atan2(pOne.getY() - goblin.getY(), pOne.getX() - goblin.getX())));
+                }
             }
         }
 
