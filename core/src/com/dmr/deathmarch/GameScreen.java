@@ -115,7 +115,7 @@ public class GameScreen implements Screen {
                 {
                     float acc1 = (x / distance1);
                     float acc2 = (y / distance1);
-                    if(x / distance1 >= 0)
+                    if(x >= 0)
                     {
                         acc1 = 1;
                     }
@@ -123,7 +123,7 @@ public class GameScreen implements Screen {
                     {
                         acc1 = -1;
                     }
-                    if(y / distance1 >= 0)
+                    if(y  >= 0)
                     {
                         acc2 = 1;
                     }
@@ -149,7 +149,7 @@ public class GameScreen implements Screen {
                     if(distance2 != 0) {
                         float acc1 = (x2 / distance2);
                         float acc2 = (y2 / distance2);
-                        if(x2 / distance2 >= 0)
+                        if(x2 >= 0)
                         {
                             acc1 = 1;
                         }
@@ -157,7 +157,7 @@ public class GameScreen implements Screen {
                         {
                             acc1 = -1;
                         }
-                        if(y2 / distance2 >= 0)
+                        if(y2 >= 0)
                         {
                             acc2 = 1;
                         }
