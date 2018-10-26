@@ -1,9 +1,10 @@
 package com.dmr.deathmarch.npc;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 
 
-public class Goblin extends Rectangle{
+public class Goblin extends Sprite {
     private float health;
     private float speed;
     public Goblin(){

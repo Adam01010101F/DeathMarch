@@ -279,9 +279,41 @@ public class GameScreen implements Screen {
         // Goblin Destruction
         for(Iterator<Goblin> iter = goblins.iterator(); iter.hasNext();){
             Goblin goblin = iter.next();
+            float x = pOne.getX() - goblin.getX();
+            float y = pOne.getY() - goblin.getY();
+            float distance1 = (float) Math.sqrt((x*x) - (y*y));
+            float x2 = pTwo.getX() - goblin.getX();
+            float y2 = pTwo.getY() - goblin.getY();
+            float distance2 = (float) Math.sqrt((x2*x2) - (y2*y2));
             if(goblin.isDead()){
                 System.out.print("Goblin is dead.");
                 iter.remove();
+            }
+            else
+            {
+                float gX = goblin.getX();
+                float gY = goblin.getY();
+                if(distance2 > distance1)
+                {
+                    goblin.setX(gX + ((40*(x/distance1)) * Gdx.graphics.getDeltaTime()));
+                    goblin.setY(gY + ((40*(y/distance1)) * Gdx.graphics.getDeltaTime()));
+                    float angle = (float) Math.toDegrees(Math.atan2(pOne.getY() - goblin.getY(), pOne.getX() - goblin.getX()));
+                    if(angle  < 0)
+                    {
+                        angle = angle + 360;
+                    }
+                    goblin.setRotation(angle);
+                }
+                else {
+                    goblin.setX(gX + ((40*(x2/distance2)) * Gdx.graphics.getDeltaTime()));
+                    goblin.setY(gY + ((40*(y2/distance2)) * Gdx.graphics.getDeltaTime()));
+                    float angle = (float) Math.toDegrees(Math.atan2(pTwo.getY() - goblin.getY(), pTwo.getX() - goblin.getX()));
+                    if(angle < 0)
+                    {
+                        angle = angle + 360;
+                    }
+                    goblin.setRotation(angle);
+                }
             }
         }
 
@@ -296,8 +328,8 @@ public class GameScreen implements Screen {
 //        game.batch.draw(bmTex, pOne.getX(), pOne.getY()-8);
         pOne.getWeapon().draw(game.batch);
         game.batch.draw(npcTex, npc.x, npc.y);
-        for(Rectangle goblin: goblins){
-            game.batch.draw(pTwoTex, goblin.x, goblin.y);
+        for(Sprite goblin: goblins){
+            game.batch.draw(pTwoTex, goblin.getX(), goblin.getY());
         }
         for (Sprite beam: projectiles){
             beam.draw(game.batch);
@@ -406,6 +438,9 @@ public class GameScreen implements Screen {
 
 
         //Player Boundaries
+        if(pOne.getX()<0){pOne.setX(0);}
+        if(pOne.getX()>1280-120){pOne.setX(1280-120);}
+
         checkBoundary(pOne);
         checkBoundary(pTwo);
     }
@@ -437,8 +472,8 @@ public class GameScreen implements Screen {
 
     private void createGoblin(){
         Goblin goblin = new Goblin();
-        goblin.x = 1280/2f - 16/2f;
-        goblin.y = 720/2f;
+        goblin.setX(1280/2f - 16/2f);
+        goblin.setY(720/2f);
         goblins.add(goblin);
     }
 
