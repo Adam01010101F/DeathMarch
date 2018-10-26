@@ -1,40 +1,24 @@
 package com.dmr.deathmarch.weapons;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.dmr.deathmarch.Direction;
+import com.dmr.deathmarch.Player;
+import com.dmr.deathmarch.Projectile;
 
-public class BeamCannon extends Rectangle {
+import java.io.Serializable;
+
+public class BeamCannon extends Weapon {
     private int damage;
     private float cooldown;
     private float lastBeamShot;
 
-    public BeamCannon(){
+    public BeamCannon(Texture tex){
+        super("Beam Cannon", tex, 25, 0, 300000000);
         damage = 25;
-        cooldown = 500000000;
-    }
-
-    public int getDamage(){
-        return damage;
-    }
-
-    public float getCooldown(){
-        return cooldown;
-    }
-
-    public Rectangle shoot(Rectangle player){
-        Rectangle laserBeam = new Rectangle();
-        laserBeam.x = player.x;
-        laserBeam.y = player.y;
-        laserBeam.height = 32;
-        laserBeam.width = 64;
-        lastBeamShot = TimeUtils.nanoTime();
-        return laserBeam;
-    }
-
-    public float getLastBeamShot(){
-        return lastBeamShot;
-    }
-    public void setLastBeamShot(float time){
-        lastBeamShot = time;
+        cooldown = 300000000;
     }
 }
