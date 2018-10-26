@@ -1,15 +1,12 @@
 package com.dmr.deathmarch.weapons;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.dmr.deathmarch.Direction;
-import com.dmr.deathmarch.Player;
 import com.dmr.deathmarch.Projectile;
 
-import java.awt.*;
-
-public abstract class Weapon extends Sprite {
+public abstract class Weapon extends Rectangle {
     private String  name;
     private int damage;
     private float lastShot;
@@ -22,7 +19,6 @@ public abstract class Weapon extends Sprite {
         cooldown = 0f;
     }
     public Weapon(String name,Texture tex, int damage, float lastShot, float cooldown){
-        super(tex);
         this.name = name;
         this.damage = damage;
         this.lastShot = lastShot;
@@ -37,10 +33,11 @@ public abstract class Weapon extends Sprite {
     }
 
     //TODO:: Make Rotation logic less ugly? Does it impact perf?
-    public Projectile shoot(Player player, Texture lbTex, Direction dir[]){
+    public Projectile shoot(Rectangle weapon, Texture lbTex, Direction dir[]){
         Projectile projectile = new Projectile(lbTex, dir[0], dir[1]);
-        projectile.setPosition(player.getX(), player.getY());
-
+//        projectile.scale(1/64f);
+        projectile.setPosition(weapon.x + weapon.height, weapon.y);
+        System.out.println("Weapon(x,y): " +weapon.x+", "+weapon.y);
         //Laser Direction Logic
         if(projectile.getxVel()==0&&projectile.getyVel()==1
                 ||projectile.getxVel()==0&&projectile.getyVel()==-1)
@@ -49,10 +46,10 @@ public abstract class Weapon extends Sprite {
                 ||projectile.getxVel()==1&&projectile.getyVel() ==-1) {
             projectile.rotate(135);
         }
-        else if(projectile.getxVel()==1 && projectile.getyVel()==1
-                ||projectile.getxVel()==-1 &&projectile.getyVel()==-1){
-            projectile.rotate(45);
-        }
+//        else if(projectile.getxVel()==1 && projectile.getyVel()==1
+//                ||projectile.getxVel()==-1 &&projectile.getyVel()==-1){
+//            projectile.rotate(45);
+//        }
         else {
             projectile.rotate(0);
         }

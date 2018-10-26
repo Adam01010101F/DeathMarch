@@ -15,7 +15,6 @@ public class Projectile extends Sprite {
     }
 
     public Projectile(Texture tex, Direction x, Direction y){
-        //Might need to add None Condition
         super(tex);
         if(x == Direction.None)
             this.xVel = 0;

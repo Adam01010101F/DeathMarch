@@ -18,7 +18,7 @@ buildscript {
 }
 
 allprojects {
-    apply plugin: "eclipse"
+//    apply plugin: "eclipse"
     apply plugin: "idea"
 
     version = '1.0'
@@ -35,6 +35,7 @@ allprojects {
         google()
         mavenLocal()
         mavenCentral()
+        jcenter()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
@@ -93,6 +94,6 @@ project(":core") {
     }
 }
 
-tasks.eclipse.doLast {
-    delete ".project"
-}
+//tasks.eclipse.doLast {
+//    delete ".project"
+//}
