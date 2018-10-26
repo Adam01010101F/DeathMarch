@@ -116,15 +116,15 @@ public class GameScreen implements Screen {
         //Player Creation
         pOne = new Player("Shredder", false, playerTex, 23, 38, 293, 191);
         pOne.setOriginCenter();
-        System.out.println(pOne.getOriginX()+ " " + pOne.getOriginY());
+//        System.out.println(pOne.getOriginX()+ " " + pOne.getOriginY());
         pOne.setColor(Color.GRAY);
-        pOne.setBounds(1280/2f - 120/2f, 720/2f, 104, 69);
+        pOne.setScale(1/3f);
         pOne.setWeapon(new BeamCannon(bmTex));
-        pOne.getBoundingRectangle().setSize(104,69);
-
+        System.out.println(pOne.getBoundingRectangle().height + " "
+                + pOne.getBoundingRectangle().width);
         pTwo = new Player("Donatello", false, playerTex, 23, 38, 293, 191);
         pTwo.setColor(Color.PURPLE);
-        pTwo.setBounds(1280/2f - 120/2f + 32, 720/2f, 104, 69);
+        pTwo.setScale(1/3f);
         pTwo.setWeapon(new BeamCannon(bmTex));
 
         // Ghetto Managers
@@ -296,7 +296,7 @@ public class GameScreen implements Screen {
         pOne.draw(game.batch);
         pTwo.draw(game.batch);
 //        game.batch.draw(bmTex, pOne.getX(), pOne.getY()-8);
-        pOne.getWeapon().draw(game.batch);
+//        pOne.getWeapon().draw(game.batch);
         game.batch.draw(npcTex, npc.x, npc.y);
         for(Rectangle goblin: goblins){
             game.batch.draw(pTwoTex, goblin.x, goblin.y);
@@ -314,45 +314,49 @@ public class GameScreen implements Screen {
                 pOne.setRotation(90);
                 pOne.setY(pOne.getY()+150*Gdx.graphics.getDeltaTime());
                 pOne.setYDirection(Direction.Up);
-
-                if(((pOne.getWeapon().getRotation()/90)%2) == 0) {
-                    pOne.getWeapon().rotate(90);
-                }
-                pOne.getWeapon().setPosition(pOne.getX()+64, pOne.getY()+92);
+                System.out.println("Height: "+ pOne.getBoundingRectangle().height + " Width:" + pOne.getBoundingRectangle().width);
+//                if(((pOne.getWeapon().getRotation()/90)%2) == 0) {
+//                    pOne.getWeapon().rotate(90);
+//                }
+//                pOne.getWeapon().setPosition(pOne.getX()+64, pOne.getY()+92);
             }
-            if(Gdx.input.isKeyPressed(Input.Keys.S)){
+            else if(Gdx.input.isKeyPressed(Input.Keys.S)){
                 pOne.setRotation(270);
                 pOne.setY(pOne.getY()-150*Gdx.graphics.getDeltaTime());
                 pOne.setYDirection(Direction.Down);
-
-                if(((pOne.getWeapon().getRotation()/90)%2) == 0) {
-                    pOne.getWeapon().rotate(90);
-                }
-                pOne.getWeapon().setPosition(pOne.getX()-8, pOne.getY());
+                System.out.println("Height: "+ pOne.getBoundingRectangle().height + " Width:" + pOne.getBoundingRectangle().width);
+//                if(((pOne.getWeapon().getRotation()/90)%2) == 0) {
+//                    pOne.getWeapon().rotate(90);
+//                }
+//                pOne.getWeapon().setPosition(pOne.getX()-8, pOne.getY());
             }
-            if(Gdx.input.isKeyPressed(Input.Keys.D)){
+            else if(Gdx.input.isKeyPressed(Input.Keys.D)){
                 pOne.setRotation(0);
                 pOne.setX(pOne.getX()+150*Gdx.graphics.getDeltaTime());
                 pOne.setXDirection(Direction.Right);
-                if(((pOne.getWeapon().getRotation()/90)%2) != 0) {
-                    pOne.getWeapon().rotate(-90);
-                }
-                pOne.getWeapon().setPosition(pOne.getX()+64, pOne.getY()+8);
+                System.out.println("Height: "+ pOne.getBoundingRectangle().height + " Width:" + pOne.getBoundingRectangle().width);
+
+//                if(((pOne.getWeapon().getRotation()/90)%2) != 0) {
+//                    pOne.getWeapon().rotate(-90);
+//                }
+//                pOne.getWeapon().setPosition(pOne.getX()+64, pOne.getY()+8);
             }
-            if(Gdx.input.isKeyPressed(Input.Keys.A)){
+            else if(Gdx.input.isKeyPressed(Input.Keys.A)){
                 pOne.setRotation(180);
                 pOne.setX(pOne.getX()-150*Gdx.graphics.getDeltaTime());
                 pOne.setXDirection(Direction.Left);
-                if(((pOne.getWeapon().getRotation()/90)%2) != 0) {
-                    pOne.getWeapon().rotate(-90);
-                }
-                pOne.getWeapon().setPosition(pOne.getX(), pOne.getY()+64);
+                System.out.println("Height: "+ pOne.getBoundingRectangle().height + " Width:" + pOne.getBoundingRectangle().width);
+
+//                if(((pOne.getWeapon().getRotation()/90)%2) != 0) {
+//                    pOne.getWeapon().rotate(-90);
+//                }
+//                pOne.getWeapon().setPosition(pOne.getX(), pOne.getY()+64);
             }
 
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
             if(TimeUtils.nanoTime() - pOne.getWeapon().getLastShot() > pOne.getWeapon().getCooldown()){
-                projectiles.add(pOne.getWeapon().shoot(pOne.getWeapon(), lbTex, pOne.getLastDirection()));
+                projectiles.add(pOne.getWeapon().shoot(pOne.getBoundingRectangle(), lbTex, pOne.getLastDirection()));
             }
         }
 
@@ -377,17 +381,17 @@ public class GameScreen implements Screen {
                 pTwo.setY(pTwo.getY() + 150 * Gdx.graphics.getDeltaTime());
                 pTwo.setYDirection(Direction.Up);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
                 pTwo.setRotation(270);
                 pTwo.setY(pTwo.getY() - 150 * Gdx.graphics.getDeltaTime());
                 pTwo.setYDirection(Direction.Down);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 pTwo.setRotation(0);
                 pTwo.setX(pTwo.getX() + 150 * Gdx.graphics.getDeltaTime());
                 pTwo.setXDirection(Direction.Right);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 pTwo.setRotation(180);
                 pTwo.setX(pTwo.getX() - 150 * Gdx.graphics.getDeltaTime());
                 pTwo.setXDirection(Direction.Left);
