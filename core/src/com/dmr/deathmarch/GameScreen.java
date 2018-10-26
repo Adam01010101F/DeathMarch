@@ -268,7 +268,7 @@ public class GameScreen implements Screen {
             }
             //TODO:: Give ownership of projectile to count score.
             for(Goblin goblin: goblins){
-                if(goblin.overlaps(projectile.getBoundingRectangle())){
+                if(goblin.getBoundingRectangle().overlaps(projectile.getBoundingRectangle())){
 //                    goblin.takeDamage(beamCannon.getDamage());
                     iter.remove();
                     System.out.println("Goblin takes damage");
@@ -410,22 +410,22 @@ public class GameScreen implements Screen {
             pTwo.clearDirections();
             if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
                 pTwo.setRotation(90);
-                pTwo.setY(pTwo.getY() + 150 * Gdx.graphics.getDeltaTime());
+                pTwo.setY(pTwo.getY() + 200 * Gdx.graphics.getDeltaTime());
                 pTwo.setYDirection(Direction.Up);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
                 pTwo.setRotation(270);
-                pTwo.setY(pTwo.getY() - 150 * Gdx.graphics.getDeltaTime());
+                pTwo.setY(pTwo.getY() - 200 * Gdx.graphics.getDeltaTime());
                 pTwo.setYDirection(Direction.Down);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
                 pTwo.setRotation(0);
-                pTwo.setX(pTwo.getX() + 150 * Gdx.graphics.getDeltaTime());
+                pTwo.setX(pTwo.getX() + 200 * Gdx.graphics.getDeltaTime());
                 pTwo.setXDirection(Direction.Right);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
                 pTwo.setRotation(180);
-                pTwo.setX(pTwo.getX() - 150 * Gdx.graphics.getDeltaTime());
+                pTwo.setX(pTwo.getX() - 200 * Gdx.graphics.getDeltaTime());
                 pTwo.setXDirection(Direction.Left);
             }
         }
