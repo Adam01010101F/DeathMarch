@@ -25,6 +25,26 @@ public class Player extends Sprite {
         isPlayerOne = pone;
         lastDirection = new Direction[2];
     }
+    public Player(String name, Boolean pone, Texture texture, int width, int height){
+        super(texture, width, height);
+        this.name = name;
+        health = 100;
+        speed = 150;
+        kills = 0;
+        dmgMulti = 1;
+        isPlayerOne = pone;
+        lastDirection = new Direction[2];
+    }
+    public Player(String name, Boolean pone, Texture texture, int x, int y, int width, int height){
+        super(texture, x, y, width, height);
+        this.name = name;
+        health = 100;
+        speed = 150;
+        kills = 0;
+        dmgMulti = 1;
+        isPlayerOne = pone;
+        lastDirection = new Direction[2];
+    }
 
     public String getName() {
         return name;

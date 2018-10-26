@@ -2,12 +2,12 @@ buildscript {
     
 
     repositories {
+        google()
         mavenLocal()
         mavenCentral()
         maven { url "https://plugins.gradle.org/m2/" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         jcenter()
-        google()
     }
     dependencies {
         classpath 'org.wisepersist:gwt-gradle-plugin:1.0.6'
@@ -18,7 +18,7 @@ buildscript {
 }
 
 allprojects {
-    apply plugin: "eclipse"
+//    apply plugin: "eclipse"
     apply plugin: "idea"
 
     version = '1.0'
@@ -32,9 +32,10 @@ allprojects {
     }
 
     repositories {
+        google()
         mavenLocal()
         mavenCentral()
-        google()
+        jcenter()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
@@ -93,6 +94,6 @@ project(":core") {
     }
 }
 
-tasks.eclipse.doLast {
-    delete ".project"
-}
+//tasks.eclipse.doLast {
+//    delete ".project"
+//}
