@@ -66,6 +66,7 @@ public class GameScreen implements Screen {
 
 
     private Skin skin;
+    private Skin shopSkin;
 
     private Dialog dialog;
 
@@ -101,7 +102,8 @@ public class GameScreen implements Screen {
         //OrthographicCamera camera = new OrthographicCamera();
         //camera.setToOrtho(true);
 
-        Skin skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
+        skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
+        shopSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
 
         lbTex = new Texture(Gdx.files.internal("laserBeam.png"));
@@ -169,7 +171,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //table
-        Skin shopSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
         //window
            /* Window window = new Window("ShopKeeper", shopSkin );
@@ -267,8 +268,9 @@ public class GameScreen implements Screen {
             }
             //TODO:: Give ownership of projectile to count score.
             for(Goblin goblin: goblins){
-                if(projectile.getBoundingRectangle().overlaps(goblin)){
+                if(goblin.overlaps(projectile.getBoundingRectangle())){
 //                    goblin.takeDamage(beamCannon.getDamage());
+                    iter.remove();
                     System.out.println("Goblin takes damage");
                 }
             }
