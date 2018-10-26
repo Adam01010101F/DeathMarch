@@ -25,6 +25,14 @@ public class Goblin extends Sprite {
         return health;
     }
 
+    public void checkGob(Sprite p) {
+        if(p.getBoundingRectangle().overlaps(this.getBoundingRectangle()))
+        {
+            p.setX(p.getX() - 100);
+            p.setY(p.getY() -100);
+        }
+    }
+
     public void loop(){
 
     }

@@ -57,6 +57,14 @@ public class Player extends Sprite {
         lastDirection[1] = Direction.None;
     }
 
+    public void checkGob(Sprite g) {
+        if(this.getBoundingRectangle().overlaps(g.getBoundingRectangle()))
+        {
+            this.setX(this.getX() - 100);
+            this.setY(this.getY() -100);
+        }
+    }
+
     public void setWeapon(Weapon weapon){this.weapon = weapon;}
     public Weapon getWeapon(){return weapon;}
 }
