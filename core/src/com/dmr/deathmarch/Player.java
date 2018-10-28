@@ -96,12 +96,5 @@ public class Player extends Sprite {
     }
 
     public void setWeapon(Weapon weapon){this.weapon = weapon;}
-    public Weapon getWeapon(){return weapon;}
-<<<<<<< HEAD
-
-
-
-
-=======
->>>>>>> 046789f5eccb9d340789cf9455e7022c2cb6e125
-}
+    public Weapon getWeapon(){return weapon; }
+    }

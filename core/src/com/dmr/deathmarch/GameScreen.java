@@ -501,7 +501,7 @@ public class GameScreen implements Screen {
         increment = collisionLayer.getTileWidth();
         increment = player.getBoundingRectangle().getWidth() < increment ? player.getBoundingRectangle().getWidth() / 2 : increment / 2;
         for(float step = 0; step <= player.getBoundingRectangle().getHeight(); step += increment)
-            if(isCellBlocked(player.getBoundingRectangle().getX() + player.getBoundingRectangle().getWidth(), player.getY() + step))
+            if(isCellBlocked(player.getBoundingRectangle().getX() + player.getBoundingRectangle().getWidth(), player.getBoundingRectangle().getY() + step))
                 return true;
         return false;
     }
