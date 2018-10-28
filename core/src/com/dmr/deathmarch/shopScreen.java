@@ -5,9 +5,11 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -31,6 +33,9 @@ import com.dmr.deathmarch.weapons.BeamCannon;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 public class shopScreen implements Screen{
     final DeathMarch game;
@@ -59,6 +64,14 @@ public class shopScreen implements Screen{
     private OrthogonalTiledMapRenderer renderer;
     private TiledMap map;
 
+    //adding text
+    FreeTypeFontGenerator generator;
+    FreeTypeFontParameter parameters;
+    BitmapFont uiText;
+    private Array<String> text;
+
+
+
 
     private Skin skin;
 
@@ -69,12 +82,14 @@ public class shopScreen implements Screen{
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1280, 720);
 
+        text = new Array<String>();
 
-
-        Skin skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
+        skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
         pOneTex = new Texture(Gdx.files.internal("player1.png"));
         pTwoTex = new Texture(Gdx.files.internal("player2.png"));
         stage = new Stage(new ScreenViewport());
+
+
 
         //Player Creation
         pOne = new Player("Shredder", false, pOneTex);
@@ -104,6 +119,23 @@ public class shopScreen implements Screen{
         door.setScale(8f);
         door.setX(22);
         door.setY(20);
+
+        //text for NPC
+        generator = new FreeTypeFontGenerator((Gdx.files.internal("fonts/joystix.ttf")));
+        parameters = new FreeTypeFontParameter();
+        parameters.size = 20;
+        parameters.color= Color.BLACK;
+
+
+        uiText = generator.generateFont(parameters);
+
+
+        text.add("1");
+        text.add("2");
+        int x = 500;
+        int y = 50;
+
+        generator.dispose();
     }
     @Override
     public void render(float delta){
@@ -124,7 +156,7 @@ public class shopScreen implements Screen{
 //            dispose();
 //        }
 
-        stage.clear();
+
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         Gdx.input.setInputProcessor(stage);
         stage.draw();
@@ -146,6 +178,18 @@ public class shopScreen implements Screen{
         heart.draw(game.batch);
         bullet.draw(game.batch);
         door.draw(game.batch);
+
+       // text bubble
+
+        if(pOne.getX()== 1280/2f - 120/2f && pOne.getY()== 720/2f)
+            uiText.draw(game.batch, text.get(0),500,50);
+        else
+            uiText.draw(game.batch, text.get(1),500,50);
+
+        
+//        uiText.draw(game.batch,"Hello World",500,50);
+
+
         game.batch.end();
 
         //Player 1 Keybindings
@@ -217,6 +261,11 @@ public class shopScreen implements Screen{
         //Player Boundaries
         checkBoundary(pOne);
         checkBoundary(pTwo);
+
+
+
+
+        stage.clear();
 
 
     }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -33,6 +34,9 @@ import com.dmr.deathmarch.weapons.BeamCannon;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 public class GameScreen implements Screen {
     final DeathMarch game;
@@ -72,6 +76,11 @@ public class GameScreen implements Screen {
     private Skin skin;
 
     private Dialog dialog;
+
+    //adding dialogue for npc
+    FreeTypeFontGenerator generator;
+    FreeTypeFontParameter parameters;
+    BitmapFont uiText;
 
 
 
@@ -151,6 +160,18 @@ public class GameScreen implements Screen {
         lastDirection = new Direction[2];       // Tracks the direction of the user.
         projectiles = new Array<Projectile>();
         goblins = new Array<Goblin>();
+
+
+        //text for NPC
+        generator = new FreeTypeFontGenerator((Gdx.files.internal("fonts/joystix.ttf")));
+        parameters = new FreeTypeFontParameter();
+        parameters.size = 20;
+        parameters.color= Color.BLACK;
+
+
+        uiText = generator.generateFont(parameters);
+
+        generator.dispose();
 
         createGoblin();
     }
@@ -250,6 +271,20 @@ public class GameScreen implements Screen {
 
         // Load Objects onto Screen
         game.batch.begin();
+        //NPC dialogue conditional statement
+        if(!npc.overlaps(pOne.getBoundingRectangle()) && !npc.overlaps(pTwo.getBoundingRectangle()))
+        {
+            uiText.draw(game.batch,"Happy Halloween! Come visit my store! There are some spooky deals",500,50);
+        }
+        if(npc.overlaps(pOne.getBoundingRectangle())&& !npc.overlaps(pTwo.getBoundingRectangle())){
+            uiText.draw(game.batch,"You should bring your friend along",500,50);
+        }
+        if(npc.overlaps(pTwo.getBoundingRectangle()) && !npc.overlaps(pOne.getBoundingRectangle())){
+            uiText.draw(game.batch,"You should bring your friend along",500,50);
+        }
+        if(npc.overlaps(pOne.getBoundingRectangle()) && npc.overlaps(pTwo.getBoundingRectangle())){
+            uiText.draw(game.batch,"Press P to enter my store",500,50);
+        }
         game.font.draw(game.batch, "P2 x: "+pTwo.getX()+" y: "+pTwo.getY(), 100, 150);
         game.font.draw(game.batch, "Projectiles: " + projectiles.size, 100, 200);
         pOne.draw(game.batch);
@@ -333,8 +368,8 @@ public class GameScreen implements Screen {
         //shopScreen open
         if (Gdx.input.isKeyPressed(Input.Keys.P) && npc.overlaps(pOne.getBoundingRectangle())&& npc.overlaps(pTwo.getBoundingRectangle())) {
             game.changeScreen(DeathMarch.SHOP);
-
         }
+
 
 
         //Player 2 Keybindings
