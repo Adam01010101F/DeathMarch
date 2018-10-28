@@ -331,6 +331,7 @@
    <property name="blocked" value=""/>
   </properties>
  </tile>
+<<<<<<< HEAD
  <tile id="548">
   <properties>
    <property name="blocked" value=""/>
@@ -371,6 +372,8 @@
    <property name="blocked" value=""/>
   </properties>
  </tile>
+=======
+>>>>>>> 046789f5eccb9d340789cf9455e7022c2cb6e125
  <tile id="567">
   <properties>
    <property name="blocked" value=""/>
@@ -406,6 +409,7 @@
    <property name="blocked" value=""/>
   </properties>
  </tile>
+<<<<<<< HEAD
  <tile id="596">
   <properties>
    <property name="blocked" value=""/>
@@ -446,6 +450,8 @@
    <property name="blocked" value=""/>
   </properties>
  </tile>
+=======
+>>>>>>> 046789f5eccb9d340789cf9455e7022c2cb6e125
  <tile id="615">
   <properties>
    <property name="blocked" value=""/>
@@ -491,6 +497,7 @@
    <property name="blocked" value=""/>
   </properties>
  </tile>
+<<<<<<< HEAD
  <tile id="644">
   <properties>
    <property name="blocked" value=""/>
@@ -531,6 +538,8 @@
    <property name="blocked" value=""/>
   </properties>
  </tile>
+=======
+>>>>>>> 046789f5eccb9d340789cf9455e7022c2cb6e125
  <tile id="663">
   <properties>
    <property name="blocked" value=""/>
@@ -576,6 +585,7 @@
    <property name="blocked" value=""/>
   </properties>
  </tile>
+<<<<<<< HEAD
  <tile id="692">
   <properties>
    <property name="blocked" value=""/>
@@ -616,6 +626,8 @@
    <property name="blocked" value=""/>
   </properties>
  </tile>
+=======
+>>>>>>> 046789f5eccb9d340789cf9455e7022c2cb6e125
  <tile id="711">
   <properties>
    <property name="blocked" value=""/>
@@ -661,6 +673,7 @@
    <property name="blocked" value=""/>
   </properties>
  </tile>
+<<<<<<< HEAD
  <tile id="740">
   <properties>
    <property name="blocked" value=""/>
@@ -701,6 +714,8 @@
    <property name="blocked" value=""/>
   </properties>
  </tile>
+=======
+>>>>>>> 046789f5eccb9d340789cf9455e7022c2cb6e125
  <tile id="768">
   <properties>
    <property name="blocked" value=""/>

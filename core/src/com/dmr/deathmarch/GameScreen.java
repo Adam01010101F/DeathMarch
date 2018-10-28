@@ -13,8 +13,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+<<<<<<< HEAD
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
+=======
+>>>>>>> 046789f5eccb9d340789cf9455e7022c2cb6e125
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -71,6 +74,7 @@ public class GameScreen implements Screen {
     private OrthographicCamera cam;
     private OrthogonalTiledMapRenderer renderer;
     private TiledMapTileLayer collisionLayer;
+<<<<<<< HEAD
     private MapObjects objects;
     private String blockedKey = "blocked";
     private float increment;
@@ -100,6 +104,38 @@ public class GameScreen implements Screen {
         p2CollisionXRight = false;
         p2CollisionYUp = false;
         p2CollisionYDown = false;
+=======
+    private String blockedKey = "blocked";
+    private float increment;
+    private Skin skin;
+    private boolean p1CollisionX, p1CollisionY, p2CollisionX , p2CollisionY;
+    private Dialog dialog;
+    private int[] background = new int[] {0}, foreground = new int[] {1};
+    private ShapeRenderer shape;
+
+    public GameScreen(final DeathMarch game){
+        shape = new ShapeRenderer();
+        map = new TmxMapLoader().load("maps/demoMap.tmx");
+        collisionLayer = (TiledMapTileLayer) map.getLayers().get(1);
+ //       System.out.println(collisionLayer.getCell(0,0).getTile().getProperties().containsKey("blocked"));
+        for(int row = 0; row < collisionLayer.getWidth(); row++)
+        {
+            for(int col = 0; col < collisionLayer.getHeight(); col++){
+                if(collisionLayer.getCell(row,col) != null){
+
+                    System.out.println("Row: "+ row + " Col: " + col );
+                    System.out.println(collisionLayer.getCell(row,col).getTile().getProperties().containsKey("blocked"));
+                }
+
+            }
+
+        }
+
+        p1CollisionX = false;
+        p1CollisionY = false;
+        p2CollisionX = false;
+        p2CollisionY = false;
+>>>>>>> 046789f5eccb9d340789cf9455e7022c2cb6e125
         this.game = game;
 
         camera = new OrthographicCamera();
@@ -180,6 +216,11 @@ public class GameScreen implements Screen {
     public void show() {
         map = new TmxMapLoader().load("maps/demoMap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 046789f5eccb9d340789cf9455e7022c2cb6e125
 
     }
 
@@ -281,16 +322,24 @@ public class GameScreen implements Screen {
         game.batch.end();
 
 
+<<<<<<< HEAD
         //shape.begin(ShapeRenderer.ShapeType.Filled);
         //shape.setColor(Color.BLACK);
         //shape.rect(pOne.getBoundingRectangle().getX(), pOne.getBoundingRectangle().getY(), pOne.getBoundingRectangle().getWidth(), pOne.getBoundingRectangle().getHeight());
         //shape.end();
+=======
+        shape.begin(ShapeRenderer.ShapeType.Filled);
+        shape.setColor(Color.BLACK);
+        shape.rect(pOne.getBoundingRectangle().getX(), pOne.getBoundingRectangle().getY(), pOne.getBoundingRectangle().getWidth(), pOne.getBoundingRectangle().getHeight());
+        shape.end();
+>>>>>>> 046789f5eccb9d340789cf9455e7022c2cb6e125
 
         //Player 1 Keybindings
         if(Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.D) ||
                 Gdx.input.isKeyPressed(Input.Keys.A)|| Gdx.input.isKeyPressed(Input.Keys.S)){
             pOne.clearDirections();
             if(Gdx.input.isKeyPressed(Input.Keys.W)){
+<<<<<<< HEAD
                 if(collidesTop(pOne))
                 {
                     pOne.setRotation(90);
@@ -344,6 +393,48 @@ public class GameScreen implements Screen {
                     pOne.setXDirection(Direction.Left);
                 }
 
+=======
+                pOne.setRotation(90);
+                pOne.setY(pOne.getY()+150*Gdx.graphics.getDeltaTime());
+
+                pOne.setYDirection(Direction.Up);
+
+//                if(((pOne.getWeapon().getRotation()/90)%2) == 0) {
+//                    pOne.getWeapon().rotate(90);
+//                }
+//                pOne.getWeapon().setPosition(pOne.getX()+64, pOne.getY()+92);
+            }
+            else if(Gdx.input.isKeyPressed(Input.Keys.S)){
+
+                pOne.setRotation(270);
+                pOne.setY(pOne.getY()-150*Gdx.graphics.getDeltaTime());
+                pOne.setYDirection(Direction.Down);
+//                if(((pOne.getWeapon().getRotation()/90)%2) == 0) {
+//                    pOne.getWeapon().rotate(90);
+//                }
+//                pOne.getWeapon().setPosition(pOne.getX()-8, pOne.getY());
+            }
+            else if(Gdx.input.isKeyPressed(Input.Keys.D)){
+                pOne.setRotation(0);
+                pOne.setX(pOne.getX()+150*Gdx.graphics.getDeltaTime());
+                pOne.setXDirection(Direction.Right);
+
+
+//                if(((pOne.getWeapon().getRotation()/90)%2) != 0) {
+//                    pOne.getWeapon().rotate(-90);
+//                }
+//                pOne.getWeapon().setPosition(pOne.getX()+64, pOne.getY()+8);
+            }
+            else if(Gdx.input.isKeyPressed(Input.Keys.A)){
+                pOne.setRotation(180);
+                pOne.setX(pOne.getX()-150*Gdx.graphics.getDeltaTime());
+                pOne.setXDirection(Direction.Left);
+
+//                if(((pOne.getWeapon().getRotation()/90)%2) != 0) {
+//                    pOne.getWeapon().rotate(-90);
+//                }
+//                pOne.getWeapon().setPosition(pOne.getX(), pOne.getY()+64);
+>>>>>>> 046789f5eccb9d340789cf9455e7022c2cb6e125
             }
 
         }
@@ -364,6 +455,7 @@ public class GameScreen implements Screen {
 
             pTwo.clearDirections();
             if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+<<<<<<< HEAD
 
                 if(collidesTop(pTwo))
                 {
@@ -377,6 +469,17 @@ public class GameScreen implements Screen {
                     pTwo.setYDirection(Direction.Up);
                 }
 
+=======
+                pTwo.setRotation(90);
+                pTwo.setY(pTwo.getY() + 200 * Gdx.graphics.getDeltaTime());
+                pTwo.setYDirection(Direction.Up);
+
+                p2CollisionY = collidesTop(pTwo);
+
+                if(p2CollisionY){
+                    pTwo.setY(pTwo.getY());
+                }
+>>>>>>> 046789f5eccb9d340789cf9455e7022c2cb6e125
             }
             else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
                 if(collidesBottom(pTwo)){
@@ -489,9 +592,12 @@ public class GameScreen implements Screen {
     }
 
     private boolean isCellBlocked(float x, float y) {
+<<<<<<< HEAD
         System.out.println("X: " + x);
         System.out.println("Y : " + y );
 
+=======
+>>>>>>> 046789f5eccb9d340789cf9455e7022c2cb6e125
         TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()), (int) (y / collisionLayer.getTileHeight()));
 
         return cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey(blockedKey);
@@ -499,27 +605,45 @@ public class GameScreen implements Screen {
 
     public boolean collidesRight(Player player) {
         increment = collisionLayer.getTileWidth();
+<<<<<<< HEAD
         increment = player.getBoundingRectangle().getWidth() < increment ? player.getBoundingRectangle().getWidth() / 2 : increment / 2;
         for(float step = 0; step <= player.getBoundingRectangle().getHeight(); step += increment)
             if(isCellBlocked(player.getBoundingRectangle().getX() + player.getBoundingRectangle().getWidth(), player.getY() + step))
+=======
+        increment = player.getWidth() < increment ? player.getWidth() / 2 : increment / 2;
+        for(float step = 0; step <= player.getHeight(); step += increment)
+            if(isCellBlocked(player.getX() + player.getWidth(), player.getY() + step))
+>>>>>>> 046789f5eccb9d340789cf9455e7022c2cb6e125
                 return true;
         return false;
     }
 
     public boolean collidesLeft(Player player) {
         increment = collisionLayer.getTileWidth();
+<<<<<<< HEAD
         increment = player.getBoundingRectangle().getWidth() < increment ? player.getBoundingRectangle().getWidth() / 2 : increment / 2;
         for(float step = 0; step <= player.getBoundingRectangle().getHeight(); step += increment)
             if(isCellBlocked(player.getBoundingRectangle().getX(), player.getBoundingRectangle().getY() + step))
+=======
+        increment = player.getWidth() < increment ? player.getWidth() / 2 : increment / 2;
+        for(float step = 0; step <= player.getHeight(); step += increment)
+            if(isCellBlocked(player.getX(), player.getY() + step))
+>>>>>>> 046789f5eccb9d340789cf9455e7022c2cb6e125
                 return true;
         return false;
     }
 
     public boolean collidesTop(Player player) {
         increment = collisionLayer.getTileHeight();
+<<<<<<< HEAD
         increment = player.getBoundingRectangle().getHeight() < increment ? player.getBoundingRectangle().getHeight() / 2 : increment / 2;
         for(float step = 0; step <= player.getBoundingRectangle().getWidth(); step += increment) {
             if (isCellBlocked(player.getBoundingRectangle().getX() + step, player.getBoundingRectangle().getY() + player.getBoundingRectangle().getHeight()))
+=======
+        increment = player.getHeight() < increment ? player.getHeight() / 2 : increment / 2;
+        for(float step = 0; step <= player.getWidth(); step += increment) {
+            if (isCellBlocked(player.getX() + step, player.getY() + player.getHeight()))
+>>>>>>> 046789f5eccb9d340789cf9455e7022c2cb6e125
                 return true;
         }
         return false;
@@ -529,9 +653,15 @@ public class GameScreen implements Screen {
     public boolean collidesBottom(Player player) {
         // calculate the increment for step in #collidesLeft() and #collidesRight()
         increment = collisionLayer.getTileHeight();
+<<<<<<< HEAD
         increment = player.getBoundingRectangle().getHeight() < increment ? player.getBoundingRectangle().getHeight() / 2 : increment / 2;
         for(float step = 0; step <= player.getBoundingRectangle().getWidth(); step += increment)
             if(isCellBlocked(player.getBoundingRectangle().getX() + step, player.getBoundingRectangle().getY()))
+=======
+        increment = player.getHeight() < increment ? player.getHeight() / 2 : increment / 2;
+        for(float step = 0; step <= player.getWidth(); step += increment)
+            if(isCellBlocked(player.getX() + step, player.getY()))
+>>>>>>> 046789f5eccb9d340789cf9455e7022c2cb6e125
                 return true;
         return false;
     }
