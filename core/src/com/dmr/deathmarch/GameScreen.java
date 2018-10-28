@@ -208,9 +208,26 @@ public class GameScreen implements Screen {
             Projectile projectile = iter.next();
             projectile.setPosition(projectile.getX() +350 * projectile.getxVel() * Gdx.graphics.getDeltaTime()
                     , projectile.getY() + 350 *projectile.getyVel() * Gdx.graphics.getDeltaTime());
-            if(projectile.getX()>1280 | projectile.getY()>720 || projectile.getX() < 0 || projectile.getY() < 0){
+//            if(projectile.getX()>1280 | projectile.getY()>720 || projectile.getX() < 0 || projectile.getY() < 0){
+//                iter.remove();
+//            }
+            if(bulletCollidesLeft(projectile)){
                 iter.remove();
             }
+            else if(bulletCollidesRight(projectile)){
+                iter.remove();
+            }
+            else if(bulletCollidesBottom(projectile)){
+                iter.remove();
+            }
+            else if(bulletCollidesTop(projectile)){
+                iter.remove();
+            }
+            else{
+                // do nothing
+            }
+
+
             //TODO:: Give ownership of projectile to count score.
             for(Goblin goblin: goblins){
                 if(goblin.getBoundingRectangle().overlaps(projectile.getBoundingRectangle())){
@@ -532,6 +549,45 @@ public class GameScreen implements Screen {
         increment = player.getBoundingRectangle().getHeight() < increment ? player.getBoundingRectangle().getHeight() / 2 : increment / 2;
         for(float step = 0; step <= player.getBoundingRectangle().getWidth(); step += increment)
             if(isCellBlocked(player.getBoundingRectangle().getX() + step, player.getBoundingRectangle().getY()))
+                return true;
+        return false;
+    }
+
+    public boolean bulletCollidesRight(Projectile proj) {
+        increment = collisionLayer.getTileWidth();
+        increment = proj.getBoundingRectangle().getWidth() < increment ? proj.getBoundingRectangle().getWidth() / 2 : increment / 2;
+        for(float step = 0; step <= proj.getBoundingRectangle().getHeight(); step += increment)
+            if(isCellBlocked(proj.getBoundingRectangle().getX() + proj.getBoundingRectangle().getWidth(), proj.getBoundingRectangle().getY() + step))
+                return true;
+        return false;
+    }
+
+    public boolean bulletCollidesLeft(Projectile proj) {
+        increment = collisionLayer.getTileWidth();
+        increment = proj.getBoundingRectangle().getWidth() < increment ? proj.getBoundingRectangle().getWidth() / 2 : increment / 2;
+        for(float step = 0; step <= proj.getBoundingRectangle().getHeight(); step += increment)
+            if(isCellBlocked(proj.getBoundingRectangle().getX(), proj.getBoundingRectangle().getY() + step))
+                return true;
+        return false;
+    }
+
+    public boolean bulletCollidesTop(Projectile proj) {
+        increment = collisionLayer.getTileHeight();
+        increment = proj.getBoundingRectangle().getHeight() < increment ? proj.getBoundingRectangle().getHeight() / 2 : increment / 2;
+        for(float step = 0; step <= proj.getBoundingRectangle().getWidth(); step += increment) {
+            if (isCellBlocked(proj.getBoundingRectangle().getX() + step, proj.getBoundingRectangle().getY() + proj.getBoundingRectangle().getHeight()))
+                return true;
+        }
+        return false;
+
+    }
+
+    public boolean bulletCollidesBottom(Projectile proj) {
+
+        increment = collisionLayer.getTileHeight();
+        increment = proj.getBoundingRectangle().getHeight() < increment ? proj.getBoundingRectangle().getHeight() / 2 : increment / 2;
+        for(float step = 0; step <= proj.getBoundingRectangle().getWidth(); step += increment)
+            if(isCellBlocked(proj.getBoundingRectangle().getX() + step, proj.getBoundingRectangle().getY()))
                 return true;
         return false;
     }
