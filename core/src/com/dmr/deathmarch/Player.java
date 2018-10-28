@@ -1,7 +1,9 @@
 package com.dmr.deathmarch;
 
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.dmr.deathmarch.weapons.Weapon;
 
 public class Player extends Sprite {
@@ -14,6 +16,20 @@ public class Player extends Sprite {
     private Texture playerTex;
     private Direction lastDirection[];
     private Weapon weapon;
+    private TiledMapTileLayer collisionLayer;
+
+    public Player(String name, Boolean pone, Texture texture, int x, int y, int width, int height, TiledMapTileLayer collisionLayer){
+        super(texture, x, y, width, height);
+        this.name = name;
+        health = 100;
+        speed = 150;
+        kills = 0;
+        dmgMulti = 1;
+        isPlayerOne = pone;
+        lastDirection = new Direction[2];
+        this.collisionLayer = collisionLayer;
+    }
+
 
     public Player(String name, Boolean pone, Texture texture){
         super(texture);
@@ -45,6 +61,8 @@ public class Player extends Sprite {
         isPlayerOne = pone;
         lastDirection = new Direction[2];
     }
+
+
 
     public String getName() {
         return name;
@@ -79,4 +97,8 @@ public class Player extends Sprite {
 
     public void setWeapon(Weapon weapon){this.weapon = weapon;}
     public Weapon getWeapon(){return weapon;}
+
+
+
+
 }
