@@ -66,13 +66,10 @@ public class TileMapScreen implements Screen {
 
         TiledMap map = new TmxMapLoader().load("maps/demoMap.tmx");
         renderer = new OrthogonalTiledMapRenderer(map,unitScale);
-
         camera = new OrthographicCamera();
-
         camera.setToOrtho(false,40,40);
         renderer.setView(camera);
         camera.update();
-
         batch = new SpriteBatch();
     }
 
