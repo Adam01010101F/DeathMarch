@@ -53,10 +53,15 @@ public class shopScreen implements Screen{
     TiledMap tiledMap;
     TiledMapRenderer tiledMapRenderer;
     private Sprite beamProjectile;
+    //BUFFS
     private Sprite heart;
-    private Sprite bullet;
+    private Sprite speed;
+    private Sprite dmg;
     private Texture heartTex;
-    private Texture bulletTex;
+    private Texture speedTex;
+    private Texture dmgTex;
+
+
     private boolean gamePaused;
     private Sprite door;
     private Texture doorTex;
@@ -69,6 +74,10 @@ public class shopScreen implements Screen{
     FreeTypeFontParameter parameters;
     BitmapFont uiText;
     private Array<String> text;
+    //for the time
+    private long start;
+    private long diffTime;
+
 
 
 
@@ -77,8 +86,9 @@ public class shopScreen implements Screen{
 
     private Dialog dialog;
 
-    public shopScreen(final DeathMarch game){
+    public shopScreen(final DeathMarch game,Player player1, Player player2){
         this.game=game;
+        System.out.println(player1.getX());
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1280, 720);
 
@@ -92,28 +102,39 @@ public class shopScreen implements Screen{
 
 
         //Player Creation
-        pOne = new Player("Shredder", false, pOneTex);
-        pOne.setPosition(1280/2f - 120/2f, 720/2f);
-        pTwo = new Player("Donatello", false, pTwoTex);
-        pTwo.setPosition((1280/2f -120/2f), 720/2f);
+        pOne = player1;
+//        pOne.setPosition(1280/2f - 120/2f, 720/2f);
+        pTwo = player2;
+//        pTwo.setPosition((1280/2f -120/2f), 720/2f);
 
-        //npc
-        heartTex = new Texture(Gdx.files.internal("heart.png"));
+        //Buffs
+        heartTex = new Texture(Gdx.files.internal("Red_orb.png"));
         heart = new Sprite(heartTex);
 
-        bulletTex = new Texture(Gdx.files.internal("Vessel.png"));
-        bullet = new Sprite(bulletTex);
-        bullet.setScale(5f);
+        speedTex = new Texture(Gdx.files.internal("Green_orb.png"));
+        speed = new Sprite(speedTex);
+
+        dmgTex = new Texture(Gdx.files.internal("Blue_orb.png"));
+        dmg = new Sprite(dmgTex);
+
+
+
 
         doorTex = new Texture(Gdx.files.internal("Stairs_down.png"));
         door = new Sprite(doorTex);
-        //npc
-        bullet.setX(550);
-        bullet.setY(73);
+
+        //Setting Buff position
+        speed.setScale(8f);
+        speed.setX(550);
+        speed.setY(73);
 
         heart.setScale(8f);
         heart.setX(350);
         heart.setY(73);
+
+        dmg.setScale(8f);
+        dmg.setX(750);
+        dmg.setY(73);
 
         // 5 & 12
         door.setScale(8f);
@@ -134,6 +155,8 @@ public class shopScreen implements Screen{
         text.add("2");
         int x = 500;
         int y = 50;
+
+        start = TimeUtils.millis();
 
         generator.dispose();
     }
@@ -171,20 +194,34 @@ public class shopScreen implements Screen{
 
         // Load Objects onto Screen
         game.batch.begin();
-        game.font.draw(game.batch, "P2 x: "+pTwo.getX()+" y: "+pTwo.getY(), 100, 150);
+
         pOne.draw(game.batch);
         pTwo.draw(game.batch);
 
         heart.draw(game.batch);
-        bullet.draw(game.batch);
+        speed.draw(game.batch);
+        dmg.draw(game.batch);
+
         door.draw(game.batch);
 
        // text bubble
 
-        if(pOne.getX()== 1280/2f - 120/2f && pOne.getY()== 720/2f)
-            uiText.draw(game.batch, text.get(0),500,50);
-        else
-            uiText.draw(game.batch, text.get(1),500,50);
+
+
+        diffTime = TimeUtils.timeSinceMillis(start);
+        if(diffTime<3000){
+            uiText.draw(game.batch,"Welcome to my store!",370,150);
+        }
+        if(diffTime>3000 && diffTime<8000){
+            uiText.draw(game.batch,"We only sell the scariest of items here!",200,150);
+        }
+        if(diffTime>8000 && diffTime<12000){
+            uiText.draw(game.batch,"Beware you might not be the same when you leave",200,150);
+        }
+        //Drawing Text for Items
+        uiText.draw(game.batch,"Health Boost",240,50);
+        uiText.draw(game.batch,"Speed Boost", 460,50);
+        uiText.draw(game.batch,"Damage Boost",660,50);
 
         
 //        uiText.draw(game.batch,"Hello World",500,50);
@@ -199,13 +236,13 @@ public class shopScreen implements Screen{
 //            int condRot = (pOne.getWeapon().getRotation()/90)%2==0 ? -90: 90;
             if(Gdx.input.isKeyPressed(Input.Keys.W)){
                 pOne.setRotation(90);
-                pOne.setY(pOne.getY()+150*Gdx.graphics.getDeltaTime());
+                pOne.setY(pOne.getY()+pOne.getSpeed()*Gdx.graphics.getDeltaTime());
                 pOne.setYDirection(Direction.Up);
 
             }
             if(Gdx.input.isKeyPressed(Input.Keys.S)){
                 pOne.setRotation(270);
-                pOne.setY(pOne.getY()-150*Gdx.graphics.getDeltaTime());
+                pOne.setY(pOne.getY()-pOne.getSpeed()*Gdx.graphics.getDeltaTime());
                 pOne.setYDirection(Direction.Down);
 
 
@@ -213,14 +250,14 @@ public class shopScreen implements Screen{
             }
             if(Gdx.input.isKeyPressed(Input.Keys.D)){
                 pOne.setRotation(0);
-                pOne.setX(pOne.getX()+150*Gdx.graphics.getDeltaTime());
+                pOne.setX(pOne.getX()+pOne.getSpeed()*Gdx.graphics.getDeltaTime());
                 pOne.setXDirection(Direction.Right);
 
 
             }
             if(Gdx.input.isKeyPressed(Input.Keys.A)){
                 pOne.setRotation(180);
-                pOne.setX(pOne.getX()-150*Gdx.graphics.getDeltaTime());
+                pOne.setX(pOne.getX()-pOne.getSpeed()*Gdx.graphics.getDeltaTime());
                 pOne.setXDirection(Direction.Left);
 
             }
@@ -258,9 +295,27 @@ public class shopScreen implements Screen{
 
         }
 
+        //buffs for speed
+
+        //buffing player 1 speed
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && pOne.getBoundingRectangle().overlaps(speed.getBoundingRectangle())){
+            pOne.buffSpeed();
+            System.out.println("Speed Increased to " + pOne.getSpeed());
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && pOne.getBoundingRectangle().overlaps(heart.getBoundingRectangle())){
+            pOne.buffHealth();
+            System.out.println("Health Increased to " + pOne.getHealth());
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && pOne.getBoundingRectangle().overlaps(dmg.getBoundingRectangle())){
+            pOne.buffDmg();
+            System.out.println("Damage Increased to " + pOne.getDmgMulti());
+        }
+
+
+
         //Player Boundaries
-        checkBoundary(pOne);
-        checkBoundary(pTwo);
+//        checkBoundary(pOne);
+//        checkBoundary(pTwo);
 
 
 
