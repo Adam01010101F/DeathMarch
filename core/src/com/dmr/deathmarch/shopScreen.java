@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -61,14 +62,17 @@ public class shopScreen implements Screen{
     private Texture speedTex;
     private Texture dmgTex;
 
-
     private boolean gamePaused;
     private Sprite door;
     private Texture doorTex;
 
     private OrthogonalTiledMapRenderer renderer;
+    private TiledMapTileLayer collisionLayer;
     private TiledMap map;
-
+    private String mapName;
+    private int[] background = new int[] {0}, foreground = new int[] {1};
+    private String blockedKey = "blocked";
+    private float increment;
     //adding text
     FreeTypeFontGenerator generator;
     FreeTypeFontParameter parameters;
@@ -78,17 +82,16 @@ public class shopScreen implements Screen{
     private long start;
     private long diffTime;
 
-
-
-
-
     private Skin skin;
 
     private Dialog dialog;
 
     public shopScreen(final DeathMarch game,Player player1, Player player2){
         this.game=game;
-        System.out.println(player1.getX());
+        mapName = "maps/shop.tmx";
+        map = new TmxMapLoader().load(mapName);
+        collisionLayer = (TiledMapTileLayer) map.getLayers().get(1);
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1280, 720);
 
@@ -98,8 +101,6 @@ public class shopScreen implements Screen{
         pOneTex = new Texture(Gdx.files.internal("player1.png"));
         pTwoTex = new Texture(Gdx.files.internal("player2.png"));
         stage = new Stage(new ScreenViewport());
-
-
 
         //Player Creation
         pOne = player1;
@@ -191,7 +192,9 @@ public class shopScreen implements Screen{
         camera.update();
 
         game.batch.setProjectionMatrix(camera.combined);
-
+        tiledMapRenderer.setView(camera);
+        tiledMapRenderer.render(background);
+        tiledMapRenderer.render(foreground);
         // Load Objects onto Screen
         game.batch.begin();
 
@@ -233,32 +236,59 @@ public class shopScreen implements Screen{
         if(Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.D) ||
                 Gdx.input.isKeyPressed(Input.Keys.A)|| Gdx.input.isKeyPressed(Input.Keys.S)){
             pOne.clearDirections();
-//            int condRot = (pOne.getWeapon().getRotation()/90)%2==0 ? -90: 90;
             if(Gdx.input.isKeyPressed(Input.Keys.W)){
-                pOne.setRotation(90);
-                pOne.setY(pOne.getY()+pOne.getSpeed()*Gdx.graphics.getDeltaTime());
-                pOne.setYDirection(Direction.Up);
-
+                if(collidesTop(pOne))
+                {
+                    pOne.setRotation(90);
+                    pOne.setY(pOne.getY());
+                    pOne.setYDirection(Direction.Up);
+                }
+                else {
+                    pOne.setRotation(90);
+                    pOne.setY(pOne.getY() + 150 * Gdx.graphics.getDeltaTime());
+                    pOne.setYDirection(Direction.Up);
+                }
             }
-            if(Gdx.input.isKeyPressed(Input.Keys.S)){
-                pOne.setRotation(270);
-                pOne.setY(pOne.getY()-pOne.getSpeed()*Gdx.graphics.getDeltaTime());
-                pOne.setYDirection(Direction.Down);
+            else if(Gdx.input.isKeyPressed(Input.Keys.S)){
 
-
-
+                if(collidesBottom(pOne))
+                {
+                    pOne.setRotation(270);
+                    pOne.setY(pOne.getY());
+                    pOne.setYDirection(Direction.Down);
+                }
+                else {
+                    pOne.setRotation(270);
+                    pOne.setY(pOne.getY() - 150 * Gdx.graphics.getDeltaTime());
+                    pOne.setYDirection(Direction.Down);
+                }
             }
-            if(Gdx.input.isKeyPressed(Input.Keys.D)){
-                pOne.setRotation(0);
-                pOne.setX(pOne.getX()+pOne.getSpeed()*Gdx.graphics.getDeltaTime());
-                pOne.setXDirection(Direction.Right);
+            else if(Gdx.input.isKeyPressed(Input.Keys.D)){
+                if(collidesRight(pOne))
+                {
+                    pOne.setRotation(0);
+                    pOne.setX(pOne.getX());
+                    pOne.setXDirection(Direction.Right);
+                }
+                else {
 
-
+                    pOne.setRotation(0);
+                    pOne.setX(pOne.getX() + 150 * Gdx.graphics.getDeltaTime());
+                    pOne.setXDirection(Direction.Right);
+                }
             }
-            if(Gdx.input.isKeyPressed(Input.Keys.A)){
-                pOne.setRotation(180);
-                pOne.setX(pOne.getX()-pOne.getSpeed()*Gdx.graphics.getDeltaTime());
-                pOne.setXDirection(Direction.Left);
+            else if(Gdx.input.isKeyPressed(Input.Keys.A)){
+                if(collidesLeft(pOne)){
+                    pOne.setRotation(180);
+                    pOne.setX(pOne.getX());
+                    pOne.setXDirection(Direction.Left);
+                }
+                else{
+
+                    pOne.setRotation(180);
+                    pOne.setX(pOne.getX()-150*Gdx.graphics.getDeltaTime());
+                    pOne.setXDirection(Direction.Left);
+                }
 
             }
 
@@ -269,24 +299,57 @@ public class shopScreen implements Screen{
                 Gdx.input.isKeyPressed(Input.Keys.LEFT)|| Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             pTwo.clearDirections();
             if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-                pTwo.setRotation(90);
-                pTwo.setY(pTwo.getY() + 150 * Gdx.graphics.getDeltaTime());
-                pTwo.setYDirection(Direction.Up);
+
+                if(collidesTop(pTwo))
+                {
+                    pTwo.setRotation(90);
+                    pTwo.setY(pTwo.getY());
+                    pOne.setYDirection(Direction.Up);
+                }
+                else{
+                    pTwo.setRotation(90);
+                    pTwo.setY(pTwo.getY() + 200 * Gdx.graphics.getDeltaTime());
+                    pTwo.setYDirection(Direction.Up);
+                }
+
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-                pTwo.setRotation(270);
-                pTwo.setY(pTwo.getY() - 150 * Gdx.graphics.getDeltaTime());
-                pTwo.setYDirection(Direction.Down);
+            else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                if(collidesBottom(pTwo)){
+                    pTwo.setRotation(270);
+                    pTwo.setY(pTwo.getY());
+                    pTwo.setYDirection(Direction.Down);
+                }
+                else{
+                    pTwo.setRotation(270);
+                    pTwo.setY(pTwo.getY() - 200 * Gdx.graphics.getDeltaTime());
+                    pTwo.setYDirection(Direction.Down);
+                }
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                pTwo.setRotation(0);
-                pTwo.setX(pTwo.getX() + 150 * Gdx.graphics.getDeltaTime());
-                pTwo.setXDirection(Direction.Right);
+            else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                if(collidesRight(pTwo)){
+                    pTwo.setRotation(0);
+                    pTwo.setX(pTwo.getX());
+                    pTwo.setXDirection(Direction.Right);
+                }
+                else{
+
+                    pTwo.setRotation(0);
+                    pTwo.setX(pTwo.getX() + 200 * Gdx.graphics.getDeltaTime());
+                    pTwo.setXDirection(Direction.Right);
+                }
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                pTwo.setRotation(180);
-                pTwo.setX(pTwo.getX() - 150 * Gdx.graphics.getDeltaTime());
-                pTwo.setXDirection(Direction.Left);
+            else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                if(collidesLeft(pTwo)){
+                    pTwo.setRotation(180);
+                    pTwo.setX(pTwo.getX());
+                    pTwo.setXDirection(Direction.Left);
+                }
+                else{
+
+                    pTwo.setRotation(180);
+                    pTwo.setX(pTwo.getX() - 200 * Gdx.graphics.getDeltaTime());
+                    pTwo.setXDirection(Direction.Left);
+                }
             }
         }
         //leaving shop area
@@ -352,16 +415,100 @@ public class shopScreen implements Screen{
 
     @Override
     public void show(){
-
-
-
-
-
+        map = new TmxMapLoader().load(mapName);
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
 
     }
     private void checkBoundary(Player player){
         if(player.getX()<0)player.setX(0);
         if(player.getX()>1280-120)player.setX(1280-120);
+    }
+
+    private boolean isCellBlocked(float x, float y) {
+        System.out.println("X: " + x);
+        System.out.println("Y : " + y );
+
+        TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()), (int) (y / collisionLayer.getTileHeight()));
+
+        return cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey(blockedKey);
+    }
+
+    public boolean collidesRight(Player player) {
+        increment = collisionLayer.getTileWidth();
+        increment = player.getBoundingRectangle().getWidth() < increment ? player.getBoundingRectangle().getWidth() / 2 : increment / 2;
+        for(float step = 0; step <= player.getBoundingRectangle().getHeight(); step += increment)
+            if(isCellBlocked(player.getBoundingRectangle().getX() + player.getBoundingRectangle().getWidth(), player.getBoundingRectangle().getY() + step))
+                return true;
+        return false;
+    }
+
+    public boolean collidesLeft(Player player) {
+        increment = collisionLayer.getTileWidth();
+        increment = player.getBoundingRectangle().getWidth() < increment ? player.getBoundingRectangle().getWidth() / 2 : increment / 2;
+        for(float step = 0; step <= player.getBoundingRectangle().getHeight(); step += increment)
+            if(isCellBlocked(player.getBoundingRectangle().getX(), player.getBoundingRectangle().getY() + step))
+                return true;
+        return false;
+    }
+
+    public boolean collidesTop(Player player) {
+        increment = collisionLayer.getTileHeight();
+        increment = player.getBoundingRectangle().getHeight() < increment ? player.getBoundingRectangle().getHeight() / 2 : increment / 2;
+        for(float step = 0; step <= player.getBoundingRectangle().getWidth(); step += increment) {
+            if (isCellBlocked(player.getBoundingRectangle().getX() + step, player.getBoundingRectangle().getY() + player.getBoundingRectangle().getHeight()))
+                return true;
+        }
+        return false;
+
+    }
+
+    public boolean collidesBottom(Player player) {
+        // calculate the increment for step in #collidesLeft() and #collidesRight()
+        increment = collisionLayer.getTileHeight();
+        increment = player.getBoundingRectangle().getHeight() < increment ? player.getBoundingRectangle().getHeight() / 2 : increment / 2;
+        for(float step = 0; step <= player.getBoundingRectangle().getWidth(); step += increment)
+            if(isCellBlocked(player.getBoundingRectangle().getX() + step, player.getBoundingRectangle().getY()))
+                return true;
+        return false;
+    }
+
+    public boolean bulletCollidesRight(Projectile proj) {
+        increment = collisionLayer.getTileWidth();
+        increment = proj.getBoundingRectangle().getWidth() < increment ? proj.getBoundingRectangle().getWidth() / 2 : increment / 2;
+        for(float step = 0; step <= proj.getBoundingRectangle().getHeight(); step += increment)
+            if(isCellBlocked(proj.getBoundingRectangle().getX() + proj.getBoundingRectangle().getWidth(), proj.getBoundingRectangle().getY() + step))
+                return true;
+        return false;
+    }
+
+    public boolean bulletCollidesLeft(Projectile proj) {
+        increment = collisionLayer.getTileWidth();
+        increment = proj.getBoundingRectangle().getWidth() < increment ? proj.getBoundingRectangle().getWidth() / 2 : increment / 2;
+        for(float step = 0; step <= proj.getBoundingRectangle().getHeight(); step += increment)
+            if(isCellBlocked(proj.getBoundingRectangle().getX(), proj.getBoundingRectangle().getY() + step))
+                return true;
+        return false;
+    }
+
+    public boolean bulletCollidesTop(Projectile proj) {
+        increment = collisionLayer.getTileHeight();
+        increment = proj.getBoundingRectangle().getHeight() < increment ? proj.getBoundingRectangle().getHeight() / 2 : increment / 2;
+        for(float step = 0; step <= proj.getBoundingRectangle().getWidth(); step += increment) {
+            if (isCellBlocked(proj.getBoundingRectangle().getX() + step, proj.getBoundingRectangle().getY() + proj.getBoundingRectangle().getHeight()))
+                return true;
+        }
+        return false;
+
+    }
+
+    public boolean bulletCollidesBottom(Projectile proj) {
+
+        increment = collisionLayer.getTileHeight();
+        increment = proj.getBoundingRectangle().getHeight() < increment ? proj.getBoundingRectangle().getHeight() / 2 : increment / 2;
+        for(float step = 0; step <= proj.getBoundingRectangle().getWidth(); step += increment)
+            if(isCellBlocked(proj.getBoundingRectangle().getX() + step, proj.getBoundingRectangle().getY()))
+                return true;
+        return false;
     }
 }
 
