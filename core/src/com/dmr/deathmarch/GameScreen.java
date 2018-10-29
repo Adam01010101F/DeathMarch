@@ -148,7 +148,8 @@ public class GameScreen implements Screen {
         pTwo = player2;
         pTwo.setPosition(200,200);
         pTwo.setColor(Color.PURPLE);
-        //pTwo.setScale(3f);
+        pTwo.setScale(3/4f);
+        //
         pTwo.setWeapon(new BeamCannon(bmTex));
 
         // Ghetto Managers
@@ -547,6 +548,10 @@ public class GameScreen implements Screen {
             game.changeScreen(DeathMarch.MENU);
 
             //game.setScreen(new GameScreen(game));
+        }
+
+        if(pOne.isDead()|| pTwo.isDead()){
+            game.changeScreen(DeathMarch.MENU);
         }
 
 

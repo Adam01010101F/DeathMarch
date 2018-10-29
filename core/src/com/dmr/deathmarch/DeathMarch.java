@@ -58,7 +58,7 @@ public class DeathMarch extends Game {
 		playerTex = new Texture(Gdx.files.internal("survivor-shoot_rifle_0.png"));
 		playerTex1 = new Texture(Gdx.files.internal("zombie.png"));
 		player1 = new Player("Shredder", false, playerTex, 23, 38, 293, 191);
-		player2 = new Player("Donatello", false, playerTex1, 0, 0, 35, 45);
+		player2 = new Player("Donatello", false, playerTex1, 0, 0, 45, 37);
 
 //		this.setScreen(new MainMenuScreen(this));
 
@@ -121,6 +121,8 @@ public class DeathMarch extends Game {
 				}
 				this.setScreen(HallOfFame);
 				break;
+
+
 			case SHOP:
 
 				if(s == null) s = new shopScreen(this,player1,player2);
