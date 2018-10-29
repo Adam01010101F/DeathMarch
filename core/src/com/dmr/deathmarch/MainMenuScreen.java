@@ -96,15 +96,12 @@ public class MainMenuScreen implements Screen {
 
         Skin skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
-        TextButton newGame = new TextButton("1 Player", skin);
-        TextButton newGame2 = new TextButton("2 Player", skin);
+        TextButton newGame = new TextButton("Start Game", skin);
         TextButton preferences = new TextButton("Settings", skin);
         TextButton exit = new TextButton("Exit", skin);
         TextButton hof = new TextButton("Hall of Fame", skin);
 
         table.add(newGame).fillX().uniformX();
-        table.row().pad(10, 0, 10, 0);
-        table.add(newGame2).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
         table.add(hof).fillX().uniformX();
         table.row();
@@ -132,12 +129,6 @@ public class MainMenuScreen implements Screen {
                 game.changeScreen(DeathMarch.PREFERENCES);
             }
 
-        });
-        newGame2.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(DeathMarch.APP2);
-            }
         });
 
 
