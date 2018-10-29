@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.dmr.deathmarch.npc.Goblin;
 import com.dmr.deathmarch.weapons.BeamCannon;
@@ -93,14 +94,14 @@ public class shopScreen implements Screen{
         collisionLayer = (TiledMapTileLayer) map.getLayers().get(1);
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1280, 720);
+        camera.setToOrtho(false, 1280, 1200);
 
         text = new Array<String>();
 
         skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
         pOneTex = new Texture(Gdx.files.internal("player1.png"));
         pTwoTex = new Texture(Gdx.files.internal("player2.png"));
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(new FitViewport(1280,1280));
 
         //Player Creation
         pOne = player1;
@@ -163,8 +164,9 @@ public class shopScreen implements Screen{
     }
     @Override
     public void render(float delta){
-//        Gdx.gl.glClearColor(0.5f,0,0,1);
+//        Gdx.gl.glClearColor(0,0,0,0);
 //        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        //
 //
 //        camera.update();
 //        game.batch.setProjectionMatrix(camera.combined);
@@ -184,7 +186,7 @@ public class shopScreen implements Screen{
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         Gdx.input.setInputProcessor(stage);
         stage.draw();
-        Gdx.gl.glClearColor(0,0.3f, 0, 0);
+        Gdx.gl.glClearColor(0,0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 

@@ -33,7 +33,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.dmr.deathmarch.npc.Goblin;
 import com.dmr.deathmarch.weapons.BeamCannon;
 
@@ -100,9 +103,9 @@ public class GameScreen implements Screen {
         this.game = game;
         mapName = "maps/demoMap.tmx";
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1280, 720);
+        camera.setToOrtho(false, 1280, 1200);
 
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(new FitViewport(1280,1280));
         shopSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
         map = new TmxMapLoader().load(mapName);
@@ -131,7 +134,7 @@ public class GameScreen implements Screen {
 
         pTwoTex = new Texture(Gdx.files.internal("player2.png"));
         Gobbi = new Goblin();
-        stage = new Stage(new ScreenViewport());
+        //stage = new Stage(new ScreenViewport());
 
         //Player Creation
         pOne = player1;
@@ -172,7 +175,7 @@ public class GameScreen implements Screen {
         //text for NPC
         generator = new FreeTypeFontGenerator((Gdx.files.internal("fonts/joystix.ttf")));
         parameters = new FreeTypeFontParameter();
-        parameters.size = 20;
+        parameters.size = 25;
         parameters.color= Color.BLACK;
 
 
@@ -191,7 +194,12 @@ public class GameScreen implements Screen {
     }
     @Override
     public void show() {
+
         map = new TmxMapLoader().load(mapName);
+
+        //float unitScale = 2f;
+        map = new TmxMapLoader().load("maps/demoMap.tmx");
+
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
 
     }
@@ -201,7 +209,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
 
         stage.clear();
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(),1/30f));
         Gdx.input.setInputProcessor(stage);
 
         // ---GAME CONTROLS---
@@ -210,7 +218,7 @@ public class GameScreen implements Screen {
         }
         // ------------------
         stage.draw();
-        Gdx.gl.glClearColor(1,1, 1, 0);
+        Gdx.gl.glClearColor(0,0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //table
@@ -252,6 +260,7 @@ public class GameScreen implements Screen {
 //                    goblin.takeDamage(beamCannon.getDamage());
                     iter.remove();
                     System.out.println("Goblin takes damage");
+                    pOne.addKill();
                 }
             }
         }
@@ -267,6 +276,8 @@ public class GameScreen implements Screen {
             float distance2 = (float) Math.sqrt((x2*x2) - (y2*y2));
             if(goblin.isDead()){
                 iter.remove();
+                System.out.println("Goblin is dead :D");
+                pOne.addBigKill();
             }
             else
             {
@@ -348,9 +359,9 @@ public class GameScreen implements Screen {
         game.batch.begin();
         //sets up the timer
         Vector3 posCamara = camera.position;
-        uiText.draw(game.batch, "Time: " + (500 - (System.currentTimeMillis() - startTime )/1000), posCamara.x - 100, posCamara.y + 330);
-        uiText.draw(game.batch, "Player 1 Health: " + pOne.getHealth(), posCamara.x - 600, posCamara.y + 330);
-        uiText.draw(game.batch, "Player 2 Health: " + pOne.getHealth(), posCamara.x + 250, posCamara.y + 330);
+        uiText.draw(game.batch, "Time: " + (300 - (System.currentTimeMillis() - startTime )/1000), posCamara.x - 100, posCamara.y + 580);
+        uiText.draw(game.batch, "Player 1 Health: " + Math.round(pOne.getHealth()), posCamara.x - 600, posCamara.y + 580);
+        uiText.draw(game.batch, "Player 2 Health: " + Math.round(pTwo.getHealth()), posCamara.x + 200, posCamara.y + 580);
 
 
         //NPC dialogue conditional statement
@@ -533,16 +544,26 @@ public class GameScreen implements Screen {
             }
         }
 
+        if(300 - (System.currentTimeMillis() - startTime )/1000 == 0){
+            //startTime = System.currentTimeMillis()
+            game.changeScreen(DeathMarch.MENU);
+
+            //game.setScreen(new GameScreen(game));
+        }
+
+
+        }
+
 
         //Player Boundaries
 //        checkBoundary(pOne);
 //        checkBoundary(pTwo);
 
-    }
+
 
     @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
@@ -661,6 +682,7 @@ public class GameScreen implements Screen {
                 return true;
         }
         return false;
+
 
     }
 

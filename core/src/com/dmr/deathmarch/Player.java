@@ -9,7 +9,7 @@ import com.sun.org.apache.xpath.internal.operations.Bool;
 
 public class Player extends Sprite {
     private String name;
-    private float health;
+    private int health;
     private int speed;
     private int kills;
     private float dmgMulti;
@@ -79,7 +79,8 @@ public class Player extends Sprite {
 
     public void takeDmg(float dmg){this.health -= dmg;}
     public void addKill(){kills++;}
-    public void addHealth(float hp){health = health + hp;}
+    public void addBigKill(){kills = kills + 250;}
+    public void addHealth(int hp){health = health + hp;}
     public void setDirection(Direction[] directions){
         this.lastDirection = directions;
     }
