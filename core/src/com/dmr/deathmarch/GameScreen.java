@@ -80,12 +80,25 @@ public class GameScreen implements Screen {
     private Dialog dialog;
     private int[] background = new int[] {0}, foreground = new int[] {1};
     private ShapeRenderer shape;
+    //adding dialogue for npc
+    FreeTypeFontGenerator generator;
+    FreeTypeFontParameter parameters;
+    BitmapFont uiText;
+
 
     public GameScreen(final DeathMarch game){
-        shape = new ShapeRenderer();
+        this.game = game;
+
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, 1280, 720);
+
+        stage = new Stage(new ScreenViewport());
+        shopSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
+
         map = new TmxMapLoader().load("maps/demoMap.tmx");
+        shape = new ShapeRenderer();
         collisionLayer = (TiledMapTileLayer) map.getLayers().get(1);
- //       System.out.println(collisionLayer.getCell(0,0).getTile().getProperties().containsKey("blocked"));
+        //       System.out.println(collisionLayer.getCell(0,0).getTile().getProperties().containsKey("blocked"));
         for(int row = 0; row < collisionLayer.getWidth(); row++)
         {
             for(int col = 0; col < collisionLayer.getHeight(); col++){
@@ -97,30 +110,13 @@ public class GameScreen implements Screen {
 
             }
 
-    //adding dialogue for npc
-    FreeTypeFontGenerator generator;
-    FreeTypeFontParameter parameters;
-    BitmapFont uiText;
+
         }
 
-
-
-    public GameScreen(final DeathMarch game){
         p1CollisionX = false;
         p1CollisionY = false;
         p2CollisionX = false;
         p2CollisionY = false;
-        this.game = game;
-
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1280, 720);
-
-        stage = new Stage(new ScreenViewport());
-        shopSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
-
-        map = new TmxMapLoader().load("maps/demoMap.tmx");
-        shape = new ShapeRenderer();
-
 //        // only needed once
 //        assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
 //        assetManager.load("level1.tmx", TiledMap.class);
@@ -152,14 +148,14 @@ public class GameScreen implements Screen {
 //        System.out.println(pOne.getOriginX()+ " " + pOne.getOriginY());
         pOne.setColor(Color.GRAY);
 //        pOne.setSize(pOne.getBoundingRectangle().width, pOne.getBoundingRectangle().height);
-        pOne.setScale(1/3f);
+        pOne.setScale(1/4f);
 //        pOne.setPosition(1280/2f, 720/2f);
 //        pOne.setBounds( pOne.getWidth()/3f, pOne.getHeight()/3f);
         pOne.setWeapon(new BeamCannon(bmTex));
         pTwo = new Player("Donatello", false, playerTex, 23, 38, 293, 191, collisionLayer);
         pTwo.setPosition(200,200);
         pTwo.setColor(Color.PURPLE);
-        pTwo.setScale(1/3f);
+        pTwo.setScale(1/4f);
         pTwo.setWeapon(new BeamCannon(bmTex));
 
         // Ghetto Managers
@@ -335,7 +331,7 @@ public class GameScreen implements Screen {
             }
            // pOne.checkGob(goblin);
             //pTwo.checkGob(goblin);
-            checkBoundary(goblin);
+//            checkBoundary(goblin);
         }
 
         game.batch.setProjectionMatrix(camera.combined);
