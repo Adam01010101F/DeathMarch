@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.dmr.deathmarch.Direction;
+import com.dmr.deathmarch.Player;
 import com.dmr.deathmarch.Projectile;
 
 public abstract class Weapon extends Rectangle {
@@ -33,11 +34,10 @@ public abstract class Weapon extends Rectangle {
     }
 
     //TODO:: Make Rotation logic less ugly? Does it impact perf?
-    public Projectile shoot(Rectangle weapon, Texture lbTex, Direction dir[]){
+    public Projectile shoot(Player player, Texture lbTex, Direction dir[]){
         Projectile projectile = new Projectile(lbTex, dir[0], dir[1]);
 //        projectile.scale(1/64f);
-        projectile.setPosition(weapon.x + weapon.height, weapon.y);
-        System.out.println("Weapon(x,y): " +weapon.x+", "+weapon.y);
+        projectile.setPosition(player.getBoundingRectangle().x , player.getBoundingRectangle().y);
         //Laser Direction Logic
         if(projectile.getxVel()==0&&projectile.getyVel()==1
                 ||projectile.getxVel()==0&&projectile.getyVel()==-1)

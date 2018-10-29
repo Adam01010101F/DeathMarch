@@ -466,7 +466,7 @@ public class GameScreen implements Screen {
         }
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
             if(TimeUtils.nanoTime() - pOne.getWeapon().getLastShot() > pOne.getWeapon().getCooldown()){
-                projectiles.add(pOne.getWeapon().shoot(pOne.getBoundingRectangle(), lbTex, pOne.getLastDirection()));
+                projectiles.add(pOne.getWeapon().shoot(pOne, lbTex, pOne.getLastDirection()));
             }
         }
 
@@ -538,7 +538,7 @@ public class GameScreen implements Screen {
         }
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
             if(TimeUtils.nanoTime() - pTwo.getWeapon().getLastShot() > pTwo.getWeapon().getCooldown()){
-                projectiles.add(pTwo.getWeapon() .shoot(pTwo.getWeapon(), lbTex, pTwo.getLastDirection()));
+                projectiles.add(pTwo.getWeapon() .shoot(pTwo, lbTex, pTwo.getLastDirection()));
             }
         }
 
