@@ -56,7 +56,7 @@ public class DeathMarch extends Game {
 		playerTex = new Texture(Gdx.files.internal("survivor-shoot_rifle_0.png"));
 		playerTex1 = new Texture(Gdx.files.internal("zombie.png"));
 		player1 = new Player("Shredder", false, playerTex, 23, 38, 293, 191);
-		player2 = new Player("Donatello", false, playerTex1, 0, 0, 45, 37);
+		player2 = new Player("Donatello", false, playerTex1, 0, 0, 37, 40);
 
 //		this.setScreen(new MainMenuScreen(this));
 
