@@ -81,14 +81,7 @@ public class GameScreen implements Screen {
     private String blockedKey = "blocked";
     private float increment;
     private Skin skin;
-    private boolean p1CollisionXLeft;
-    private boolean p1CollisionXRight;
-    private boolean p1CollisionYUp;
-    private boolean p1CollisionYDown;
-    private boolean p2CollisionXLeft;
-    private boolean p2CollisionXRight;
-    private boolean p2CollisionYUp;
-    private boolean p2CollisionYDown;
+
     private Dialog dialog;
     private int[] background = new int[] {0}, foreground = new int[] {1};
     private ShapeRenderer shape;
@@ -100,38 +93,22 @@ public class GameScreen implements Screen {
     //for the time
     private long start;
     private long diffTime;
-
+    private String mapName;
 
 
     public GameScreen(final DeathMarch game,Player player1,Player player2){
         this.game = game;
-
+        mapName = "maps/demoMap.tmx";
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1280, 720);
 
         stage = new Stage(new ScreenViewport());
         shopSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
-        map = new TmxMapLoader().load("maps/demoMap.tmx");
+        map = new TmxMapLoader().load(mapName);
         shape = new ShapeRenderer();
         collisionLayer = (TiledMapTileLayer) map.getLayers().get(1);
-        p1CollisionXLeft = false;
-        p1CollisionXRight = false;
-        p1CollisionYUp = false;
-        p1CollisionYDown = false;
-        p2CollisionXRight = false;
-        p2CollisionXLeft = false;
-        p2CollisionYUp = false;
-        p2CollisionYDown = false;
-        objects = map.getLayers().get("collisions").getObjects();
-        for(int row = 0; row < collisionLayer.getWidth(); row++)
-        {
-            for(int col = 0; col < collisionLayer.getHeight(); col++){
-                if(collisionLayer.getCell(row,col) != null){
 
-                }
-            }
-        }
 //        // only needed once
 //        assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
 //        assetManager.load("level1.tmx", TiledMap.class);
@@ -214,7 +191,7 @@ public class GameScreen implements Screen {
     }
     @Override
     public void show() {
-        map = new TmxMapLoader().load("maps/demoMap.tmx");
+        map = new TmxMapLoader().load(mapName);
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
 
     }
@@ -238,7 +215,6 @@ public class GameScreen implements Screen {
 
         //table
         tiledMapRenderer.setView(camera);
-
         tiledMapRenderer.render(background);
         tiledMapRenderer.render(foreground);
 
