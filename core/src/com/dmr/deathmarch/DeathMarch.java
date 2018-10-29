@@ -25,6 +25,7 @@ public class DeathMarch extends Game {
 	private AppPreferences preferences;
 	private TileMapScreen tileMap;
 	private shopScreen s;
+	private HOFScreen HallOfFame;
 	private Texture playerTex;
 	private Texture playerTex1;
 
@@ -34,6 +35,7 @@ public class DeathMarch extends Game {
 	public final static int ENDGAME = 3;
 	public final static int APP2 = 4;
 	public final static int SHOP = 5;
+	public final static int HOF = 6;
 
 
 
@@ -56,7 +58,7 @@ public class DeathMarch extends Game {
 		playerTex = new Texture(Gdx.files.internal("survivor-shoot_rifle_0.png"));
 		playerTex1 = new Texture(Gdx.files.internal("zombie.png"));
 		player1 = new Player("Shredder", false, playerTex, 23, 38, 293, 191);
-		player2 = new Player("Donatello", false, playerTex1, 0, 0, 45, 37);
+		player2 = new Player("Donatello", false, playerTex1, 0, 0, 35, 45);
 
 //		this.setScreen(new MainMenuScreen(this));
 
@@ -113,18 +115,12 @@ public class DeathMarch extends Game {
 
 				break;
 
-
-			case APP2:
-
-				if(mainScreen == null){
-					//test1.create();
-					tileMap = new TileMapScreen(this);
+			case HOF:
+				if(HallOfFame == null){
+					HallOfFame = new HOFScreen(this, player1);
 				}
-				this.setScreen(tileMap);
-
+				this.setScreen(HallOfFame);
 				break;
-
-
 			case SHOP:
 
 				if(s == null) s = new shopScreen(this,player1,player2);

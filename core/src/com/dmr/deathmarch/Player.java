@@ -66,7 +66,7 @@ public class Player extends Sprite {
         this.health = 150;
     }
     public void buffSpeed(){
-        this.speed = 200;
+        this.speed = 175;
     }
     public void buffDmg(){
         this.dmgMulti = 2;
