@@ -706,8 +706,6 @@ public class GameScreen implements Screen {
 
         // Ghetto Managers
         //npc
-        npcTex = new Texture(Gdx.files.internal("Stairs_up.png"));
-        stairs = new Sprite(npcTex);
 
 
 //        pTwo.x = 1280/2 - 16/2;

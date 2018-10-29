@@ -86,6 +86,7 @@ public class DeathMarch extends Game {
 		batch.dispose();
 		font.dispose();
 	}
+
 	public void changeScreen(int screen){
 
 		switch(screen){
