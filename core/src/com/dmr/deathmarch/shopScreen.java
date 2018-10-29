@@ -112,7 +112,7 @@ public class shopScreen implements Screen{
         //Player Creation
         pOne = player1;
 //        pOne.setPosition(1280/2f - 120/2f, 720/2f);
-        pTwo = player2;
+
 //        pTwo.setPosition((1280/2f -120/2f), 720/2f);
 
         //Buffs
@@ -218,7 +218,7 @@ public class shopScreen implements Screen{
         game.batch.begin();
 
         pOne.draw(game.batch);
-        pTwo.draw(game.batch);
+
 
         heart.draw(game.batch);
         speed.draw(game.batch);
@@ -317,64 +317,7 @@ public class shopScreen implements Screen{
 
         }
 
-        //Player 2 Keybindings
-        if(Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.RIGHT) ||
-                Gdx.input.isKeyPressed(Input.Keys.LEFT)|| Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            pTwo.clearDirections();
-            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-
-                if(collidesTop(pTwo))
-                {
-                    pTwo.setRotation(90);
-                    pTwo.setY(pTwo.getY());
-                    pOne.setYDirection(Direction.Up);
-                }
-                else{
-                    pTwo.setRotation(90);
-                    pTwo.setY(pTwo.getY() + pTwo.getSpeed() * Gdx.graphics.getDeltaTime());
-                    pTwo.setYDirection(Direction.Up);
-                }
-
-            }
-            else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-                if(collidesBottom(pTwo)){
-                    pTwo.setRotation(270);
-                    pTwo.setY(pTwo.getY());
-                    pTwo.setYDirection(Direction.Down);
-                }
-                else{
-                    pTwo.setRotation(270);
-                    pTwo.setY(pTwo.getY() - pTwo.getSpeed() * Gdx.graphics.getDeltaTime());
-                    pTwo.setYDirection(Direction.Down);
-                }
-            }
-            else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                if(collidesRight(pTwo)){
-                    pTwo.setRotation(0);
-                    pTwo.setX(pTwo.getX());
-                    pTwo.setXDirection(Direction.Right);
-                }
-                else{
-
-                    pTwo.setRotation(0);
-                    pTwo.setX(pTwo.getX() + pTwo.getSpeed() * Gdx.graphics.getDeltaTime());
-                    pTwo.setXDirection(Direction.Right);
-                }
-            }
-            else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                if(collidesLeft(pTwo)){
-                    pTwo.setRotation(180);
-                    pTwo.setX(pTwo.getX());
-                    pTwo.setXDirection(Direction.Left);
-                }
-                else{
-
-                    pTwo.setRotation(180);
-                    pTwo.setX(pTwo.getX() - pTwo.getSpeed() * Gdx.graphics.getDeltaTime());
-                    pTwo.setXDirection(Direction.Left);
-                }
-            }
-        }
+        
         //leaving shop area
         if (Gdx.input.isKeyPressed(Input.Keys.P) && pOne.getBoundingRectangle().overlaps(door.getBoundingRectangle())) {
             bgm_Music.stop();
