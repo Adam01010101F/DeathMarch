@@ -74,6 +74,7 @@ public class GameScreen implements Screen {
     private TextButton buttonPlay;
     private TextButton buttonQuit;
     private Rectangle npc;
+    private Sprite stairs;
     private Texture npcTex;
     private boolean gamePaused;
     Skin shopSkin;
@@ -152,8 +153,8 @@ public class GameScreen implements Screen {
 
         // Ghetto Managers
         //npc
-        npcTex = new Texture(Gdx.files.internal("npc.png"));
-        npc = new Rectangle();
+        npcTex = new Texture(Gdx.files.internal("Stairs_up.png"));
+        stairs = new Sprite(npcTex);
 
 
 //        pTwo.x = 1280/2 - 16/2;
@@ -161,11 +162,11 @@ public class GameScreen implements Screen {
 //        pTwo.width = 120;
 //        pTwo.height = 120;
 
-        //npc
-        npc.x = 1100;
-        npc.y = 10;
-        npc.width = 150;
-        npc.height = 150;
+        //doors
+        stairs.setX(1150);
+        stairs.setY(27);
+        stairs.setScale(3f);
+
 
         lastDirection = new Direction[2];       // Tracks the direction of the user.
         projectiles = new Array<Projectile>();
@@ -373,14 +374,8 @@ public class GameScreen implements Screen {
             uiText.draw(game.batch,"Let's see if you survive HAHAHA!",370,150);
         }
 
-        if(npc.overlaps(pOne.getBoundingRectangle())&& !npc.overlaps(pTwo.getBoundingRectangle())){
-            uiText.draw(game.batch,"You should bring your friend along",370,150);
-        }
-        if(npc.overlaps(pTwo.getBoundingRectangle()) && !npc.overlaps(pOne.getBoundingRectangle())){
-            uiText.draw(game.batch,"You should bring your friend along",370,150);
-        }
-        if(npc.overlaps(pOne.getBoundingRectangle()) && npc.overlaps(pTwo.getBoundingRectangle())){
-            uiText.draw(game.batch,"Press P to enter my store",370,150);
+        if(pOne.getBoundingRectangle().overlaps(stairs.getBoundingRectangle() )){
+            uiText.draw(game.batch,"Press P to enter the store",370,150);
         }
 
 
@@ -390,9 +385,10 @@ public class GameScreen implements Screen {
         game.font.draw(game.batch, "Projectiles: " + projectiles.size, 100, 200);
         pOne.draw(game.batch);
         pTwo.draw(game.batch);
+        stairs.draw(game.batch);
 //        game.batch.draw(bmTex, pOne.getX(), pOne.getY()-8);
 //        pOne.getWeapon().draw(game.batch);
-        game.batch.draw(npcTex, npc.x, npc.y);
+
         for(Sprite goblin: goblins){
             game.batch.draw(pTwoTex, goblin.getX(), goblin.getY());
         }
@@ -474,9 +470,11 @@ public class GameScreen implements Screen {
             }
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.P) && npc.overlaps(pOne.getBoundingRectangle())&& npc.overlaps(pTwo.getBoundingRectangle())) {
+        //enter Store
+        if (Gdx.input.isKeyPressed(Input.Keys.P) && pOne.getBoundingRectangle().overlaps(stairs.getBoundingRectangle())) {
             game.changeScreen(DeathMarch.SHOP);
         }
+
 
         //Player 2 Keybindings
         if(Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.RIGHT) ||

@@ -19,7 +19,7 @@ public class MainMenuScreen implements Screen {
 
     public TiledTest testTile;
 
-    public MainMenuScreen(final DeathMarch game){
+    public MainMenuScreen(final DeathMarch game) {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1280, 720);
@@ -29,7 +29,7 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override
-    public void render(float delta){
+    public void render(float delta) {
 //        Gdx.gl.glClearColor(0.5f,0,0,1);
 //        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 //
@@ -81,7 +81,7 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override
-    public void show(){
+    public void show() {
         stage.clear();
         Gdx.input.setInputProcessor(stage);
 
@@ -123,14 +123,18 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        preferences.addListener(new ChangeListener(){
+        preferences.addListener(new ChangeListener() {
             @Override
-            public void changed(ChangeEvent event, Actor actor){
+            public void changed(ChangeEvent event, Actor actor) {
                 game.changeScreen(DeathMarch.PREFERENCES);
             }
 
         });
-
-
+        hof.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.changeScreen(DeathMarch.HOF);
+            }
+        });
     }
 }
