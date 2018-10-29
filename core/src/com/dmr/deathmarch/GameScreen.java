@@ -339,8 +339,6 @@ public class GameScreen implements Screen {
 
                 }
             }
-           // pOne.checkGob(goblin);
-            //pTwo.checkGob(goblin);
 //            checkBoundary(goblin);
         }
 
@@ -411,7 +409,7 @@ public class GameScreen implements Screen {
                 }
                 else {
                     pOne.setRotation(90);
-                    pOne.setY(pOne.getY() + 150 * Gdx.graphics.getDeltaTime());
+                    pOne.setY(pOne.getY() + pOne.getSpeed() * Gdx.graphics.getDeltaTime());
                     pOne.setYDirection(Direction.Up);
                 }
             }
@@ -425,7 +423,7 @@ public class GameScreen implements Screen {
                 }
                 else {
                     pOne.setRotation(270);
-                    pOne.setY(pOne.getY() - 150 * Gdx.graphics.getDeltaTime());
+                    pOne.setY(pOne.getY() - pOne.getSpeed() * Gdx.graphics.getDeltaTime());
                     pOne.setYDirection(Direction.Down);
                 }
             }
@@ -439,7 +437,7 @@ public class GameScreen implements Screen {
                 else {
 
                     pOne.setRotation(0);
-                    pOne.setX(pOne.getX() + 150 * Gdx.graphics.getDeltaTime());
+                    pOne.setX(pOne.getX() + pOne.getSpeed() * Gdx.graphics.getDeltaTime());
                     pOne.setXDirection(Direction.Right);
                 }
             }
@@ -452,7 +450,7 @@ public class GameScreen implements Screen {
                 else{
 
                     pOne.setRotation(180);
-                    pOne.setX(pOne.getX()-150*Gdx.graphics.getDeltaTime());
+                    pOne.setX(pOne.getX()-pOne.getSpeed()*Gdx.graphics.getDeltaTime());
                     pOne.setXDirection(Direction.Left);
                 }
 
