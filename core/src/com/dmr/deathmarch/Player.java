@@ -77,10 +77,13 @@ public class Player extends Sprite {
     }
     public int getKills(){return kills;}
 
-    public void takeDmg(float dmg){this.health -= dmg;}
+    public void takeDmg(int dmg){this.health -= dmg;}
     public void addKill(){kills++;}
     public void addBigKill(){kills = kills + 250;}
+    public void resetKills(){kills = 0;}
     public void addHealth(int hp){health = health + hp;}
+    public void resetHealth(){health = 100;}
+    public void setHealth(int i){health = i;}
     public void setDirection(Direction[] directions){
         this.lastDirection = directions;
     }
