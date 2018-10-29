@@ -63,6 +63,10 @@ public class shopScreen implements Screen{
     private Texture speedTex;
     private Texture dmgTex;
 
+    //NPC
+    private Sprite npc;
+    private Texture npcTex;
+
     private boolean gamePaused;
     private Sprite door;
     private Texture doorTex;
@@ -119,11 +123,17 @@ public class shopScreen implements Screen{
         dmgTex = new Texture(Gdx.files.internal("Blue_orb.png"));
         dmg = new Sprite(dmgTex);
 
+        //NPC
+        npcTex = new Texture(Gdx.files.internal("npc.png"));
+        npc = new Sprite(npcTex);
 
 
 
         doorTex = new Texture(Gdx.files.internal("Stairs_down.png"));
         door = new Sprite(doorTex);
+        //Setting Player 1 Position
+        pOne.setX(30);
+        pOne.setY(40);
 
         //Setting Buff position
         speed.setScale(8f);
@@ -138,10 +148,15 @@ public class shopScreen implements Screen{
         dmg.setX(750);
         dmg.setY(73);
 
-        // 5 & 12
-        door.setScale(8f);
-        door.setX(22);
-        door.setY(20);
+        npc.setScale(0.5f);
+        npc.setX(470);
+        npc.setY(140);
+
+
+        //it's actually stairs but oh well
+        door.setScale(3f);
+        door.setX(30);
+        door.setY(40);
 
         //text for NPC
         generator = new FreeTypeFontGenerator((Gdx.files.internal("fonts/joystix.ttf")));
@@ -207,6 +222,8 @@ public class shopScreen implements Screen{
         speed.draw(game.batch);
         dmg.draw(game.batch);
 
+        npc.draw(game.batch);
+
         door.draw(game.batch);
 
        // text bubble
@@ -230,7 +247,9 @@ public class shopScreen implements Screen{
 
         
 //        uiText.draw(game.batch,"Hello World",500,50);
-
+        if(pOne.getBoundingRectangle().overlaps(door.getBoundingRectangle() )){
+            uiText.draw(game.batch,"Press P to exit the store",370,150);
+        }
 
         game.batch.end();
 
@@ -310,7 +329,7 @@ public class shopScreen implements Screen{
                 }
                 else{
                     pTwo.setRotation(90);
-                    pTwo.setY(pTwo.getY() + 200 * Gdx.graphics.getDeltaTime());
+                    pTwo.setY(pTwo.getY() + pTwo.getSpeed() * Gdx.graphics.getDeltaTime());
                     pTwo.setYDirection(Direction.Up);
                 }
 
@@ -323,7 +342,7 @@ public class shopScreen implements Screen{
                 }
                 else{
                     pTwo.setRotation(270);
-                    pTwo.setY(pTwo.getY() - 200 * Gdx.graphics.getDeltaTime());
+                    pTwo.setY(pTwo.getY() - pTwo.getSpeed() * Gdx.graphics.getDeltaTime());
                     pTwo.setYDirection(Direction.Down);
                 }
             }
@@ -336,7 +355,7 @@ public class shopScreen implements Screen{
                 else{
 
                     pTwo.setRotation(0);
-                    pTwo.setX(pTwo.getX() + 200 * Gdx.graphics.getDeltaTime());
+                    pTwo.setX(pTwo.getX() + pTwo.getSpeed() * Gdx.graphics.getDeltaTime());
                     pTwo.setXDirection(Direction.Right);
                 }
             }
@@ -349,13 +368,13 @@ public class shopScreen implements Screen{
                 else{
 
                     pTwo.setRotation(180);
-                    pTwo.setX(pTwo.getX() - 200 * Gdx.graphics.getDeltaTime());
+                    pTwo.setX(pTwo.getX() - pTwo.getSpeed() * Gdx.graphics.getDeltaTime());
                     pTwo.setXDirection(Direction.Left);
                 }
             }
         }
         //leaving shop area
-        if (Gdx.input.isKeyPressed(Input.Keys.P) && pOne.getBoundingRectangle().overlaps(door.getBoundingRectangle()) && pTwo.getBoundingRectangle().overlaps(door.getBoundingRectangle())) {
+        if (Gdx.input.isKeyPressed(Input.Keys.P) && pOne.getBoundingRectangle().overlaps(door.getBoundingRectangle())) {
             game.changeScreen(DeathMarch.APPLICATION);
 
         }
