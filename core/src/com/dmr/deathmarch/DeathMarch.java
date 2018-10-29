@@ -26,6 +26,7 @@ public class DeathMarch extends Game {
 	private TileMapScreen tileMap;
 	private shopScreen s;
 	private Texture playerTex;
+	private Texture playerTex1;
 
 	public final static int MENU = 0;
 	public final static int PREFERENCES = 1;
@@ -53,8 +54,9 @@ public class DeathMarch extends Game {
 		font = new BitmapFont();
 
 		playerTex = new Texture(Gdx.files.internal("survivor-shoot_rifle_0.png"));
+		playerTex1 = new Texture(Gdx.files.internal("zombie.png"));
 		player1 = new Player("Shredder", false, playerTex, 23, 38, 293, 191);
-		player2 = new Player("Donatello", false, playerTex, 23, 38, 293, 191);
+		player2 = new Player("Donatello", false, playerTex1, 0, 0, 45, 37);
 
 //		this.setScreen(new MainMenuScreen(this));
 

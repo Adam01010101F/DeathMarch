@@ -147,7 +147,7 @@ public class GameScreen implements Screen {
         pTwo = player2;
         pTwo.setPosition(200,200);
         pTwo.setColor(Color.PURPLE);
-        pTwo.setScale(1/8f);
+        //pTwo.setScale(3f);
         pTwo.setWeapon(new BeamCannon(bmTex));
 
         // Ghetto Managers
@@ -175,7 +175,7 @@ public class GameScreen implements Screen {
         //text for NPC
         generator = new FreeTypeFontGenerator((Gdx.files.internal("fonts/joystix.ttf")));
         parameters = new FreeTypeFontParameter();
-        parameters.size = 25;
+        parameters.size = 20;
         parameters.color= Color.BLACK;
 
 
