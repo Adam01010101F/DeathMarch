@@ -3,6 +3,7 @@ package com.dmr.deathmarch;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -27,6 +28,7 @@ public class DeathMarch extends Game {
 	private shopScreen s;
 	private HOFScreen HallOfFame;
 	private Texture playerTex;
+	private Music bgm_Music;
 	private Texture playerTex1;
 
 	public final static int MENU = 0;
@@ -65,6 +67,8 @@ public class DeathMarch extends Game {
 		splashScreen = new SplashScreen(this);
 		setScreen(splashScreen);
 		preferences = new AppPreferences();
+
+
 	}
 
 	@Override
@@ -79,6 +83,7 @@ public class DeathMarch extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
+		bgm_Music.dispose();
 		font.dispose();
 	}
 	public void changeScreen(int screen){
@@ -126,7 +131,6 @@ public class DeathMarch extends Game {
 			case SHOP:
 
 				if(s == null) s = new shopScreen(this,player1,player2);
-
 				this.setScreen(s);
 
 				break;
