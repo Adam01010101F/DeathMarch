@@ -84,7 +84,6 @@ public class DeathMarch extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		bgm_Music.dispose();
 		font.dispose();
 	}
 	public void changeScreen(int screen){
