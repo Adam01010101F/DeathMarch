@@ -3,6 +3,7 @@ package com.dmr.deathmarch;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.dmr.deathmarch.weapons.Weapon;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 public class Player extends Sprite {
     private String name;
@@ -14,6 +15,7 @@ public class Player extends Sprite {
     private Texture playerTex;
     private Direction lastDirection[];
     private Weapon weapon;
+    private boolean isDead;
 
     public Player(String name, Boolean pone, Texture texture){
         super(texture);
@@ -79,4 +81,8 @@ public class Player extends Sprite {
 
     public void setWeapon(Weapon weapon){this.weapon = weapon;}
     public Weapon getWeapon(){return weapon;}
+    public Boolean isDead(){
+        if(health == 0) return true;
+        else return false;
+    }
 }
