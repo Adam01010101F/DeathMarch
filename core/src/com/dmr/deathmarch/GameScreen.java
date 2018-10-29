@@ -149,6 +149,7 @@ public class GameScreen implements Screen {
         pTwo.setPosition(200,200);
         pTwo.setColor(Color.PURPLE);
         pTwo.setScale(3/4f);
+        //
         pTwo.setWeapon(new BeamCannon(bmTex));
 
         // Ghetto Managers
