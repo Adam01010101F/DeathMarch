@@ -237,7 +237,7 @@ public class GameScreen implements Screen {
             Projectile projectile = iter.next();
             projectile.setPosition(projectile.getX() +350 * projectile.getxVel() * Gdx.graphics.getDeltaTime()
                     , projectile.getY() + 350 *projectile.getyVel() * Gdx.graphics.getDeltaTime());
-            if(projectile.getX()>1280 | projectile.getY()>720 || projectile.getX() < 0 || projectile.getY() < 0){
+            if(projectile.getX()>1280-164 | projectile.getY()>720-64 || projectile.getX() < 0+12 || projectile.getY() < 0+12){
                 iter.remove();
             }
             //TODO:: Give ownership of projectile to count score.
@@ -516,8 +516,8 @@ public class GameScreen implements Screen {
 
 
         //Player Boundaries
-        checkBoundary(pOne);
-        checkBoundary(pTwo);
+//        checkBoundary(pOne);
+//        checkBoundary(pTwo);
 
     }
 
