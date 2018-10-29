@@ -312,6 +312,7 @@ public class shopScreen implements Screen{
                 }
 
             }
+            //else if(Gdx.input.isKeyPressed(Input.Keys.P))
 
         }
 

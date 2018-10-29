@@ -48,7 +48,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 public class GameScreen implements Screen {
-    final DeathMarch game;
+    public DeathMarch game;
     private long startTime;
     private OrthographicCamera camera;
     private Texture playerTex;
@@ -60,6 +60,7 @@ public class GameScreen implements Screen {
     private Goblin Gobbi;
     private BeamCannon beamCannon;
     private Array<Projectile> projectiles;
+    private Array<Projectile> bile;
     private long lastBeamShot;
     private Array<Goblin> goblins;
     private LogicModel lm;
@@ -109,6 +110,9 @@ public class GameScreen implements Screen {
         stage = new Stage(new FitViewport(1280,1280));
         shopSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
+        pOne = player1;
+        pTwo = player2;
+
         map = new TmxMapLoader().load(mapName);
         shape = new ShapeRenderer();
         collisionLayer = (TiledMapTileLayer) map.getLayers().get(1);
@@ -138,17 +142,18 @@ public class GameScreen implements Screen {
         //stage = new Stage(new ScreenViewport());
 
         //Player Creation
-        pOne = player1;
+        //pOne = player1;
         pOne.setOriginCenter();
         pOne.setPosition(100,100);
 //        System.out.println(pOne.getOriginX()+ " " + pOne.getOriginY());
         pOne.setColor(Color.GRAY);
         pOne.setScale(1/8f);
         pOne.setWeapon(new BeamCannon(bmTex));
-        pTwo = player2;
-        pTwo.setPosition(200,200);
+        //pTwo = player2;
+        pTwo.setPosition(1000,900);
         pTwo.setColor(Color.PURPLE);
         pTwo.setScale(3/4f);
+        pTwo.setHealth(150);
         //
         pTwo.setWeapon(new BeamCannon(bmTex));
 
@@ -171,7 +176,12 @@ public class GameScreen implements Screen {
 
         lastDirection = new Direction[2];       // Tracks the direction of the user.
         projectiles = new Array<Projectile>();
+        bile = new Array<Projectile>();
         goblins = new Array<Goblin>();
+
+        startTime = System.currentTimeMillis();
+
+
 
 
         //text for NPC
@@ -186,8 +196,8 @@ public class GameScreen implements Screen {
 
         generator.dispose();
 
-        createGoblin();
-        startTime = System.currentTimeMillis();
+        //createGoblin();
+
     }
 
 
@@ -229,43 +239,108 @@ public class GameScreen implements Screen {
         tiledMapRenderer.render(foreground);
 
         camera.update();
+        // Bullet Physics|Destruction
+        for(int i = 0; i< projectiles.size; i ++) {
+            Projectile proj = projectiles.get(i);
+            proj.setPosition(proj.getX() + 350 * proj.getxVel() * Gdx.graphics.getDeltaTime()
+                    , proj.getY() + 350 * proj.getyVel() * Gdx.graphics.getDeltaTime());
+            if (bulletCollidesLeft(proj)) {
+                projectiles.removeIndex(i);
+            } else if (bulletCollidesRight(proj)) {
+                projectiles.removeIndex(i);
+
+            } else if (bulletCollidesBottom(proj)) {
+                projectiles.removeIndex(i);
+
+            } else if (bulletCollidesTop(proj)) {
+                projectiles.removeIndex(i);
+
+            } else {
+                // do nothing
+            }
+            //TODO:: Give ownership of projectile to count score.
+            for(Projectile biles: projectiles){
+                if(biles.getBoundingRectangle().overlaps(pTwo.getBoundingRectangle())){
+//                    goblin.takeDamage(beamCannon.getDamage());
+                    projectiles.removeIndex(i);
+
+                    System.out.println("Goblin takes damage");
+                    pOne.addKill();
+                    pTwo.takeDmg(5);
+
+                }
+            }
+
+        }
 
 
         // Bullet Physics|Destruction
-        for(Iterator<Projectile> iter = projectiles.iterator(); iter.hasNext();){
-            Projectile projectile = iter.next();
-            projectile.setPosition(projectile.getX() +350 * projectile.getxVel() * Gdx.graphics.getDeltaTime()
-                    , projectile.getY() + 350 *projectile.getyVel() * Gdx.graphics.getDeltaTime());
-//            if(projectile.getX()>1280 | projectile.getY()>720 || projectile.getX() < 0 || projectile.getY() < 0){
-//                iter.remove();
-//            }
-            if(bulletCollidesLeft(projectile)){
-                iter.remove();
-            }
-            else if(bulletCollidesRight(projectile)){
-                iter.remove();
-            }
-            else if(bulletCollidesBottom(projectile)){
-                iter.remove();
-            }
-            else if(bulletCollidesTop(projectile)){
-                iter.remove();
-            }
-            else{
+        for(int i = 0; i< bile.size; i ++) {
+            Projectile proj = bile.get(i);
+            proj.setPosition(proj.getX() + 350 * proj.getxVel() * Gdx.graphics.getDeltaTime()
+                    , proj.getY() + 350 * proj.getyVel() * Gdx.graphics.getDeltaTime());
+            if (bulletCollidesLeft(proj)) {
+                bile.removeIndex(i);
+            } else if (bulletCollidesRight(proj)) {
+                bile.removeIndex(i);
+
+            } else if (bulletCollidesBottom(proj)) {
+                bile.removeIndex(i);
+
+            } else if (bulletCollidesTop(proj)) {
+                bile.removeIndex(i);
+
+            } else {
                 // do nothing
             }
-
-
             //TODO:: Give ownership of projectile to count score.
-            for(Goblin goblin: goblins){
-                if(goblin.getBoundingRectangle().overlaps(projectile.getBoundingRectangle())){
+            for(Projectile biles: bile){
+                if(biles.getBoundingRectangle().overlaps(pOne.getBoundingRectangle())){
 //                    goblin.takeDamage(beamCannon.getDamage());
-                    iter.remove();
-                    System.out.println("Goblin takes damage");
-                    pOne.addKill();
+                    bile.removeIndex(i);
+
+                    System.out.println("Player takes damage");
+                    pTwo.addKill();
+                    pOne.takeDmg(5);
                 }
             }
+
         }
+
+
+
+//        // Bullet Physics|Destruction
+//        for(Iterator<Projectile> iter = projectiles.iterator(); iter.hasNext();){
+//                Projectile projectile = iter.next();
+//                projectile.setPosition(projectile.getX() +350 * projectile.getxVel() * Gdx.graphics.getDeltaTime()
+//                        , projectile.getY() + 350 * projectile.getyVel() * Gdx.graphics.getDeltaTime());
+//                if(bulletCollidesLeft(projectile)){
+//                    iter.remove();
+//                }
+//                else if(bulletCollidesRight(projectile)){
+//                    iter.remove();
+//                }
+//                else if(bulletCollidesBottom(projectile)){
+//                    iter.remove();
+//                }
+//                else if(bulletCollidesTop(projectile)){
+//                    iter.remove();
+//                }
+//                else {
+//                    // do nothing
+//                }
+//
+//
+//            //TODO:: Give ownership of projectile to count score.
+//            for(Projectile proj: projectiles){
+//                if(proj.getBoundingRectangle().overlaps(pTwo.getBoundingRectangle())){
+////                    goblin.takeDamage(beamCannon.getDamage());
+//                    iter.remove();
+//                    System.out.println("Goblin takes damage");
+//                    pOne.addKill();
+//                }
+//            }
+//        }
 
         // Goblin Destruction
         for(Iterator<Goblin> iter = goblins.iterator(); iter.hasNext();){
@@ -362,17 +437,19 @@ public class GameScreen implements Screen {
         //sets up the timer
         Vector3 posCamara = camera.position;
         uiText.draw(game.batch, "Time: " + (300 - (System.currentTimeMillis() - startTime )/1000), posCamara.x - 100, posCamara.y + 580);
-        uiText.draw(game.batch, "Player 1 Health: " + Math.round(pOne.getHealth()), posCamara.x - 600, posCamara.y + 580);
-        uiText.draw(game.batch, "Player 2 Health: " + Math.round(pTwo.getHealth()), posCamara.x + 200, posCamara.y + 580);
+        uiText.draw(game.batch, "Soldier Health: " + Math.round(pOne.getHealth()), posCamara.x - 600, posCamara.y + 580);
+        uiText.draw(game.batch, "Soldier Points: " + Math.round(pOne.getKills()), posCamara.x - 600, posCamara.y + 560);
+        uiText.draw(game.batch, "Zombie Health: " + Math.round(pTwo.getHealth()), posCamara.x + 200, posCamara.y + 580);
+        uiText.draw(game.batch, "Zombie Points: " + Math.round(pTwo.getKills()), posCamara.x + 200, posCamara.y + 560);
 
 
         //NPC dialogue conditional statement
         diffTime = TimeUtils.timeSinceMillis(start);
         if(diffTime<3000){
-            uiText.draw(game.batch,"Welcome to Death March!",370,150);
+            uiText.draw(game.batch,"Welcome to Death March!",370,40);
         }
         if(diffTime>3000 && diffTime<6000){
-            uiText.draw(game.batch,"Let's see if you survive HAHAHA!",370,150);
+            uiText.draw(game.batch,"Let's see if you survive HAHAHA!",370,40);
         }
 
         if(pOne.getBoundingRectangle().overlaps(stairs.getBoundingRectangle() )){
@@ -384,6 +461,7 @@ public class GameScreen implements Screen {
 
         game.font.draw(game.batch, "P2 x: "+pTwo.getX()+" y: "+pTwo.getY(), 100, 150);
         game.font.draw(game.batch, "Projectiles: " + projectiles.size, 100, 200);
+        game.font.draw(game.batch, "Projectiles: " + bile.size, 100, 100);
         pOne.draw(game.batch);
         pTwo.draw(game.batch);
         stairs.draw(game.batch);
@@ -394,6 +472,9 @@ public class GameScreen implements Screen {
             game.batch.draw(pTwoTex, goblin.getX(), goblin.getY());
         }
         for (Sprite beam: projectiles){
+            beam.draw(game.batch);
+        }
+        for (Sprite beam: bile){
             beam.draw(game.batch);
         }
         game.batch.end();
@@ -465,7 +546,7 @@ public class GameScreen implements Screen {
             }
 
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
             if(TimeUtils.nanoTime() - pOne.getWeapon().getLastShot() > pOne.getWeapon().getCooldown()){
                 projectiles.add(pOne.getWeapon().shoot(pOne, lbTex, pOne.getLastDirection()));
             }
@@ -537,21 +618,29 @@ public class GameScreen implements Screen {
             }
 
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+        if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
             if(TimeUtils.nanoTime() - pTwo.getWeapon().getLastShot() > pTwo.getWeapon().getCooldown()){
-                projectiles.add(pTwo.getWeapon() .shoot(pTwo, lbTex, pTwo.getLastDirection()));
+                bile.add(pTwo.getWeapon() .shoot(pTwo, lbTex, pTwo.getLastDirection()));
             }
         }
 
         if(300 - (System.currentTimeMillis() - startTime )/1000 == 0){
             //startTime = System.currentTimeMillis()
+            init();
             game.changeScreen(DeathMarch.MENU);
 
             //game.setScreen(new GameScreen(game));
         }
 
         if(pOne.isDead()|| pTwo.isDead()){
+            //new MainMenuScreen(game);
+            //game = new DeathMarch();
+            //game.setScreen((new GameScreen(game,pOne,pTwo)));
+            //game.changeScreen(DeathMarch.MENU);
+            init();
             game.changeScreen(DeathMarch.MENU);
+
+
         }
 
 
@@ -586,6 +675,38 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+
+    }
+
+    public void init(){
+
+        // Ghetto Managers
+        //npc
+        npcTex = new Texture(Gdx.files.internal("Stairs_up.png"));
+        stairs = new Sprite(npcTex);
+
+
+//        pTwo.x = 1280/2 - 16/2;
+//        pTwo.y = 720/2;
+//        pTwo.width = 120;
+//        pTwo.height = 120;
+
+
+
+
+        lastDirection = new Direction[2];       // Tracks the direction of the user.
+        projectiles = new Array<Projectile>();
+        bile = new Array<Projectile>();
+        goblins = new Array<Goblin>();
+
+        startTime = System.currentTimeMillis();
+        pOne.resetHealth();
+        pOne.resetKills();
+        pTwo.resetHealth();
+        pTwo.setHealth(150);
+        pTwo.resetKills();
+        pOne.setPosition(100,100);
+        pTwo.setPosition(1000,900);
 
     }
 

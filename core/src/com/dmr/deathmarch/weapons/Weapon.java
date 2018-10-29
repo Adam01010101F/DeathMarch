@@ -34,9 +34,9 @@ public abstract class Weapon extends Rectangle {
     }
 
     //TODO:: Make Rotation logic less ugly? Does it impact perf?
-    public Projectile shoot(Player player, Texture lbTex, Direction dir[]){
+    public Projectile shoot(Player player
+            , Texture lbTex, Direction dir[]){
         Projectile projectile = new Projectile(lbTex, dir[0], dir[1]);
-//        projectile.scale(1/64f);
         projectile.setPosition(player.getBoundingRectangle().x , player.getBoundingRectangle().y);
         //Laser Direction Logic
         if(projectile.getxVel()==0&&projectile.getyVel()==1
