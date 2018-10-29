@@ -5,6 +5,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -90,6 +91,7 @@ public class shopScreen implements Screen{
     private Skin skin;
 
     private Dialog dialog;
+    private Music bgm_Music;
 
     public shopScreen(final DeathMarch game,Player player1, Player player2){
         this.game=game;
@@ -375,6 +377,7 @@ public class shopScreen implements Screen{
         }
         //leaving shop area
         if (Gdx.input.isKeyPressed(Input.Keys.P) && pOne.getBoundingRectangle().overlaps(door.getBoundingRectangle())) {
+            bgm_Music.stop();
             game.changeScreen(DeathMarch.APPLICATION);
 
         }
@@ -438,6 +441,11 @@ public class shopScreen implements Screen{
     public void show(){
         map = new TmxMapLoader().load(mapName);
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
+
+        bgm_Music = Gdx.audio.newMusic(Gdx.files.internal("sakura.mp3"));
+        bgm_Music.setLooping(true);
+        bgm_Music.setVolume(0.7f);
+        bgm_Music.play();
 
     }
     private void checkBoundary(Player player){

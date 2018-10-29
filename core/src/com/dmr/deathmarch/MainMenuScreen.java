@@ -11,11 +11,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.audio.Music;
 
 public class MainMenuScreen implements Screen {
     final DeathMarch game;
     public OrthographicCamera camera;
     public Stage stage;
+    private Music bgm_Music;
 
     public TiledTest testTile;
 
@@ -82,6 +84,11 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show(){
+        //music
+        bgm_Music = Gdx.audio.newMusic(Gdx.files.internal("mainMenu.mp3"));
+        bgm_Music.setLooping(true);
+        bgm_Music.play();
+
         stage.clear();
         Gdx.input.setInputProcessor(stage);
 
@@ -112,6 +119,7 @@ public class MainMenuScreen implements Screen {
         exit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                bgm_Music.stop();
                 Gdx.app.exit();
             }
         });
@@ -119,6 +127,7 @@ public class MainMenuScreen implements Screen {
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                bgm_Music.stop();
                 game.changeScreen(DeathMarch.APPLICATION);
             }
         });
@@ -126,6 +135,7 @@ public class MainMenuScreen implements Screen {
         preferences.addListener(new ChangeListener(){
             @Override
             public void changed(ChangeEvent event, Actor actor){
+                bgm_Music.stop();
                 game.changeScreen(DeathMarch.PREFERENCES);
             }
 

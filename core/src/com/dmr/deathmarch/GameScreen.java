@@ -6,6 +6,8 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -99,6 +101,11 @@ public class GameScreen implements Screen {
     private long diffTime;
     private String mapName;
 
+    //Music
+    private Music bgm_Music;
+    private Sound sound;
+
+
 
     public GameScreen(final DeathMarch game,Player player1,Player player2){
         this.game = game;
@@ -156,6 +163,8 @@ public class GameScreen implements Screen {
         npcTex = new Texture(Gdx.files.internal("Stairs_up.png"));
         stairs = new Sprite(npcTex);
 
+        sound = Gdx.audio.newSound(Gdx.files.internal("blaster.mp3"));
+
 
 //        pTwo.x = 1280/2 - 16/2;
 //        pTwo.y = 720/2;
@@ -187,10 +196,17 @@ public class GameScreen implements Screen {
 
         createGoblin();
         startTime = System.currentTimeMillis();
+
+
+
+
+
     }
 
 
     public void create(){
+
+
 
     }
     @Override
@@ -202,6 +218,12 @@ public class GameScreen implements Screen {
         map = new TmxMapLoader().load("maps/demoMap.tmx");
 
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
+        bgm_Music = Gdx.audio.newMusic(Gdx.files.internal("battle1.mp3"));
+        bgm_Music.setLooping(true);
+        bgm_Music.setVolume(1.3f);
+        bgm_Music.play();
+
+
 
     }
 
@@ -209,12 +231,17 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
+
+
+
+
         stage.clear();
         stage.act(Math.min(Gdx.graphics.getDeltaTime(),1/30f));
         Gdx.input.setInputProcessor(stage);
 
         // ---GAME CONTROLS---
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            bgm_Music.stop();
             game.changeScreen(DeathMarch.MENU);
         }
         // ------------------
@@ -467,11 +494,13 @@ public class GameScreen implements Screen {
         if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
             if(TimeUtils.nanoTime() - pOne.getWeapon().getLastShot() > pOne.getWeapon().getCooldown()){
                 projectiles.add(pOne.getWeapon().shoot(pOne.getBoundingRectangle(), lbTex, pOne.getLastDirection()));
+                sound.play(1f);
             }
         }
 
         //enter Store
         if (Gdx.input.isKeyPressed(Input.Keys.P) && pOne.getBoundingRectangle().overlaps(stairs.getBoundingRectangle())) {
+            bgm_Music.stop();
             game.changeScreen(DeathMarch.SHOP);
         }
 
@@ -581,6 +610,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
+        bgm_Music.dispose();
 
     }
 
@@ -603,6 +633,7 @@ public class GameScreen implements Screen {
         goblin.setX(1280/2f - 16/2f);
         goblin.setY(720/2f);
         goblins.add(goblin);
+
     }
 
     private void checkBoundary(Player player){
