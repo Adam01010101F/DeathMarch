@@ -24,6 +24,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 //import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -95,6 +96,7 @@ public class GameScreen implements Screen {
     FreeTypeFontGenerator generator;
     FreeTypeFontParameter parameters;
     BitmapFont uiText;
+
 
 
     public GameScreen(final DeathMarch game){
@@ -219,6 +221,12 @@ public class GameScreen implements Screen {
         stage.clear();
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         Gdx.input.setInputProcessor(stage);
+
+        // ---GAME CONTROLS---
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            game.changeScreen(DeathMarch.MENU);
+        }
+        // ------------------
         stage.draw();
         Gdx.gl.glClearColor(1,1, 1, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -342,6 +350,13 @@ public class GameScreen implements Screen {
 
         // Load Objects onto Screen
         game.batch.begin();
+        //sets up the timer
+        Vector3 posCamara = camera.position;
+        uiText.draw(game.batch, "Time: " + (500 - (System.currentTimeMillis() - startTime )/1000), posCamara.x - 100, posCamara.y + 330);
+        uiText.draw(game.batch, "Player 1 Health: " + pOne.getHealth(), posCamara.x - 600, posCamara.y + 330);
+        uiText.draw(game.batch, "Player 2 Health: " + pOne.getHealth(), posCamara.x + 250, posCamara.y + 330);
+
+
         //NPC dialogue conditional statement
         if(!npc.overlaps(pOne.getBoundingRectangle()) && !npc.overlaps(pTwo.getBoundingRectangle()))
         {
