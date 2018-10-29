@@ -538,7 +538,7 @@ public class GameScreen implements Screen {
         }
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
             if(TimeUtils.nanoTime() - pTwo.getWeapon().getLastShot() > pTwo.getWeapon().getCooldown()){
-                projectiles.add(pTwo.getWeapon() .shoot(pTwo.getWeapon(), lbTex, pTwo.getLastDirection()));
+                projectiles.add(pTwo.getWeapon().shoot(pTwo.getWeapon(), lbTex, pTwo.getLastDirection()));
             }
         }
 
