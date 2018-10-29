@@ -22,6 +22,7 @@ public class DeathMarch extends Game {
 	private PreferencesScreen preferencesScreen;
 	private MainMenuScreen menuScreen;
 	private GameScreen mainScreen;
+	private NameScreen nameScreen;
 	//private EndScreen endScreen;
 	private AppPreferences preferences;
 	private TileMapScreen tileMap;
@@ -93,44 +94,45 @@ public class DeathMarch extends Game {
 			case MENU:
 
 				if(menuScreen == null) menuScreen = new MainMenuScreen(this);
-
 				this.setScreen(menuScreen);
 
-				break;
+                break;
 
-			case PREFERENCES:
+            case PREFERENCES:
 
-				if(preferencesScreen == null) preferencesScreen = new PreferencesScreen(this);
+                if(preferencesScreen == null) preferencesScreen = new PreferencesScreen(this);
 
-				this.setScreen(preferencesScreen);
+                this.setScreen(preferencesScreen);
 
-				break;
+                break;
 
-			case APPLICATION:
+            case APPLICATION:
 
-				// always make new game screen so game can't start midway
+                // always make new game screen so game can't start midway
 
-				if(mainScreen == null){
+                if(mainScreen == null){
 
-					mainScreen = new GameScreen(this,player1,player2);
+                    mainScreen = new GameScreen(this,player1,player2);
 
-				}
+                }
 
-				this.setScreen(mainScreen);
+                this.setScreen(mainScreen);
 
-				break;
+                break;
 
-			case HOF:
-				if(HallOfFame == null){
-					HallOfFame = new HOFScreen(this, player1);
-				}
-				this.setScreen(HallOfFame);
-				break;
+            case HOF:
+                System.out.println(nameScreen.getInputName());
+                if(HallOfFame == null){
+                    HallOfFame = new HOFScreen(this, player1);
+                }
+                this.setScreen(HallOfFame);
+                break;
 
 
-			case SHOP:
+            case SHOP:
 
 				if(s == null) s = new shopScreen(this,player1,player2);
+
 				this.setScreen(s);
 
 				break;
