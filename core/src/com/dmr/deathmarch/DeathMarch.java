@@ -23,12 +23,14 @@ public class DeathMarch extends Game {
 	//private EndScreen endScreen;
 	private AppPreferences preferences;
 	private TileMapScreen tileMap;
+	private shopScreen s;
 
 	public final static int MENU = 0;
 	public final static int PREFERENCES = 1;
 	public final static int APPLICATION = 2;
 	public final static int ENDGAME = 3;
 	public final static int APP2 = 4;
+	public final static int SHOP = 5;
 
 
 	public AppPreferences getPreferences(){
@@ -105,6 +107,15 @@ public class DeathMarch extends Game {
 					tileMap = new TileMapScreen(this);
 				}
 				this.setScreen(tileMap);
+
+				break;
+
+
+			case SHOP:
+
+				if(s == null) s = new shopScreen(this);
+
+				this.setScreen(s);
 
 				break;
 		}

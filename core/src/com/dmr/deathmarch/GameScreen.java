@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -19,10 +20,12 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 //import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -32,6 +35,9 @@ import com.dmr.deathmarch.weapons.BeamCannon;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 public class GameScreen implements Screen {
     final DeathMarch game;
@@ -72,6 +78,11 @@ public class GameScreen implements Screen {
     private Skin skin;
 
     private Dialog dialog;
+
+    //adding dialogue for npc
+    FreeTypeFontGenerator generator;
+    FreeTypeFontParameter parameters;
+    BitmapFont uiText;
 
 
 
@@ -155,6 +166,18 @@ public class GameScreen implements Screen {
         projectiles = new Array<Projectile>();
         goblins = new Array<Goblin>();
 
+
+        //text for NPC
+        generator = new FreeTypeFontGenerator((Gdx.files.internal("fonts/joystix.ttf")));
+        parameters = new FreeTypeFontParameter();
+        parameters.size = 20;
+        parameters.color= Color.BLACK;
+
+
+        uiText = generator.generateFont(parameters);
+
+        generator.dispose();
+
         createGoblin();
         startTime = System.currentTimeMillis();
     }
@@ -166,6 +189,9 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         //TiledMap map = new TmxMapLoader().load("demoMap.tmx");
+
+
+
 
 
 
@@ -185,88 +211,6 @@ public class GameScreen implements Screen {
 
         //table
 
-        //window
-           /* Window window = new Window("ShopKeeper", shopSkin );
-            window.setPosition(400,200);
-            window.pack();*/
-
-        //table
-        stage.clear();
-        Gdx.input.setInputProcessor(stage);
-
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1/30f));
-        stage.draw();
-
-        //constrains table size
-        Container<Table> tableContainer = new Container<Table>();
-        float sw = Gdx.graphics.getWidth();
-        float sh = Gdx.graphics.getHeight();
-
-        float cw = sw * 0.7f;
-        float ch = sh * 0.5f;
-
-        //creates container restraints
-        tableContainer.setSize(cw, ch);
-        tableContainer.setPosition((sw - cw) / 2.0f, (sh - ch) / 2.0f);
-        tableContainer.fillX();
-
-        //creates table
-        Table table = new Table();
-        table.setFillParent(true);
-        table.setDebug(true);
-        stage.addActor(table);
-
-        //creates subTable so that exit button is center
-        Table subTable = new Table();
-        table.setFillParent(true);
-        table.setDebug(true);
-        stage.addActor(subTable);
-
-
-        //sets size of table
-        table.setSize(800,480);
-        subTable.setSize(800,480);
-
-        //label for table includes items and title
-        Label topLabel = new Label("Shop Keeper",shopSkin);
-        Label grenades = new Label("Grenades",shopSkin);
-        Label health = new Label("Health Booster",shopSkin);
-        //buttons to buy itesm
-        TextButton buyg = new TextButton("Buy",shopSkin);
-        TextButton buyh = new TextButton("Buy",shopSkin);
-        //button to exit
-        TextButton buttonExit = new TextButton("Exit" , shopSkin);
-        table.add(buttonExit);
-        //adds the rows for Title Label
-        table.row().colspan(2).expandX().fillX();
-        table.add(topLabel).fillX();
-        table.row().colspan(2).expandX().fillX();
-        //adds the rows for grenades
-        table.row().colspan(2).expandX().fillX();
-        table.add(grenades).expandX().fillX();
-        //the following commented changes size of button.
-        //table.add(buyg).width(Value.percentWidth(.25F,table));
-        table.add(buyg).expandX().fillX();
-        //adds the rows for health booster
-        table.row().colspan(2).expandX().fillX();
-        table.add(health).expandX().fillX();
-        table.add(buyh).expandX().fillX();
-        //adds the row and separate table for exit button
-        table.row().colspan(2).expandX().fillX();
-        table.add(subTable);
-        subTable.pad(16);
-        subTable.row().fillX().expandX();
-
-        subTable.add(buttonExit).width(cw/3.0f);
-
-
-
-
-
-
-        /*TextButton buttonQuit = new TextButton("Quit", shopSkin);
-        table.add(buttonQuit);
-        table.row();*/
 
         camera.update();
 
@@ -381,6 +325,20 @@ public class GameScreen implements Screen {
 
         // Load Objects onto Screen
         game.batch.begin();
+        //NPC dialogue conditional statement
+        if(!npc.overlaps(pOne.getBoundingRectangle()) && !npc.overlaps(pTwo.getBoundingRectangle()))
+        {
+            uiText.draw(game.batch,"Happy Halloween! Come visit my store! There are some spooky deals",500,50);
+        }
+        if(npc.overlaps(pOne.getBoundingRectangle())&& !npc.overlaps(pTwo.getBoundingRectangle())){
+            uiText.draw(game.batch,"You should bring your friend along",500,50);
+        }
+        if(npc.overlaps(pTwo.getBoundingRectangle()) && !npc.overlaps(pOne.getBoundingRectangle())){
+            uiText.draw(game.batch,"You should bring your friend along",500,50);
+        }
+        if(npc.overlaps(pOne.getBoundingRectangle()) && npc.overlaps(pTwo.getBoundingRectangle())){
+            uiText.draw(game.batch,"Press P to enter my store",500,50);
+        }
         game.font.draw(game.batch, "P2 x: "+pTwo.getX()+" y: "+pTwo.getY(), 100, 150);
         game.font.draw(game.batch, "Projectiles: " + projectiles.size, 100, 200);
         pOne.draw(game.batch);
@@ -460,16 +418,22 @@ public class GameScreen implements Screen {
         }
 
         // TABLE/WINDOW
-        if (Gdx.input.isKeyPressed(Input.Keys.P)) {
-            if (!gamePaused)
-                gamePaused = true;
-            else
-                gamePaused = false;
+//        if (Gdx.input.isKeyPressed(Input.Keys.P)) {
+//            if (gamePaused == false)
+//                gamePaused = true;
+//            else
+//                gamePaused = false;
+//        }
+//        if(gamePaused == true) {
+//            table.setVisible(true);
+//            stage.draw();
+//        }
+        //shopScreen open
+        if (Gdx.input.isKeyPressed(Input.Keys.P) && npc.overlaps(pOne.getBoundingRectangle())&& npc.overlaps(pTwo.getBoundingRectangle())) {
+            game.changeScreen(DeathMarch.SHOP);
         }
-        if(gamePaused) {
-            table.setVisible(true);
-            stage.draw();
-        }
+
+
 
         //Player 2 Keybindings
         if(Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.RIGHT) ||
