@@ -358,8 +358,6 @@ public class GameScreen implements Screen {
 
                 }
             }
-           // pOne.checkGob(goblin);
-            //pTwo.checkGob(goblin);
 //            checkBoundary(goblin);
         }
 
