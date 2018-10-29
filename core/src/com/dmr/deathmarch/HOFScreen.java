@@ -46,6 +46,12 @@ public class HOFScreen implements Screen {
             FileHandle file = Gdx.files.internal("hof.json");
             System.out.println("File Exists.");
             famers = gson.fromJson(file.readString(), Famer[].class);
+            for (int i = 0; i<famers.length;i++) {
+                if(player.getKills()>0&&!enteredUser) {
+                    famers[i] = new Famer(player.getName(), player.getKills());
+                    break;
+                }
+            }
         } else {
             FileHandle file = Gdx.files.local("hof.json");
             for (int i = 0; i<famers.length;i++) {

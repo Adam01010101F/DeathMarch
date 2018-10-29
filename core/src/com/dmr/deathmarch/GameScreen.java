@@ -237,11 +237,8 @@ public class GameScreen implements Screen {
     public void render(float delta) {
 
 
-
-
-
         stage.clear();
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(),1/30f));
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         Gdx.input.setInputProcessor(stage);
 
         // ---GAME CONTROLS---
@@ -251,7 +248,7 @@ public class GameScreen implements Screen {
         }
         // ------------------
         stage.draw();
-        Gdx.gl.glClearColor(0,0, 0, 0);
+        Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //table
@@ -261,7 +258,7 @@ public class GameScreen implements Screen {
 
         camera.update();
         // Bullet Physics|Destruction
-        for(int i = 0; i< projectiles.size; i ++) {
+        for (int i = 0; i < projectiles.size; i++) {
             Projectile proj = projectiles.get(i);
             proj.setPosition(proj.getX() + 350 * proj.getxVel() * Gdx.graphics.getDeltaTime()
                     , proj.getY() + 350 * proj.getyVel() * Gdx.graphics.getDeltaTime());
@@ -280,14 +277,14 @@ public class GameScreen implements Screen {
                 // do nothing
             }
             //TODO:: Give ownership of projectile to count score.
-            for(Projectile biles: projectiles){
-                if(biles.getBoundingRectangle().overlaps(pTwo.getBoundingRectangle())){
+            for (Projectile biles : projectiles) {
+                if (biles.getBoundingRectangle().overlaps(pTwo.getBoundingRectangle())) {
 //                    goblin.takeDamage(beamCannon.getDamage());
                     projectiles.removeIndex(i);
 
                     System.out.println("Goblin takes damage");
                     pOne.addKill();
-                    pTwo.takeDmg(5);
+                    pTwo.takeDmg(5 * pOne.getDmgMulti());
 
                 }
             }
@@ -296,7 +293,7 @@ public class GameScreen implements Screen {
 
 
         // Bullet Physics|Destruction
-        for(int i = 0; i< bile.size; i ++) {
+        for (int i = 0; i < bile.size; i++) {
             Projectile proj = bile.get(i);
             proj.setPosition(proj.getX() + 350 * proj.getxVel() * Gdx.graphics.getDeltaTime()
                     , proj.getY() + 350 * proj.getyVel() * Gdx.graphics.getDeltaTime());
@@ -315,8 +312,8 @@ public class GameScreen implements Screen {
                 // do nothing
             }
             //TODO:: Give ownership of projectile to count score.
-            for(Projectile biles: bile){
-                if(biles.getBoundingRectangle().overlaps(pOne.getBoundingRectangle())){
+            for (Projectile biles : bile) {
+                if (biles.getBoundingRectangle().overlaps(pOne.getBoundingRectangle())) {
 //                    goblin.takeDamage(beamCannon.getDamage());
                     bile.removeIndex(i);
 
@@ -327,7 +324,6 @@ public class GameScreen implements Screen {
             }
 
         }
-
 
 
 //        // Bullet Physics|Destruction
@@ -364,75 +360,58 @@ public class GameScreen implements Screen {
 //        }
 
         // Goblin Destruction
-        for(Iterator<Goblin> iter = goblins.iterator(); iter.hasNext();){
+        for (Iterator<Goblin> iter = goblins.iterator(); iter.hasNext(); ) {
             Goblin goblin = iter.next();
             float x = pOne.getX() - goblin.getX();
             float y = pOne.getY() - goblin.getY();
-            float distance1 = (float) Math.sqrt((x*x) - (y*y));
+            float distance1 = (float) Math.sqrt((x * x) - (y * y));
             float x2 = pTwo.getX() - goblin.getX();
             float y2 = pTwo.getY() - goblin.getY();
-            float distance2 = (float) Math.sqrt((x2*x2) - (y2*y2));
-            if(goblin.isDead()){
+            float distance2 = (float) Math.sqrt((x2 * x2) - (y2 * y2));
+            if (goblin.isDead()) {
                 iter.remove();
                 System.out.println("Goblin is dead :D");
                 pOne.addBigKill();
-            }
-            else
-            {
+            } else {
                 float gX = goblin.getX();
                 float gY = goblin.getY();
-                if(distance2 > distance1)
-                {
+                if (distance2 > distance1) {
                     float acc1 = (x / distance1);
                     float acc2 = (y / distance1);
-                    if(x >= 0)
-                    {
+                    if (x >= 0) {
                         acc1 = 1;
-                    }
-                    else
-                    {
+                    } else {
                         acc1 = -1;
                     }
-                    if(y  >= 0)
-                    {
+                    if (y >= 0) {
                         acc2 = 1;
-                    }
-                    else
-                    {
+                    } else {
                         acc2 = -1;
                     }
-                    if(distance1 != 0) {
+                    if (distance1 != 0) {
                         goblin.setX(gX + ((20 * acc1) * Gdx.graphics.getDeltaTime()));
                         goblin.setY(gY + ((20 * acc2) * Gdx.graphics.getDeltaTime()));
 
                     }
                     goblin.checkGob(pOne);
                     float angle = (float) Math.toDegrees(Math.atan2(pOne.getY() - goblin.getY(), pOne.getX() - goblin.getX()));
-                    if(angle  < 0)
-                    {
+                    if (angle < 0) {
                         angle = angle + 360;
                     }
                     goblin.setRotation(angle);
 
-                }
-                else {
-                    if(distance2 != 0) {
+                } else {
+                    if (distance2 != 0) {
                         float acc1 = (x2 / distance2);
                         float acc2 = (y2 / distance2);
-                        if(x2 >= 0)
-                        {
+                        if (x2 >= 0) {
                             acc1 = 1;
-                        }
-                        else
-                        {
+                        } else {
                             acc1 = -1;
                         }
-                        if(y2 >= 0)
-                        {
+                        if (y2 >= 0) {
                             acc2 = 1;
-                        }
-                        else
-                        {
+                        } else {
                             acc2 = -1;
                         }
                         goblin.setX(gX + ((20 * acc1) * Gdx.graphics.getDeltaTime()));
@@ -440,8 +419,7 @@ public class GameScreen implements Screen {
                     }
                     goblin.checkGob(pTwo);
                     float angle = (float) Math.toDegrees(Math.atan2(pTwo.getY() - goblin.getY(), pTwo.getX() - goblin.getX()));
-                    if(angle < 0)
-                    {
+                    if (angle < 0) {
                         angle = angle + 360;
                     }
                     goblin.setRotation(angle);
@@ -457,7 +435,7 @@ public class GameScreen implements Screen {
         game.batch.begin();
         //sets up the timer
         Vector3 posCamara = camera.position;
-        uiText.draw(game.batch, "Time: " + (300 - (System.currentTimeMillis() - startTime )/1000), posCamara.x - 100, posCamara.y + 580);
+        uiText.draw(game.batch, "Time: " + (300 - (System.currentTimeMillis() - startTime) / 1000), posCamara.x - 100, posCamara.y + 580);
         uiText.draw(game.batch, "Soldier Health: " + Math.round(pOne.getHealth()), posCamara.x - 600, posCamara.y + 580);
         uiText.draw(game.batch, "Soldier Points: " + Math.round(pOne.getKills()), posCamara.x - 600, posCamara.y + 560);
         uiText.draw(game.batch, "Zombie Health: " + Math.round(pTwo.getHealth()), posCamara.x + 200, posCamara.y + 580);
@@ -466,21 +444,19 @@ public class GameScreen implements Screen {
 
         //NPC dialogue conditional statement
         diffTime = TimeUtils.timeSinceMillis(start);
-        if(diffTime<3000){
-            uiText.draw(game.batch,"Welcome to Death March!",370,40);
+        if (diffTime < 3000) {
+            uiText.draw(game.batch, "Welcome to Death March!", 370, 40);
         }
-        if(diffTime>3000 && diffTime<6000){
-            uiText.draw(game.batch,"Let's see if you survive HAHAHA!",370,40);
-        }
-
-        if(pOne.getBoundingRectangle().overlaps(stairs.getBoundingRectangle() )){
-            uiText.draw(game.batch,"Press P to enter the store",370,150);
+        if (diffTime > 3000 && diffTime < 6000) {
+            uiText.draw(game.batch, "Let's see if you survive HAHAHA!", 370, 40);
         }
 
+        if (pOne.getBoundingRectangle().overlaps(stairs.getBoundingRectangle())) {
+            uiText.draw(game.batch, "Press P to enter the store", 370, 150);
+        }
 
 
-
-        game.font.draw(game.batch, "P2 x: "+pTwo.getX()+" y: "+pTwo.getY(), 100, 150);
+        game.font.draw(game.batch, "P2 x: " + pTwo.getX() + " y: " + pTwo.getY(), 100, 150);
         game.font.draw(game.batch, "Projectiles: " + projectiles.size, 100, 200);
         game.font.draw(game.batch, "Projectiles: " + bile.size, 100, 100);
         pOne.draw(game.batch);
@@ -489,13 +465,13 @@ public class GameScreen implements Screen {
 //        game.batch.draw(bmTex, pOne.getX(), pOne.getY()-8);
 //        pOne.getWeapon().draw(game.batch);
 
-        for(Sprite goblin: goblins){
+        for (Sprite goblin : goblins) {
             game.batch.draw(pTwoTex, goblin.getX(), goblin.getY());
         }
-        for (Sprite beam: projectiles){
+        for (Sprite beam : projectiles) {
             beam.draw(game.batch);
         }
-        for (Sprite beam: bile){
+        for (Sprite beam : bile) {
             beam.draw(game.batch);
         }
         game.batch.end();
@@ -507,68 +483,58 @@ public class GameScreen implements Screen {
         //shape.end();
 
         //Player 1 Keybindings
-        if(Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.D) ||
-                Gdx.input.isKeyPressed(Input.Keys.A)|| Gdx.input.isKeyPressed(Input.Keys.S)){
+        if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.D) ||
+                Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.S)) {
             pOne.clearDirections();
-            if(Gdx.input.isKeyPressed(Input.Keys.W)){
-                if(collidesTop(pOne))
-                {
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+                if (collidesTop(pOne)) {
                     pOne.setRotation(90);
                     pOne.setY(pOne.getY());
                     pOne.setYDirection(Direction.Up);
-                }
-                else {
+                } else {
                     pOne.setRotation(90);
                     pOne.setY(pOne.getY() + pOne.getSpeed() * Gdx.graphics.getDeltaTime());
                     pOne.setYDirection(Direction.Up);
                 }
-            }
-            else if(Gdx.input.isKeyPressed(Input.Keys.S)){
+            } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 
-                if(collidesBottom(pOne))
-                {
+                if (collidesBottom(pOne)) {
                     pOne.setRotation(270);
                     pOne.setY(pOne.getY());
                     pOne.setYDirection(Direction.Down);
-                }
-                else {
+                } else {
                     pOne.setRotation(270);
                     pOne.setY(pOne.getY() - pOne.getSpeed() * Gdx.graphics.getDeltaTime());
                     pOne.setYDirection(Direction.Down);
                 }
-            }
-            else if(Gdx.input.isKeyPressed(Input.Keys.D)){
-                if(collidesRight(pOne))
-                {
+            } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                if (collidesRight(pOne)) {
                     pOne.setRotation(0);
                     pOne.setX(pOne.getX());
                     pOne.setXDirection(Direction.Right);
-                }
-                else {
+                } else {
 
                     pOne.setRotation(0);
                     pOne.setX(pOne.getX() + pOne.getSpeed() * Gdx.graphics.getDeltaTime());
                     pOne.setXDirection(Direction.Right);
                 }
-            }
-            else if(Gdx.input.isKeyPressed(Input.Keys.A)){
-                if(collidesLeft(pOne)){
+            } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                if (collidesLeft(pOne)) {
                     pOne.setRotation(180);
                     pOne.setX(pOne.getX());
                     pOne.setXDirection(Direction.Left);
-                }
-                else{
+                } else {
 
                     pOne.setRotation(180);
-                    pOne.setX(pOne.getX()-pOne.getSpeed()*Gdx.graphics.getDeltaTime());
+                    pOne.setX(pOne.getX() - pOne.getSpeed() * Gdx.graphics.getDeltaTime());
                     pOne.setXDirection(Direction.Left);
                 }
 
             }
 
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
-            if(TimeUtils.nanoTime() - pOne.getWeapon().getLastShot() > pOne.getWeapon().getCooldown()){
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            if (TimeUtils.nanoTime() - pOne.getWeapon().getLastShot() > pOne.getWeapon().getCooldown()) {
                 sound.play(1f);
                 projectiles.add(pOne.getWeapon().shoot(pOne, lbTex, pOne.getLastDirection()));
             }
@@ -582,57 +548,49 @@ public class GameScreen implements Screen {
 
 
         //Player 2 Keybindings
-        if(Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.RIGHT) ||
-                Gdx.input.isKeyPressed(Input.Keys.LEFT)|| Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.RIGHT) ||
+                Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
 
             pTwo.clearDirections();
             if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
 
-                if(collidesTop(pTwo))
-                {
+                if (collidesTop(pTwo)) {
                     pTwo.setRotation(90);
                     pTwo.setY(pTwo.getY());
                     pOne.setYDirection(Direction.Up);
-                }
-                else{
+                } else {
                     pTwo.setRotation(90);
                     pTwo.setY(pTwo.getY() + 200 * Gdx.graphics.getDeltaTime());
                     pTwo.setYDirection(Direction.Up);
                 }
 
-            }
-            else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-                if(collidesBottom(pTwo)){
+            } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                if (collidesBottom(pTwo)) {
                     pTwo.setRotation(270);
                     pTwo.setY(pTwo.getY());
                     pTwo.setYDirection(Direction.Down);
-                }
-                else{
+                } else {
                     pTwo.setRotation(270);
                     pTwo.setY(pTwo.getY() - 200 * Gdx.graphics.getDeltaTime());
                     pTwo.setYDirection(Direction.Down);
                 }
-            }
-            else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                if(collidesRight(pTwo)){
+            } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                if (collidesRight(pTwo)) {
                     pTwo.setRotation(0);
                     pTwo.setX(pTwo.getX());
                     pTwo.setXDirection(Direction.Right);
-                }
-                else{
+                } else {
 
                     pTwo.setRotation(0);
                     pTwo.setX(pTwo.getX() + 200 * Gdx.graphics.getDeltaTime());
                     pTwo.setXDirection(Direction.Right);
                 }
-            }
-            else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                if(collidesLeft(pTwo)){
+            } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                if (collidesLeft(pTwo)) {
                     pTwo.setRotation(180);
                     pTwo.setX(pTwo.getX());
                     pTwo.setXDirection(Direction.Left);
-                }
-                else{
+                } else {
 
                     pTwo.setRotation(180);
                     pTwo.setX(pTwo.getX() - 200 * Gdx.graphics.getDeltaTime());
@@ -641,30 +599,33 @@ public class GameScreen implements Screen {
             }
 
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
-            if(TimeUtils.nanoTime() - pTwo.getWeapon().getLastShot() > pTwo.getWeapon().getCooldown()){
-                bile.add(pTwo.getWeapon() .shoot(pTwo, lbTex, pTwo.getLastDirection()));
+        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+            if (TimeUtils.nanoTime() - pTwo.getWeapon().getLastShot() > pTwo.getWeapon().getCooldown()) {
+                bile.add(pTwo.getWeapon().shoot(pTwo, lbTex, pTwo.getLastDirection()));
             }
         }
 
-        if(300 - (System.currentTimeMillis() - startTime )/1000 == 0){
+        if (300 - (System.currentTimeMillis() - startTime) / 1000 == 0) {
             //startTime = System.currentTimeMillis()
             init();
             game.changeScreen(DeathMarch.MENU);
+        }
+        //game.setScreen(new GameScreen(game));
 
-            //game.setScreen(new GameScreen(game));
+        if (pTwo.isDead() && !pOne.isDead()) {
+            bgm_Music.stop();
+            game.changeScreen(DeathMarch.WIN);
+
         }
 
-        if(pOne.isDead()|| pTwo.isDead()){
+        if (pOne.isDead()) {
             //new MainMenuScreen(game);
             //game = new DeathMarch();
             //game.setScreen((new GameScreen(game,pOne,pTwo)));
             //game.changeScreen(DeathMarch.MENU);
             init();
+            bgm_Music.stop();
             game.changeScreen(DeathMarch.MENU);
-
-
-        }
 
 
         }
@@ -674,44 +635,48 @@ public class GameScreen implements Screen {
 //        checkBoundary(pOne);
 //        checkBoundary(pTwo);
 
-
-
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
     }
+        @Override
+        public void resize ( int width, int height){
+            stage.getViewport().update(width, height, true);
+        }
 
-    @Override
-    public void pause() {
+        @Override
+        public void pause () {
 
-    }
+        }
 
-    @Override
-    public void resume() {
+        @Override
+        public void resume () {
 
-    }
+        }
 
-    @Override
-    public void hide() {
+        @Override
+        public void hide () {
 
-    }
+        }
 
-    @Override
-    public void dispose() {
-        bgm_Music.dispose();
+        @Override
+        public void dispose () {
+            bgm_Music.dispose();
 
-    }
+        }
 
     public void init(){
 
         // Ghetto Managers
         //npc
+//        npcTex = new Texture(Gdx.files.internal("Stairs_up.png"));
+//        stairs = new Sprite(npcTex);
 
 
 //        pTwo.x = 1280/2 - 16/2;
 //        pTwo.y = 720/2;
 //        pTwo.width = 120;
 //        pTwo.height = 120;
+//        stairs.setX(1150);
+//        stairs.setY(27);
+//        stairs.setScale(3f);
 
 
 

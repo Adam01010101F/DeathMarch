@@ -12,7 +12,7 @@ public class Player extends Sprite {
     private int health;
     private int speed;
     private int kills;
-    private float dmgMulti;
+    private int dmgMulti;
     private Boolean isPlayerOne;
     private Texture playerTex;
     private Direction lastDirection[];
@@ -72,12 +72,14 @@ public class Player extends Sprite {
         this.dmgMulti = 2;
     }
     public Direction[] getDirection(){return lastDirection;}
-    public float getDmgMulti() {
+    public int getDmgMulti() {
         return dmgMulti;
     }
     public int getKills(){return kills;}
+    public void setDamage(int i){ i = i*2;}
 
     public void takeDmg(int dmg){this.health -= dmg;}
+    public void setDmgMulti(int i){dmgMulti = i ;}
     public void addKill(){kills++;}
     public void addBigKill(){kills = kills + 250;}
     public void resetKills(){kills = 0;}
@@ -96,6 +98,7 @@ public class Player extends Sprite {
         lastDirection[0] = Direction.None;
         lastDirection[1] = Direction.None;
     }
+    public void setName(String name){this.name = name;}
 
     public void checkGob(Sprite g) {
         if(this.getBoundingRectangle().overlaps(g.getBoundingRectangle()))

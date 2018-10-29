@@ -19,8 +19,10 @@ public class NameScreen implements Screen {
     final DeathMarch game;
     public OrthographicCamera camera;
     public Stage stage;
+    Player p1;
 
-    public NameScreen(final DeathMarch game) {
+    public NameScreen(final DeathMarch game, Player winner) {
+        p1 = winner;
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1280, 720);
@@ -94,6 +96,7 @@ public class NameScreen implements Screen {
         submitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                p1.setName(getName());
                 game.changeScreen(DeathMarch.HOF);
             }
         });

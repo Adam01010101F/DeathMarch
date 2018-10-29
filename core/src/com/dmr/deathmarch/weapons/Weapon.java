@@ -65,5 +65,9 @@ public abstract class Weapon extends Rectangle {
     public void setLastShot(float time){
         lastShot = time;
     }
+
+    public void doubleDamage(){
+        damage = damage*2;
+    }
 }
 

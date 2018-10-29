@@ -39,6 +39,7 @@ public class DeathMarch extends Game {
 	public final static int APP2 = 4;
 	public final static int SHOP = 5;
 	public final static int HOF = 6;
+	public final static int WIN = 7;
 
 
 
@@ -84,12 +85,20 @@ public class DeathMarch extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
+		//bgm_Music.dispose();
 		font.dispose();
 	}
 
 	public void changeScreen(int screen){
 
 		switch(screen){
+
+			case WIN:
+
+				if(nameScreen == null) nameScreen = new NameScreen(this,player1);
+				this.setScreen(nameScreen);
+
+				break;
 
 			case MENU:
 
@@ -121,7 +130,7 @@ public class DeathMarch extends Game {
                 break;
 
             case HOF:
-                System.out.println(nameScreen.getInputName());
+                //System.out.println(nameScreen.getInputName());
                 if(HallOfFame == null){
                     HallOfFame = new HOFScreen(this, player1);
                 }
@@ -136,7 +145,9 @@ public class DeathMarch extends Game {
 				this.setScreen(s);
 
 				break;
+
 		}
+
 
 	}
 
