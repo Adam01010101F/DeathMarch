@@ -15,7 +15,8 @@ public class DeathMarch extends Game {
 	public Stage stage;
 
 	TiledTest test1;
-
+	public Player player1;
+	public Player player2;
 	private SplashScreen splashScreen;
 	private PreferencesScreen preferencesScreen;
 	private MainMenuScreen menuScreen;
@@ -24,6 +25,7 @@ public class DeathMarch extends Game {
 	private AppPreferences preferences;
 	private TileMapScreen tileMap;
 	private shopScreen s;
+	private Texture playerTex;
 
 	public final static int MENU = 0;
 	public final static int PREFERENCES = 1;
@@ -32,6 +34,12 @@ public class DeathMarch extends Game {
 	public final static int APP2 = 4;
 	public final static int SHOP = 5;
 
+
+
+	public DeathMarch() {
+
+
+	}
 
 	public AppPreferences getPreferences(){
 
@@ -43,6 +51,10 @@ public class DeathMarch extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
+
+		playerTex = new Texture(Gdx.files.internal("survivor-shoot_rifle_0.png"));
+		player1 = new Player("Shredder", false, playerTex, 23, 38, 293, 191);
+		player2 = new Player("Donatello", false, playerTex, 23, 38, 293, 191);
 
 //		this.setScreen(new MainMenuScreen(this));
 
@@ -91,7 +103,7 @@ public class DeathMarch extends Game {
 
 				if(mainScreen == null){
 
-					mainScreen = new GameScreen(this);
+					mainScreen = new GameScreen(this,player1,player2);
 
 				}
 
@@ -113,7 +125,7 @@ public class DeathMarch extends Game {
 
 			case SHOP:
 
-				if(s == null) s = new shopScreen(this);
+				if(s == null) s = new shopScreen(this,player1,player2);
 
 				this.setScreen(s);
 

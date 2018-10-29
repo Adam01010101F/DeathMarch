@@ -75,6 +75,15 @@ public class Player extends Sprite {
     public int getSpeed(){
         return speed;
     }
+    public void buffHealth(){
+        this.health = 150;
+    }
+    public void buffSpeed(){
+        this.speed = 200;
+    }
+    public void buffDmg(){
+        this.dmgMulti = 2;
+    }
     public Direction[] getDirection(){return lastDirection;}
     public float getDmgMulti() {
         return dmgMulti;

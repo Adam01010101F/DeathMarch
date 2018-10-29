@@ -97,9 +97,13 @@ public class GameScreen implements Screen {
     FreeTypeFontParameter parameters;
     BitmapFont uiText;
 
+    //for the time
+    private long start;
+    private long diffTime;
 
 
-    public GameScreen(final DeathMarch game){
+
+    public GameScreen(final DeathMarch game,Player player1,Player player2){
         this.game = game;
 
         camera = new OrthographicCamera();
@@ -147,20 +151,20 @@ public class GameScreen implements Screen {
         lbTex = new Texture(Gdx.files.internal("laserBeam.png"));
 
         bmTex = new Texture(Gdx.files.internal("BeamCannon.png"));
-        playerTex = new Texture(Gdx.files.internal("survivor-shoot_rifle_0.png"));
+
         pTwoTex = new Texture(Gdx.files.internal("player2.png"));
         Gobbi = new Goblin();
         stage = new Stage(new ScreenViewport());
 
         //Player Creation
-        pOne = new Player("Shredder", false, playerTex, 23, 38, 293, 191, collisionLayer);
+        pOne = player1;
         pOne.setOriginCenter();
         pOne.setPosition(100,100);
 //        System.out.println(pOne.getOriginX()+ " " + pOne.getOriginY());
         pOne.setColor(Color.GRAY);
         pOne.setScale(1/8f);
         pOne.setWeapon(new BeamCannon(bmTex));
-        pTwo = new Player("Donatello", false, playerTex, 23, 38, 293, 191, collisionLayer);
+        pTwo = player2;
         pTwo.setPosition(200,200);
         pTwo.setColor(Color.PURPLE);
         pTwo.setScale(1/8f);
@@ -196,6 +200,7 @@ public class GameScreen implements Screen {
 
 
         uiText = generator.generateFont(parameters);
+        start = TimeUtils.millis();
 
         generator.dispose();
 
@@ -373,19 +378,27 @@ public class GameScreen implements Screen {
 
 
         //NPC dialogue conditional statement
-        if(!npc.overlaps(pOne.getBoundingRectangle()) && !npc.overlaps(pTwo.getBoundingRectangle()))
-        {
-            uiText.draw(game.batch,"Happy Halloween! Come visit my store! There are some spooky deals",500,50);
+        diffTime = TimeUtils.timeSinceMillis(start);
+        if(diffTime<3000){
+            uiText.draw(game.batch,"Welcome to Death March!",370,150);
         }
+        if(diffTime>3000 && diffTime<6000){
+            uiText.draw(game.batch,"Let's see if you survive HAHAHA!",370,150);
+        }
+
         if(npc.overlaps(pOne.getBoundingRectangle())&& !npc.overlaps(pTwo.getBoundingRectangle())){
-            uiText.draw(game.batch,"You should bring your friend along",500,50);
+            uiText.draw(game.batch,"You should bring your friend along",370,150);
         }
         if(npc.overlaps(pTwo.getBoundingRectangle()) && !npc.overlaps(pOne.getBoundingRectangle())){
-            uiText.draw(game.batch,"You should bring your friend along",500,50);
+            uiText.draw(game.batch,"You should bring your friend along",370,150);
         }
         if(npc.overlaps(pOne.getBoundingRectangle()) && npc.overlaps(pTwo.getBoundingRectangle())){
-            uiText.draw(game.batch,"Press P to enter my store",500,50);
+            uiText.draw(game.batch,"Press P to enter my store",370,150);
         }
+
+
+
+
         game.font.draw(game.batch, "P2 x: "+pTwo.getX()+" y: "+pTwo.getY(), 100, 150);
         game.font.draw(game.batch, "Projectiles: " + projectiles.size, 100, 200);
         pOne.draw(game.batch);
@@ -420,7 +433,7 @@ public class GameScreen implements Screen {
                 }
                 else {
                     pOne.setRotation(90);
-                    pOne.setY(pOne.getY() + 150 * Gdx.graphics.getDeltaTime());
+                    pOne.setY(pOne.getY() + pOne.getSpeed() * Gdx.graphics.getDeltaTime());
                     pOne.setYDirection(Direction.Up);
                 }
             }
@@ -434,7 +447,7 @@ public class GameScreen implements Screen {
                 }
                 else {
                     pOne.setRotation(270);
-                    pOne.setY(pOne.getY() - 150 * Gdx.graphics.getDeltaTime());
+                    pOne.setY(pOne.getY() - pOne.getSpeed() * Gdx.graphics.getDeltaTime());
                     pOne.setYDirection(Direction.Down);
                 }
             }
@@ -448,7 +461,7 @@ public class GameScreen implements Screen {
                 else {
 
                     pOne.setRotation(0);
-                    pOne.setX(pOne.getX() + 150 * Gdx.graphics.getDeltaTime());
+                    pOne.setX(pOne.getX() + pOne.getSpeed() * Gdx.graphics.getDeltaTime());
                     pOne.setXDirection(Direction.Right);
                 }
             }
@@ -461,7 +474,7 @@ public class GameScreen implements Screen {
                 else{
 
                     pOne.setRotation(180);
-                    pOne.setX(pOne.getX()-150*Gdx.graphics.getDeltaTime());
+                    pOne.setX(pOne.getX()-pOne.getSpeed()*Gdx.graphics.getDeltaTime());
                     pOne.setXDirection(Direction.Left);
                 }
 
