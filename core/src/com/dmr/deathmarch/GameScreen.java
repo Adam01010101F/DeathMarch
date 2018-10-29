@@ -301,26 +301,74 @@ public class GameScreen implements Screen {
                 float gY = goblin.getY();
                 if(distance2 > distance1)
                 {
-                    goblin.setX(goblin.getX() + ((40*(x/distance1)) * Gdx.graphics.getDeltaTime()));
-                    goblin.setY(gY + ((40*(y/distance1)) * Gdx.graphics.getDeltaTime()));
+                    float acc1 = (x / distance1);
+                    float acc2 = (y / distance1);
+                    if(x >= 0)
+                    {
+                        acc1 = 1;
+                    }
+                    else
+                    {
+                        acc1 = -1;
+                    }
+                    if(y  >= 0)
+                    {
+                        acc2 = 1;
+                    }
+                    else
+                    {
+                        acc2 = -1;
+                    }
+                    if(distance1 != 0) {
+                        goblin.setX(gX + ((20 * acc1) * Gdx.graphics.getDeltaTime()));
+                        goblin.setY(gY + ((20 * acc2) * Gdx.graphics.getDeltaTime()));
+
+                    }
+                    goblin.checkGob(pOne);
                     float angle = (float) Math.toDegrees(Math.atan2(pOne.getY() - goblin.getY(), pOne.getX() - goblin.getX()));
                     if(angle  < 0)
                     {
                         angle = angle + 360;
                     }
                     goblin.setRotation(angle);
+
                 }
                 else {
-                    goblin.setX(gX + ((40*(x2/distance2)) * Gdx.graphics.getDeltaTime()));
-                    goblin.setY(gY + ((40*(y2/distance2)) * Gdx.graphics.getDeltaTime()));
+                    if(distance2 != 0) {
+                        float acc1 = (x2 / distance2);
+                        float acc2 = (y2 / distance2);
+                        if(x2 >= 0)
+                        {
+                            acc1 = 1;
+                        }
+                        else
+                        {
+                            acc1 = -1;
+                        }
+                        if(y2 >= 0)
+                        {
+                            acc2 = 1;
+                        }
+                        else
+                        {
+                            acc2 = -1;
+                        }
+                        goblin.setX(gX + ((20 * acc1) * Gdx.graphics.getDeltaTime()));
+                        goblin.setY(gY + ((20 * acc2) * Gdx.graphics.getDeltaTime()));
+                    }
+                    goblin.checkGob(pTwo);
                     float angle = (float) Math.toDegrees(Math.atan2(pTwo.getY() - goblin.getY(), pTwo.getX() - goblin.getX()));
                     if(angle < 0)
                     {
                         angle = angle + 360;
                     }
                     goblin.setRotation(angle);
+
                 }
             }
+           // pOne.checkGob(goblin);
+            //pTwo.checkGob(goblin);
+            checkBoundary(goblin);
         }
 
         game.batch.setProjectionMatrix(camera.combined);
@@ -471,6 +519,20 @@ public class GameScreen implements Screen {
 
     }
 
+    private boolean checkColl(float x , float y, Sprite p, Array<Goblin> g)
+    {
+        Sprite q = p;
+        q.setX(q.getX() + x);
+        q.setY(q.getY() + y);
+        for(Iterator<Goblin> iter = g.iterator(); iter.hasNext();) {
+            Goblin goblin = iter.next();
+            if(p.getBoundingRectangle().overlaps(goblin.getBoundingRectangle()))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
     private void createGoblin(){
         Goblin goblin = new Goblin();
         goblin.setX(1280/2f - 16/2f);
@@ -478,7 +540,7 @@ public class GameScreen implements Screen {
         goblins.add(goblin);
     }
 
-    private void checkBoundary(Player player){
+    private void checkBoundary(Sprite player){
         if(player.getX()<0)player.setX(0);
         if(player.getX()>1280-120)player.setX(1280-120);
         if(player.getY()<0)player.setY(0);
