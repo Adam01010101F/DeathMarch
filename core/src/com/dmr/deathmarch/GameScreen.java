@@ -491,7 +491,7 @@ public class GameScreen implements Screen {
                 }
                 else{
                     pTwo.setRotation(90);
-                    pTwo.setY(pTwo.getY() + pTwo.getSpeed() * Gdx.graphics.getDeltaTime());
+                    pTwo.setY(pTwo.getY() + 200 * Gdx.graphics.getDeltaTime());
                     pTwo.setYDirection(Direction.Up);
                 }
 
@@ -504,7 +504,7 @@ public class GameScreen implements Screen {
                 }
                 else{
                     pTwo.setRotation(270);
-                    pTwo.setY(pTwo.getY() - pTwo.getSpeed() * Gdx.graphics.getDeltaTime());
+                    pTwo.setY(pTwo.getY() - 200 * Gdx.graphics.getDeltaTime());
                     pTwo.setYDirection(Direction.Down);
                 }
             }
@@ -517,7 +517,7 @@ public class GameScreen implements Screen {
                 else{
 
                     pTwo.setRotation(0);
-                    pTwo.setX(pTwo.getX() + pTwo.getSpeed() * Gdx.graphics.getDeltaTime());
+                    pTwo.setX(pTwo.getX() + 200 * Gdx.graphics.getDeltaTime());
                     pTwo.setXDirection(Direction.Right);
                 }
             }
@@ -530,7 +530,7 @@ public class GameScreen implements Screen {
                 else{
 
                     pTwo.setRotation(180);
-                    pTwo.setX(pTwo.getX() - pTwo.getSpeed() * Gdx.graphics.getDeltaTime());
+                    pTwo.setX(pTwo.getX() - 200 * Gdx.graphics.getDeltaTime());
                     pTwo.setXDirection(Direction.Left);
                 }
             }
