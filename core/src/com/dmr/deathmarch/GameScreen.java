@@ -14,11 +14,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 //import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -73,10 +76,18 @@ public class GameScreen implements Screen {
     private OrthographicCamera cam;
     private OrthogonalTiledMapRenderer renderer;
     private TiledMapTileLayer collisionLayer;
+    private MapObjects objects;
     private String blockedKey = "blocked";
     private float increment;
     private Skin skin;
-    private boolean p1CollisionX, p1CollisionY, p2CollisionX , p2CollisionY;
+    private boolean p1CollisionXLeft;
+    private boolean p1CollisionXRight;
+    private boolean p1CollisionYUp;
+    private boolean p1CollisionYDown;
+    private boolean p2CollisionXLeft;
+    private boolean p2CollisionXRight;
+    private boolean p2CollisionYUp;
+    private boolean p2CollisionYDown;
     private Dialog dialog;
     private int[] background = new int[] {0}, foreground = new int[] {1};
     private ShapeRenderer shape;
@@ -98,25 +109,23 @@ public class GameScreen implements Screen {
         map = new TmxMapLoader().load("maps/demoMap.tmx");
         shape = new ShapeRenderer();
         collisionLayer = (TiledMapTileLayer) map.getLayers().get(1);
-        //       System.out.println(collisionLayer.getCell(0,0).getTile().getProperties().containsKey("blocked"));
+        p1CollisionXLeft = false;
+        p1CollisionXRight = false;
+        p1CollisionYUp = false;
+        p1CollisionYDown = false;
+        p2CollisionXRight = false;
+        p2CollisionXLeft = false;
+        p2CollisionYUp = false;
+        p2CollisionYDown = false;
+        objects = map.getLayers().get("collisions").getObjects();
         for(int row = 0; row < collisionLayer.getWidth(); row++)
         {
             for(int col = 0; col < collisionLayer.getHeight(); col++){
                 if(collisionLayer.getCell(row,col) != null){
 
-                    System.out.println("Row: "+ row + " Col: " + col );
-                    System.out.println(collisionLayer.getCell(row,col).getTile().getProperties().containsKey("blocked"));
                 }
-
             }
-
-
         }
-
-        p1CollisionX = false;
-        p1CollisionY = false;
-        p2CollisionX = false;
-        p2CollisionY = false;
 //        // only needed once
 //        assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
 //        assetManager.load("level1.tmx", TiledMap.class);
@@ -147,15 +156,12 @@ public class GameScreen implements Screen {
         pOne.setPosition(100,100);
 //        System.out.println(pOne.getOriginX()+ " " + pOne.getOriginY());
         pOne.setColor(Color.GRAY);
-//        pOne.setSize(pOne.getBoundingRectangle().width, pOne.getBoundingRectangle().height);
-        pOne.setScale(1/4f);
-//        pOne.setPosition(1280/2f, 720/2f);
-//        pOne.setBounds( pOne.getWidth()/3f, pOne.getHeight()/3f);
+        pOne.setScale(1/8f);
         pOne.setWeapon(new BeamCannon(bmTex));
         pTwo = new Player("Donatello", false, playerTex, 23, 38, 293, 191, collisionLayer);
         pTwo.setPosition(200,200);
         pTwo.setColor(Color.PURPLE);
-        pTwo.setScale(1/4f);
+        pTwo.setScale(1/8f);
         pTwo.setWeapon(new BeamCannon(bmTex));
 
         // Ghetto Managers
@@ -203,8 +209,6 @@ public class GameScreen implements Screen {
     public void show() {
         map = new TmxMapLoader().load("maps/demoMap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
-
-
 
     }
 
@@ -366,64 +370,71 @@ public class GameScreen implements Screen {
             beam.draw(game.batch);
         }
         game.batch.end();
-        shape.begin(ShapeRenderer.ShapeType.Filled);
-        shape.setColor(Color.BLACK);
-        shape.rect(pOne.getX(), pOne.getY(),
-                pOne.getWidth(), pOne.getHeight());
-//        shape.rect(pTwo.getBoundingRectangle().x,pTwo.getBoundingRectangle().y,
-//                pTwo.getBoundingRectangle().width,pTwo.getBoundingRectangle().height);
-//        shape.rect(pTwo.getX(),pTwo.getY(),
-//                pTwo.getWidth(),pTwo.getHeight());
-        shape.setColor(Color.RED);
-        shape.rect(pOne.getBoundingRectangle().x,pOne.getBoundingRectangle().y,
-                pOne.getBoundingRectangle().width,pOne.getBoundingRectangle().height);
 
-        shape.end();
+
+        //shape.begin(ShapeRenderer.ShapeType.Filled);
+        //shape.setColor(Color.BLACK);
+        //shape.rect(pOne.getBoundingRectangle().getX(), pOne.getBoundingRectangle().getY(), pOne.getBoundingRectangle().getWidth(), pOne.getBoundingRectangle().getHeight());
+        //shape.end();
 
         //Player 1 Keybindings
         if(Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.D) ||
                 Gdx.input.isKeyPressed(Input.Keys.A)|| Gdx.input.isKeyPressed(Input.Keys.S)){
             pOne.clearDirections();
             if(Gdx.input.isKeyPressed(Input.Keys.W)){
-                pOne.setRotation(90);
-                pOne.setY(pOne.getY()+150*Gdx.graphics.getDeltaTime());
-
-                pOne.setYDirection(Direction.Up);
-//                if(((pOne.getWeapon().getRotation()/90)%2) == 0) {
-//                    pOne.getWeapon().rotate(90);
-//                }
-//                pOne.getWeapon().setPosition(pOne.getX()+64, pOne.getY()+92);
+                if(collidesTop(pOne))
+                {
+                    pOne.setRotation(90);
+                    pOne.setY(pOne.getY());
+                    pOne.setYDirection(Direction.Up);
+                }
+                else {
+                    pOne.setRotation(90);
+                    pOne.setY(pOne.getY() + 150 * Gdx.graphics.getDeltaTime());
+                    pOne.setYDirection(Direction.Up);
+                }
             }
             else if(Gdx.input.isKeyPressed(Input.Keys.S)){
 
-                pOne.setRotation(270);
-                pOne.setY(pOne.getY()-150*Gdx.graphics.getDeltaTime());
-                pOne.setYDirection(Direction.Down);
-//                if(((pOne.getWeapon().getRotation()/90)%2) == 0) {
-//                    pOne.getWeapon().rotate(90);
-//                }
-//                pOne.getWeapon().setPosition(pOne.getX()-8, pOne.getY());
+                if(collidesBottom(pOne))
+                {
+                    pOne.setRotation(270);
+                    pOne.setY(pOne.getY());
+                    pOne.setYDirection(Direction.Down);
+                }
+                else {
+                    pOne.setRotation(270);
+                    pOne.setY(pOne.getY() - 150 * Gdx.graphics.getDeltaTime());
+                    pOne.setYDirection(Direction.Down);
+                }
             }
             else if(Gdx.input.isKeyPressed(Input.Keys.D)){
-                pOne.setRotation(0);
-                pOne.setX(pOne.getX()+150*Gdx.graphics.getDeltaTime());
-                pOne.setXDirection(Direction.Right);
+                if(collidesRight(pOne))
+                {
+                    pOne.setRotation(0);
+                    pOne.setX(pOne.getX());
+                    pOne.setXDirection(Direction.Right);
+                }
+                else {
 
-
-//                if(((pOne.getWeapon().getRotation()/90)%2) != 0) {
-//                    pOne.getWeapon().rotate(-90);
-//                }
-//                pOne.getWeapon().setPosition(pOne.getX()+64, pOne.getY()+8);
+                    pOne.setRotation(0);
+                    pOne.setX(pOne.getX() + 150 * Gdx.graphics.getDeltaTime());
+                    pOne.setXDirection(Direction.Right);
+                }
             }
             else if(Gdx.input.isKeyPressed(Input.Keys.A)){
-                pOne.setRotation(180);
-                pOne.setX(pOne.getX()-150*Gdx.graphics.getDeltaTime());
-                pOne.setXDirection(Direction.Left);
+                if(collidesLeft(pOne)){
+                    pOne.setRotation(180);
+                    pOne.setX(pOne.getX());
+                    pOne.setXDirection(Direction.Left);
+                }
+                else{
 
-//                if(((pOne.getWeapon().getRotation()/90)%2) != 0) {
-//                    pOne.getWeapon().rotate(-90);
-//                }
-//                pOne.getWeapon().setPosition(pOne.getX(), pOne.getY()+64);
+                    pOne.setRotation(180);
+                    pOne.setX(pOne.getX()-150*Gdx.graphics.getDeltaTime());
+                    pOne.setXDirection(Direction.Left);
+                }
+
             }
 
         }
@@ -433,23 +444,9 @@ public class GameScreen implements Screen {
             }
         }
 
-        // TABLE/WINDOW
-//        if (Gdx.input.isKeyPressed(Input.Keys.P)) {
-//            if (gamePaused == false)
-//                gamePaused = true;
-//            else
-//                gamePaused = false;
-//        }
-//        if(gamePaused == true) {
-//            table.setVisible(true);
-//            stage.draw();
-//        }
-        //shopScreen open
         if (Gdx.input.isKeyPressed(Input.Keys.P) && npc.overlaps(pOne.getBoundingRectangle())&& npc.overlaps(pTwo.getBoundingRectangle())) {
             game.changeScreen(DeathMarch.SHOP);
         }
-
-
 
         //Player 2 Keybindings
         if(Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.RIGHT) ||
@@ -457,30 +454,57 @@ public class GameScreen implements Screen {
 
             pTwo.clearDirections();
             if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-                pTwo.setRotation(90);
-                pTwo.setY(pTwo.getY() + 200 * Gdx.graphics.getDeltaTime());
-                pTwo.setYDirection(Direction.Up);
 
-                p2CollisionY = collidesTop(pTwo);
-
-                if(p2CollisionY){
+                if(collidesTop(pTwo))
+                {
+                    pTwo.setRotation(90);
                     pTwo.setY(pTwo.getY());
+                    pOne.setYDirection(Direction.Up);
                 }
+                else{
+                    pTwo.setRotation(90);
+                    pTwo.setY(pTwo.getY() + 200 * Gdx.graphics.getDeltaTime());
+                    pTwo.setYDirection(Direction.Up);
+                }
+
             }
             else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-                pTwo.setRotation(270);
-                pTwo.setY(pTwo.getY() - 200 * Gdx.graphics.getDeltaTime());
-                pTwo.setYDirection(Direction.Down);
+                if(collidesBottom(pTwo)){
+                    pTwo.setRotation(270);
+                    pTwo.setY(pTwo.getY());
+                    pTwo.setYDirection(Direction.Down);
+                }
+                else{
+                    pTwo.setRotation(270);
+                    pTwo.setY(pTwo.getY() - 200 * Gdx.graphics.getDeltaTime());
+                    pTwo.setYDirection(Direction.Down);
+                }
             }
             else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                pTwo.setRotation(0);
-                pTwo.setX(pTwo.getX() + 200 * Gdx.graphics.getDeltaTime());
-                pTwo.setXDirection(Direction.Right);
+                if(collidesRight(pTwo)){
+                    pTwo.setRotation(0);
+                    pTwo.setX(pTwo.getX());
+                    pTwo.setXDirection(Direction.Right);
+                }
+                else{
+
+                    pTwo.setRotation(0);
+                    pTwo.setX(pTwo.getX() + 200 * Gdx.graphics.getDeltaTime());
+                    pTwo.setXDirection(Direction.Right);
+                }
             }
             else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                pTwo.setRotation(180);
-                pTwo.setX(pTwo.getX() - 200 * Gdx.graphics.getDeltaTime());
-                pTwo.setXDirection(Direction.Left);
+                if(collidesLeft(pTwo)){
+                    pTwo.setRotation(180);
+                    pTwo.setX(pTwo.getX());
+                    pTwo.setXDirection(Direction.Left);
+                }
+                else{
+
+                    pTwo.setRotation(180);
+                    pTwo.setX(pTwo.getX() - 200 * Gdx.graphics.getDeltaTime());
+                    pTwo.setXDirection(Direction.Left);
+                }
             }
 
         }
@@ -490,9 +514,7 @@ public class GameScreen implements Screen {
             }
         }
 
-        if((pOne.isDead()&&pTwo.isDead()) || (System.currentTimeMillis() - startTime == 300000l)){
 
-        }
         //Player Boundaries
         checkBoundary(pOne);
         checkBoundary(pTwo);
@@ -586,6 +608,9 @@ public class GameScreen implements Screen {
     }
 
     private boolean isCellBlocked(float x, float y) {
+        System.out.println("X: " + x);
+        System.out.println("Y : " + y );
+
         TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()), (int) (y / collisionLayer.getTileHeight()));
 
         return cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey(blockedKey);
@@ -593,27 +618,27 @@ public class GameScreen implements Screen {
 
     public boolean collidesRight(Player player) {
         increment = collisionLayer.getTileWidth();
-        increment = player.getWidth() < increment ? player.getWidth() / 2 : increment / 2;
-        for(float step = 0; step <= player.getHeight(); step += increment)
-            if(isCellBlocked(player.getX() + player.getWidth(), player.getY() + step))
+        increment = player.getBoundingRectangle().getWidth() < increment ? player.getBoundingRectangle().getWidth() / 2 : increment / 2;
+        for(float step = 0; step <= player.getBoundingRectangle().getHeight(); step += increment)
+            if(isCellBlocked(player.getBoundingRectangle().getX() + player.getBoundingRectangle().getWidth(), player.getBoundingRectangle().getY() + step))
                 return true;
         return false;
     }
 
     public boolean collidesLeft(Player player) {
         increment = collisionLayer.getTileWidth();
-        increment = player.getWidth() < increment ? player.getWidth() / 2 : increment / 2;
-        for(float step = 0; step <= player.getHeight(); step += increment)
-            if(isCellBlocked(player.getX(), player.getY() + step))
+        increment = player.getBoundingRectangle().getWidth() < increment ? player.getBoundingRectangle().getWidth() / 2 : increment / 2;
+        for(float step = 0; step <= player.getBoundingRectangle().getHeight(); step += increment)
+            if(isCellBlocked(player.getBoundingRectangle().getX(), player.getBoundingRectangle().getY() + step))
                 return true;
         return false;
     }
 
     public boolean collidesTop(Player player) {
         increment = collisionLayer.getTileHeight();
-        increment = player.getHeight() < increment ? player.getHeight() / 2 : increment / 2;
-        for(float step = 0; step <= player.getWidth(); step += increment) {
-            if (isCellBlocked(player.getX() + step, player.getY() + player.getHeight()))
+        increment = player.getBoundingRectangle().getHeight() < increment ? player.getBoundingRectangle().getHeight() / 2 : increment / 2;
+        for(float step = 0; step <= player.getBoundingRectangle().getWidth(); step += increment) {
+            if (isCellBlocked(player.getBoundingRectangle().getX() + step, player.getBoundingRectangle().getY() + player.getBoundingRectangle().getHeight()))
                 return true;
         }
         return false;
@@ -623,9 +648,9 @@ public class GameScreen implements Screen {
     public boolean collidesBottom(Player player) {
         // calculate the increment for step in #collidesLeft() and #collidesRight()
         increment = collisionLayer.getTileHeight();
-        increment = player.getHeight() < increment ? player.getHeight() / 2 : increment / 2;
-        for(float step = 0; step <= player.getWidth(); step += increment)
-            if(isCellBlocked(player.getX() + step, player.getY()))
+        increment = player.getBoundingRectangle().getHeight() < increment ? player.getBoundingRectangle().getHeight() / 2 : increment / 2;
+        for(float step = 0; step <= player.getBoundingRectangle().getWidth(); step += increment)
+            if(isCellBlocked(player.getBoundingRectangle().getX() + step, player.getBoundingRectangle().getY()))
                 return true;
         return false;
     }
