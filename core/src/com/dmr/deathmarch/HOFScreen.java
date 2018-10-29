@@ -1,6 +1,7 @@
 package com.dmr.deathmarch;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.files.FileHandle;
@@ -43,7 +44,7 @@ public class HOFScreen implements Screen {
 
         Gson gson = new Gson();
         if (Gdx.files.local("hof.json").exists()) {
-            FileHandle file = Gdx.files.internal("hof.json");
+            FileHandle file = Gdx.files.local("hof.json");
             System.out.println("File Exists.");
             famers = gson.fromJson(file.readString(), Famer[].class);
             for (int i = 0; i<famers.length;i++) {
@@ -52,6 +53,7 @@ public class HOFScreen implements Screen {
                     break;
                 }
             }
+            file.writeString(gson.toJson(famers), false);
         } else {
             FileHandle file = Gdx.files.local("hof.json");
             for (int i = 0; i<famers.length;i++) {
@@ -79,7 +81,7 @@ public class HOFScreen implements Screen {
 
 //        Table table = new Table();
         masterTable.setFillParent(true);
-        masterTable.setDebug(true);
+//        masterTable.setDebug(true);
         stage.addActor(masterTable);
 
 
@@ -98,6 +100,13 @@ public class HOFScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+
+        // ---GAME CONTROLS---
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+
+            game.changeScreen(DeathMarch.MENU);
+        }
+        // ------------------
 
 
 

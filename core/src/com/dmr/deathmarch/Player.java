@@ -81,6 +81,8 @@ public class Player extends Sprite {
     public void takeDmg(int dmg){this.health -= dmg;}
     public void setDmgMulti(int i){dmgMulti = i ;}
     public void addKill(){kills++;}
+
+    public void addHealth(){health ++;}
     public void addBigKill(){kills = kills + 250;}
     public void resetKills(){kills = 0;}
     public void addHealth(int hp){health = health + hp;}
@@ -111,7 +113,7 @@ public class Player extends Sprite {
     public void setWeapon(Weapon weapon){this.weapon = weapon;}
     public Weapon getWeapon(){return weapon;}
     public Boolean isDead(){
-        if(health == 0) return true;
+        if(health <= 0) return true;
         else return false;
     }
 }

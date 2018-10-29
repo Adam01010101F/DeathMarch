@@ -243,8 +243,12 @@ public class GameScreen implements Screen {
 
         // ---GAME CONTROLS---
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+
             bgm_Music.stop();
+            init();
             game.changeScreen(DeathMarch.MENU);
+            startTime = System.currentTimeMillis();
+
         }
         // ------------------
         stage.draw();
@@ -284,6 +288,7 @@ public class GameScreen implements Screen {
 
                     System.out.println("Goblin takes damage");
                     pOne.addKill();
+                    pOne.addHealth();
                     pTwo.takeDmg(5 * pOne.getDmgMulti());
 
                 }
@@ -319,6 +324,7 @@ public class GameScreen implements Screen {
 
                     System.out.println("Player takes damage");
                     pTwo.addKill();
+                    pTwo.addHealth(2);
                     pOne.takeDmg(5);
                 }
             }
@@ -615,6 +621,7 @@ public class GameScreen implements Screen {
         if (pTwo.isDead() && !pOne.isDead()) {
             bgm_Music.stop();
             game.changeScreen(DeathMarch.WIN);
+            //init();
 
         }
 

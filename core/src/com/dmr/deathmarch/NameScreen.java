@@ -98,6 +98,7 @@ public class NameScreen implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
                 p1.setName(getName());
                 game.changeScreen(DeathMarch.HOF);
+                //GameScreen.init();
             }
         });
     }
