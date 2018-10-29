@@ -317,7 +317,7 @@ public class shopScreen implements Screen{
 
         }
 
-        
+
         //leaving shop area
         if (Gdx.input.isKeyPressed(Input.Keys.P) && pOne.getBoundingRectangle().overlaps(door.getBoundingRectangle())) {
             bgm_Music.stop();
@@ -387,7 +387,7 @@ public class shopScreen implements Screen{
 
         bgm_Music = Gdx.audio.newMusic(Gdx.files.internal("sakura.mp3"));
         bgm_Music.setLooping(true);
-        bgm_Music.setVolume(0.7f);
+        bgm_Music.setVolume(0.5f);
         bgm_Music.play();
 
     }

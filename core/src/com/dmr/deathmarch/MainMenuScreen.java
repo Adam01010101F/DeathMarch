@@ -87,6 +87,7 @@ public class MainMenuScreen implements Screen {
         //music
         bgm_Music = Gdx.audio.newMusic(Gdx.files.internal("mainMenu.mp3"));
         bgm_Music.setLooping(true);
+        bgm_Music.setVolume(0.5f);
         bgm_Music.play();
 
         stage.clear();
