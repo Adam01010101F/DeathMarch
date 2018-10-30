@@ -131,9 +131,7 @@ public class DeathMarch extends Game {
 
             case HOF:
                 //System.out.println(nameScreen.getInputName());
-                if(HallOfFame == null){
-                    HallOfFame = new HOFScreen(this, player1);
-                }
+				HallOfFame = new HOFScreen(this, player1);
                 this.setScreen(HallOfFame);
                 break;
 

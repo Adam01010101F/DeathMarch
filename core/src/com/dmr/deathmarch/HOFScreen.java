@@ -13,20 +13,24 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.Array;
+
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.google.gson.*;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.LinkedList;
+import java.util.List;
 
 public class HOFScreen implements Screen {
     final DeathMarch game;
-
+    final static int hofSize = 10;
     private OrthographicCamera camera;
     private Boolean enteredUser;
     private Stage stage;
+    List<Famer> famers;
     Table masterTable;
-    Label.LabelStyle hofStyle;
 
-    Famer famers[] = new Famer[10];
 
     HOFScreen(final DeathMarch game, Player player) {
         this.game = game;
@@ -34,37 +38,45 @@ public class HOFScreen implements Screen {
         enteredUser=false;
         stage = new Stage(new ScreenViewport());
 
+        Type listType = new TypeToken<List<Famer>>() {}.getType();
+        famers = new LinkedList<Famer>();
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1024, 576);
 
         masterTable = new Table();
-        hofStyle = new Label.LabelStyle(new BitmapFont(), Color.GOLD);
-
-
+        System.out.println("Does it die here. At Beginning");
         Gson gson = new Gson();
         if (Gdx.files.local("hof.json").exists()) {
             FileHandle file = Gdx.files.local("hof.json");
             System.out.println("File Exists.");
-            famers = gson.fromJson(file.readString(), Famer[].class);
-            for (int i = 0; i<famers.length;i++) {
-                if(player.getKills()>0&&!enteredUser) {
-                    famers[i] = new Famer(player.getName(), player.getKills());
-                    break;
+            famers = gson.fromJson(file.readString(), listType);
+
+            for (int i = 0; i<hofSize;i++) {
+                if(!enteredUser && player.getKills()>famers.get(i).getPoints()) {
+                    famers.add(i, new Famer(player.getName(), player.getKills()));
+                    enteredUser = true;
                 }
             }
             file.writeString(gson.toJson(famers), false);
         } else {
             FileHandle file = Gdx.files.local("hof.json");
-            for (int i = 0; i<famers.length;i++) {
-                if(player.getKills()>0&&!enteredUser) {
-                    famers[i] = new Famer(player.getName(), player.getKills());
+
+            for (int i = 0; i<hofSize;++i) {
+                famers.add(i, new Famer());
+                if(!enteredUser && player.getKills()>famers.get(i).getPoints()) {
+                    famers.add(i, new Famer(player.getName(), player.getKills()));
                     enteredUser=true;
                 }
-                famers[i] = new Famer();
             }
+
             file.writeString(gson.toJson(famers), false);
         }
+        while(famers.size()>hofSize){
+            famers.remove(famers.size()-1);
+        }
+        System.out.println("Does it die here. At End!");
+
 
     }
 
@@ -85,10 +97,10 @@ public class HOFScreen implements Screen {
         stage.addActor(masterTable);
 
 
-        for(int i=0; i<famers.length ;i++){
+        for(int i=0; i<hofSize;i++){
             masterTable.row().colspan(2).expandX().fillX();
-            masterTable.add(new Label((i+1)+". " + famers[i].getName() +" " +
-                    famers[i].getPoints(), skin)).width(200).height(100);
+            masterTable.add(new Label((i+1)+". " + famers.get(i).getName() +" " +
+                    famers.get(i).getPoints(), skin)).width(200).height(100);
         }
         System.out.print("It gets here.");
 
@@ -136,6 +148,7 @@ public class HOFScreen implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+        
     }
 }
 
