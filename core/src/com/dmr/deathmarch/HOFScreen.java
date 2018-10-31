@@ -95,13 +95,19 @@ public class HOFScreen implements Screen {
         masterTable.setFillParent(true);
 //        masterTable.setDebug(true);
         stage.addActor(masterTable);
+        Label title  = new Label("HALL OF FAME", skin);
+        title.setFontScale(1.75f);
+        title.setStyle(new Label.LabelStyle(new BitmapFont((Gdx.files.internal("fonts/spooky.fnt"))),Color.RED));
+
+        masterTable.row().colspan(2).expandX().fillX();
+        masterTable.add(title).colspan(2).expandX().width(450).height(150);
 
 
         for(int i=0; i<hofSize;i++){
             masterTable.row().colspan(2).expandX().fillX();
             masterTable.add(new Label((i+1)+". " + famers.get(i).getName() +" " +
                     famers.get(i).getPoints(), skin)).width(200).height(100);
-        }
+    }
         System.out.print("It gets here.");
 
     }
