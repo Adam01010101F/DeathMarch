@@ -431,8 +431,28 @@ public class GameScreen implements Screen {
                     goblin.setRotation(angle);
 
                 }
+                if(collidesTop(goblin))
+                {
+                    goblin.rotate(90);
+                    goblin.setX(goblin.getX() + (20) * Gdx.graphics.getDeltaTime());
+                }
+                if(collidesRight(goblin))
+                {
+                    goblin.rotate(180);
+                    goblin.setY(goblin.getY() + (-20) * Gdx.graphics.getDeltaTime());
+                }
+                if(collidesBottom(goblin))
+                {
+                    goblin.rotate(270);
+                    goblin.setX(goblin.getX() + (-20) * Gdx.graphics.getDeltaTime());
+                }
+                if(collidesLeft(goblin))
+                {
+                    goblin.rotate(360);
+                    goblin.setY(goblin.getY() + (20) * Gdx.graphics.getDeltaTime());
+                }
             }
-//            checkBoundary(goblin);
+
         }
 
         game.batch.setProjectionMatrix(camera.combined);
@@ -850,6 +870,47 @@ public class GameScreen implements Screen {
         increment = proj.getBoundingRectangle().getHeight() < increment ? proj.getBoundingRectangle().getHeight() / 2 : increment / 2;
         for(float step = 0; step <= proj.getBoundingRectangle().getWidth(); step += increment)
             if(isCellBlocked(proj.getBoundingRectangle().getX() + step, proj.getBoundingRectangle().getY()))
+                return true;
+        return false;
+    }
+
+    //Goblin Collision
+    public boolean collidesRight(Goblin player) {
+        increment = collisionLayer.getTileWidth();
+        increment = player.getBoundingRectangle().getWidth() < increment ? player.getBoundingRectangle().getWidth() / 2 : increment / 2;
+        for(float step = 0; step <= player.getBoundingRectangle().getHeight(); step += increment)
+            if(isCellBlocked(player.getBoundingRectangle().getX() + player.getBoundingRectangle().getWidth(), player.getBoundingRectangle().getY() + step))
+                return true;
+        return false;
+    }
+
+    public boolean collidesLeft(Goblin player) {
+        increment = collisionLayer.getTileWidth();
+        increment = player.getBoundingRectangle().getWidth() < increment ? player.getBoundingRectangle().getWidth() / 2 : increment / 2;
+        for(float step = 0; step <= player.getBoundingRectangle().getHeight(); step += increment)
+            if(isCellBlocked(player.getBoundingRectangle().getX(), player.getBoundingRectangle().getY() + step))
+                return true;
+        return false;
+    }
+
+    public boolean collidesTop(Goblin player) {
+        increment = collisionLayer.getTileHeight();
+        increment = player.getBoundingRectangle().getHeight() < increment ? player.getBoundingRectangle().getHeight() / 2 : increment / 2;
+        for(float step = 0; step <= player.getBoundingRectangle().getWidth(); step += increment) {
+            if (isCellBlocked(player.getBoundingRectangle().getX() + step, player.getBoundingRectangle().getY() + player.getBoundingRectangle().getHeight()))
+                return true;
+        }
+        return false;
+
+
+    }
+
+    public boolean collidesBottom(Goblin player) {
+        // calculate the increment for step in #collidesLeft() and #collidesRight()
+        increment = collisionLayer.getTileHeight();
+        increment = player.getBoundingRectangle().getHeight() < increment ? player.getBoundingRectangle().getHeight() / 2 : increment / 2;
+        for(float step = 0; step <= player.getBoundingRectangle().getWidth(); step += increment)
+            if(isCellBlocked(player.getBoundingRectangle().getX() + step, player.getBoundingRectangle().getY()))
                 return true;
         return false;
     }
