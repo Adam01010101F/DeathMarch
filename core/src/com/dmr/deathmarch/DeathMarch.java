@@ -93,12 +93,7 @@ public class DeathMarch extends Game {
 
 		switch(screen){
 
-			case WIN:
 
-				if(nameScreen == null) nameScreen = new NameScreen(this,player1);
-				this.setScreen(nameScreen);
-
-				break;
 
 			case MENU:
 
@@ -144,9 +139,22 @@ public class DeathMarch extends Game {
 
 				break;
 
+
+			case WIN:
+
+				if(nameScreen == null) nameScreen = new NameScreen(this,player1);
+				this.setScreen(nameScreen);
+
+				break;
 		}
-
-
 	}
+
+//	public void create2(){
+//		setScreen(new MainMenuScreen(this));
+//	}
+//	public void init(DeathMarch game){
+//		create2();
+//		//game.changeScreen(DeathMarch.MENU);
+//	}
 
 }

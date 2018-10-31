@@ -1,6 +1,7 @@
 package com.dmr.deathmarch;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -38,6 +39,14 @@ public class NameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+
+        // ---GAME CONTROLS---
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            //game.setScreen(new MainMenuScreen(game));
+            //game.init(game);
+            game.changeScreen(DeathMarch.MENU);
+        }
+        // ------------------
 
 
     }
@@ -97,6 +106,8 @@ public class NameScreen implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 p1.setName(getName());
+                //dispose();
+                //stage.clear();
                 game.changeScreen(DeathMarch.HOF);
                 //GameScreen.init();
             }

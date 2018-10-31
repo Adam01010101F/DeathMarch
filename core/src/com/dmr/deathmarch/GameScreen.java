@@ -35,10 +35,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.*;
 import com.dmr.deathmarch.npc.Goblin;
 import com.dmr.deathmarch.weapons.BeamCannon;
 
@@ -57,17 +54,17 @@ public class GameScreen implements Screen {
     private Texture pTwoTex;
     private Texture bmTex;
     private Texture lbTex;
-    private Player pOne;
-    private Player pTwo;
+    public static Player pOne;
+    public static Player pTwo;
     private Goblin Gobbi;
     private BeamCannon beamCannon;
-    private Array<Projectile> projectiles;
-    private Array<Projectile> bile;
+    public static Array<Projectile> projectiles;
+    public static Array<Projectile> bile;
     private long lastBeamShot;
-    private Array<Goblin> goblins;
+    public static Array<Goblin> goblins;
     private LogicModel lm;
     //private Box2DDebugRenderer dbr;
-    private Direction lastDirection[];
+    public static Direction lastDirection[];
     private Stage stage;
     AssetManager assetManager;
     private TiledMap map;
@@ -114,7 +111,7 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1280, 1200);
 
-        stage = new Stage(new FitViewport(1280,1280));
+        stage = new Stage(new FitViewport(1280,1200));
         shopSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
         pOne = player1;
@@ -188,7 +185,6 @@ public class GameScreen implements Screen {
         bile = new Array<Projectile>();
         goblins = new Array<Goblin>();
 
-        startTime = System.currentTimeMillis();
 
 
 
@@ -198,6 +194,9 @@ public class GameScreen implements Screen {
         parameters = new FreeTypeFontParameter();
         parameters.size = 20;
         parameters.color= Color.BLACK;
+//        parameters.borderColor = Color.WHITE;
+//        parameters.borderWidth = 0.5f;
+
 
 
         uiText = generator.generateFont(parameters);
@@ -217,6 +216,9 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
 
+        startTime = System.currentTimeMillis();
+
+
         map = new TmxMapLoader().load(mapName);
 
         //float unitScale = 2f;
@@ -230,11 +232,15 @@ public class GameScreen implements Screen {
 
 
 
+
+
     }
 
     //TODO: Fix textures. They judder because they aren't perfectly centered in png file.
     @Override
     public void render(float delta) {
+
+
 
 
         stage.clear();
@@ -243,22 +249,28 @@ public class GameScreen implements Screen {
 
         // ---GAME CONTROLS---
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-
             bgm_Music.stop();
-            init();
+            //camera = new OrthographicCamera();
+            //camera.setToOrtho(false, 1280, 720);
+            //camera.update();
             game.changeScreen(DeathMarch.MENU);
-            startTime = System.currentTimeMillis();
 
         }
         // ------------------
+
         stage.draw();
         Gdx.gl.glClearColor(0, 0, 0, 0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+
 
         //table
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render(background);
         tiledMapRenderer.render(foreground);
+
+
+
 
         camera.update();
         // Bullet Physics|Destruction
@@ -436,6 +448,9 @@ public class GameScreen implements Screen {
         }
 
         game.batch.setProjectionMatrix(camera.combined);
+
+
+
 
         // Load Objects onto Screen
         game.batch.begin();
@@ -665,35 +680,22 @@ public class GameScreen implements Screen {
 
         @Override
         public void dispose () {
+            stage.dispose();
+            //camera.setToOrtho(false,1280,720);
             bgm_Music.dispose();
+
 
         }
 
-    public void init(){
+    public static void init(){
 
-        // Ghetto Managers
-        //npc
-//        npcTex = new Texture(Gdx.files.internal("Stairs_up.png"));
-//        stairs = new Sprite(npcTex);
-
-
-//        pTwo.x = 1280/2 - 16/2;
-//        pTwo.y = 720/2;
-//        pTwo.width = 120;
-//        pTwo.height = 120;
-//        stairs.setX(1150);
-//        stairs.setY(27);
-//        stairs.setScale(3f);
-
-
-
-
+        //game = new DeathMarch();
         lastDirection = new Direction[2];       // Tracks the direction of the user.
         projectiles = new Array<Projectile>();
         bile = new Array<Projectile>();
         goblins = new Array<Goblin>();
 
-        startTime = System.currentTimeMillis();
+        //startTime = System.currentTimeMillis();
         pOne.resetHealth();
         pOne.resetKills();
         pTwo.resetHealth();

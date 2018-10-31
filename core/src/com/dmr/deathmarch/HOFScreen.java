@@ -115,8 +115,11 @@ public class HOFScreen implements Screen {
 
         // ---GAME CONTROLS---
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-
+            //game.setScreen(new MainMenuScreen(game));
+            //game.init(game);
+            GameScreen.init();
             game.changeScreen(DeathMarch.MENU);
+
         }
         // ------------------
 
