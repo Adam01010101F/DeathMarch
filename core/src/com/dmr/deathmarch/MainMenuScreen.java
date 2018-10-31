@@ -155,6 +155,7 @@ public class MainMenuScreen implements Screen {
         TextButton preferences = new TextButton("Settings", skin);
         TextButton exit = new TextButton("Exit", skin);
         TextButton hof = new TextButton("Hall of Fame", skin);
+        //
 
         //table.add(uiText.draw())
 
