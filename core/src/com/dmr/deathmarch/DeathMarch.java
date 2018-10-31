@@ -28,6 +28,7 @@ public class DeathMarch extends Game {
 	private TileMapScreen tileMap;
 	private shopScreen s;
 	private HOFScreen HallOfFame;
+	private LoseScreen loseScreen;
 	private Texture playerTex;
 	private Music bgm_Music;
 	private Texture playerTex1;
@@ -40,7 +41,7 @@ public class DeathMarch extends Game {
 	public final static int SHOP = 5;
 	public final static int HOF = 6;
 	public final static int WIN = 7;
-
+	public final static int LOSE = 8;
 
 
 	public DeathMarch() {
@@ -130,7 +131,7 @@ public class DeathMarch extends Game {
                 break;
 
             case HOF:
-                //System.out.println(nameScreen.getInputName());
+
                 if(HallOfFame == null){
                     HallOfFame = new HOFScreen(this, player1);
                 }
@@ -143,6 +144,14 @@ public class DeathMarch extends Game {
 				if(s == null) s = new shopScreen(this,player1,player2);
 
 				this.setScreen(s);
+
+				break;
+
+			case LOSE:
+
+				if(loseScreen == null) loseScreen = new LoseScreen(this,player1);
+
+				this.setScreen(loseScreen);
 
 				break;
 
