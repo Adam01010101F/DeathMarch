@@ -471,22 +471,34 @@ public class GameScreen implements Screen {
                     goblin.setRotation(angle);
 
                 }
-                if(collidesTop(goblin))
+                if(collidesTop(goblin.getBoundingRectangle().getWidth(),
+                        goblin.getBoundingRectangle().getHeight(),
+                        goblin.getBoundingRectangle().getX(),
+                        goblin.getBoundingRectangle().getY()))
                 {
                     goblin.rotate(90);
                     goblin.setX(goblin.getX() + (20) * Gdx.graphics.getDeltaTime());
                 }
-                if(collidesRight(goblin))
+                if(collidesRight(goblin.getBoundingRectangle().getWidth(),
+                        goblin.getBoundingRectangle().getHeight(),
+                        goblin.getBoundingRectangle().getX(),
+                        goblin.getBoundingRectangle().getY()))
                 {
                     goblin.rotate(180);
                     goblin.setY(goblin.getY() + (-20) * Gdx.graphics.getDeltaTime());
                 }
-                if(collidesBottom(goblin))
+                if(collidesBottom(goblin.getBoundingRectangle().getWidth(),
+                        goblin.getBoundingRectangle().getHeight(),
+                        goblin.getBoundingRectangle().getX(),
+                        goblin.getBoundingRectangle().getY()))
                 {
                     goblin.rotate(270);
                     goblin.setX(goblin.getX() + (-20) * Gdx.graphics.getDeltaTime());
                 }
-                if(collidesLeft(goblin))
+                if(collidesLeft(goblin.getBoundingRectangle().getWidth(),
+                        goblin.getBoundingRectangle().getHeight(),
+                        goblin.getBoundingRectangle().getX(),
+                        goblin.getBoundingRectangle().getY()))
                 {
                     goblin.rotate(360);
                     goblin.setY(goblin.getY() + (20) * Gdx.graphics.getDeltaTime());
@@ -806,8 +818,8 @@ public class GameScreen implements Screen {
     }
     private void createGoblin(){
         Goblin goblin = new Goblin();
-        goblin.setX(1280/2f - 16/2f);
-        goblin.setY(720/2f);
+        goblin.setX(pTwo.getX());
+        goblin.setY(pTwo.getY());
         goblins.add(goblin);
 
     }
