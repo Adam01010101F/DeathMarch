@@ -266,15 +266,35 @@ public class GameScreen implements Screen {
             Projectile proj = projectiles.get(i);
             proj.setPosition(proj.getX() + 350 * proj.getxVel() * Gdx.graphics.getDeltaTime()
                     , proj.getY() + 350 * proj.getyVel() * Gdx.graphics.getDeltaTime());
-            if (bulletCollidesLeft(proj)) {
+            if (collidesLeft(
+                    proj.getBoundingRectangle().getWidth(),
+                    proj.getBoundingRectangle().getHeight(),
+                    proj.getBoundingRectangle().getX(),
+                    proj.getBoundingRectangle().getY()
+            )) {
                 projectiles.removeIndex(i);
-            } else if (bulletCollidesRight(proj)) {
+            } else if (collidesRight(
+                    proj.getBoundingRectangle().getWidth(),
+                    proj.getBoundingRectangle().getHeight(),
+                    proj.getBoundingRectangle().getX(),
+                    proj.getBoundingRectangle().getY()
+            )) {
                 projectiles.removeIndex(i);
 
-            } else if (bulletCollidesBottom(proj)) {
+            } else if (collidesBottom(
+                    proj.getBoundingRectangle().getWidth(),
+                    proj.getBoundingRectangle().getHeight(),
+                    proj.getBoundingRectangle().getX(),
+                    proj.getBoundingRectangle().getY()
+            )) {
                 projectiles.removeIndex(i);
 
-            } else if (bulletCollidesTop(proj)) {
+            } else if (collidesTop(
+                    proj.getBoundingRectangle().getWidth(),
+                    proj.getBoundingRectangle().getHeight(),
+                    proj.getBoundingRectangle().getX(),
+                    proj.getBoundingRectangle().getY()
+            )) {
                 projectiles.removeIndex(i);
 
             } else {
@@ -302,15 +322,35 @@ public class GameScreen implements Screen {
             Projectile proj = bile.get(i);
             proj.setPosition(proj.getX() + 350 * proj.getxVel() * Gdx.graphics.getDeltaTime()
                     , proj.getY() + 350 * proj.getyVel() * Gdx.graphics.getDeltaTime());
-            if (bulletCollidesLeft(proj)) {
+            if (collidesLeft(
+                    proj.getBoundingRectangle().getWidth(),
+                    proj.getBoundingRectangle().getHeight(),
+                    proj.getBoundingRectangle().getX(),
+                    proj.getBoundingRectangle().getY()
+            )) {
                 bile.removeIndex(i);
-            } else if (bulletCollidesRight(proj)) {
+            } else if (collidesRight(
+                    proj.getBoundingRectangle().getWidth(),
+                    proj.getBoundingRectangle().getHeight(),
+                    proj.getBoundingRectangle().getX(),
+                    proj.getBoundingRectangle().getY()
+            )) {
                 bile.removeIndex(i);
 
-            } else if (bulletCollidesBottom(proj)) {
+            } else if (collidesBottom(
+                    proj.getBoundingRectangle().getWidth(),
+                    proj.getBoundingRectangle().getHeight(),
+                    proj.getBoundingRectangle().getX(),
+                    proj.getBoundingRectangle().getY()
+            )) {
                 bile.removeIndex(i);
 
-            } else if (bulletCollidesTop(proj)) {
+            } else if (collidesTop(
+                    proj.getBoundingRectangle().getWidth(),
+                    proj.getBoundingRectangle().getHeight(),
+                    proj.getBoundingRectangle().getX(),
+                    proj.getBoundingRectangle().getY()
+            )) {
                 bile.removeIndex(i);
 
             } else {
@@ -513,7 +553,11 @@ public class GameScreen implements Screen {
                 Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.S)) {
             pOne.clearDirections();
             if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                if (collidesTop(pOne)) {
+                if (collidesTop(
+                        pOne.getBoundingRectangle().getWidth(),
+                        pOne.getBoundingRectangle().getHeight(),
+                        pOne.getBoundingRectangle().getX(),
+                        pOne.getBoundingRectangle().getY())) {
                     pOne.setRotation(90);
                     pOne.setY(pOne.getY());
                     pOne.setYDirection(Direction.Up);
@@ -524,7 +568,12 @@ public class GameScreen implements Screen {
                 }
             } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 
-                if (collidesBottom(pOne)) {
+                if (collidesBottom(
+                        pOne.getBoundingRectangle().getWidth(),
+                        pOne.getBoundingRectangle().getHeight(),
+                        pOne.getBoundingRectangle().getX(),
+                        pOne.getBoundingRectangle().getY()
+                )) {
                     pOne.setRotation(270);
                     pOne.setY(pOne.getY());
                     pOne.setYDirection(Direction.Down);
@@ -534,7 +583,12 @@ public class GameScreen implements Screen {
                     pOne.setYDirection(Direction.Down);
                 }
             } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                if (collidesRight(pOne)) {
+                if (collidesRight(
+                        pOne.getBoundingRectangle().getWidth(),
+                        pOne.getBoundingRectangle().getHeight(),
+                        pOne.getBoundingRectangle().getX(),
+                        pOne.getBoundingRectangle().getY()
+                )) {
                     pOne.setRotation(0);
                     pOne.setX(pOne.getX());
                     pOne.setXDirection(Direction.Right);
@@ -545,7 +599,12 @@ public class GameScreen implements Screen {
                     pOne.setXDirection(Direction.Right);
                 }
             } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                if (collidesLeft(pOne)) {
+                if (collidesLeft(
+                        pOne.getBoundingRectangle().getWidth(),
+                        pOne.getBoundingRectangle().getHeight(),
+                        pOne.getBoundingRectangle().getX(),
+                        pOne.getBoundingRectangle().getY()
+                )) {
                     pOne.setRotation(180);
                     pOne.setX(pOne.getX());
                     pOne.setXDirection(Direction.Left);
@@ -580,7 +639,12 @@ public class GameScreen implements Screen {
             pTwo.clearDirections();
             if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
 
-                if (collidesTop(pTwo)) {
+                if (collidesTop(
+                        pTwo.getBoundingRectangle().getWidth(),
+                        pTwo.getBoundingRectangle().getHeight(),
+                        pTwo.getBoundingRectangle().getX(),
+                        pTwo.getBoundingRectangle().getY()
+                )) {
                     pTwo.setRotation(90);
                     pTwo.setY(pTwo.getY());
                     pOne.setYDirection(Direction.Up);
@@ -591,7 +655,12 @@ public class GameScreen implements Screen {
                 }
 
             } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-                if (collidesBottom(pTwo)) {
+                if (collidesBottom(
+                        pTwo.getBoundingRectangle().getWidth(),
+                        pTwo.getBoundingRectangle().getHeight(),
+                        pTwo.getBoundingRectangle().getX(),
+                        pTwo.getBoundingRectangle().getY()
+                )) {
                     pTwo.setRotation(270);
                     pTwo.setY(pTwo.getY());
                     pTwo.setYDirection(Direction.Down);
@@ -601,7 +670,11 @@ public class GameScreen implements Screen {
                     pTwo.setYDirection(Direction.Down);
                 }
             } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                if (collidesRight(pTwo)) {
+                if (collidesRight(
+                        pTwo.getBoundingRectangle().getWidth(),
+                        pTwo.getBoundingRectangle().getHeight(),
+                        pTwo.getBoundingRectangle().getX(),
+                        pTwo.getBoundingRectangle().getY())) {
                     pTwo.setRotation(0);
                     pTwo.setX(pTwo.getX());
                     pTwo.setXDirection(Direction.Right);
@@ -612,7 +685,11 @@ public class GameScreen implements Screen {
                     pTwo.setXDirection(Direction.Right);
                 }
             } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                if (collidesLeft(pTwo)) {
+                if (collidesLeft(
+                        pTwo.getBoundingRectangle().getWidth(),
+                        pTwo.getBoundingRectangle().getHeight(),
+                        pTwo.getBoundingRectangle().getX(),
+                        pTwo.getBoundingRectangle().getY())) {
                     pTwo.setRotation(180);
                     pTwo.setX(pTwo.getX());
                     pTwo.setXDirection(Direction.Left);
@@ -632,11 +709,10 @@ public class GameScreen implements Screen {
         }
 
         if (300 - (System.currentTimeMillis() - startTime) / 1000 == 0) {
-            //startTime = System.currentTimeMillis()
             init();
             game.changeScreen(DeathMarch.MENU);
         }
-        //game.setScreen(new GameScreen(game));
+
 
         if (pTwo.isDead() && !pOne.isDead()) {
             bgm_Music.stop();
@@ -646,21 +722,11 @@ public class GameScreen implements Screen {
         }
 
         if (pOne.isDead()) {
-            //new MainMenuScreen(game);
-            //game = new DeathMarch();
-            //game.setScreen((new GameScreen(game,pOne,pTwo)));
-            //game.changeScreen(DeathMarch.MENU);
-            init();
+
             bgm_Music.stop();
-            game.changeScreen(DeathMarch.MENU);
-
-
+            game.changeScreen(DeathMarch.LOSE);
+            init();
         }
-
-
-        //Player Boundaries
-//        checkBoundary(pOne);
-//        checkBoundary(pTwo);
 
     }
         @Override
@@ -746,22 +812,6 @@ public class GameScreen implements Screen {
 
     }
 
-    private void checkBoundary(Player player){
-        if(player.getBoundingRectangle().getX()<0){
-            System.out.println(player.getX() + " " + player.getBoundingRectangle().getX());
-
-            player.setX(player.getBoundingRectangle().getX()-95);
-            System.out.println(player.getX() + " " + player.getBoundingRectangle().getX());
-
-        }
-        if(player.getBoundingRectangle().getX()>1280-120){
-            player.setX(player.getBoundingRectangle().getX());
-            System.out.println(player.getX() + " " + player.getBoundingRectangle().getX());
-
-        }
-        if(player.getBoundingRectangle().getY()<0)player.setY(0);
-        if(player.getBoundingRectangle().getY()>720-120)player.setY(720-120);
-    }
 
     public void showDialog() {
 
@@ -795,123 +845,42 @@ public class GameScreen implements Screen {
         return cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey(blockedKey);
     }
 
-    public boolean collidesRight(Player player) {
+    public boolean collidesRight(float boundingWidth, float boundingHeight, float boundingX, float boundingY) {
         increment = collisionLayer.getTileWidth();
-        increment = player.getBoundingRectangle().getWidth() < increment ? player.getBoundingRectangle().getWidth() / 2 : increment / 2;
-        for(float step = 0; step <= player.getBoundingRectangle().getHeight(); step += increment)
-            if(isCellBlocked(player.getBoundingRectangle().getX() + player.getBoundingRectangle().getWidth(), player.getBoundingRectangle().getY() + step))
+        increment = boundingWidth < increment ? boundingWidth / 2 : increment / 2;
+        for(float step = 0; step <= boundingHeight; step += increment)
+            if(isCellBlocked(boundingX + boundingWidth, boundingY + step))
                 return true;
         return false;
     }
 
-    public boolean collidesLeft(Player player) {
+    public boolean collidesLeft(float boundingWidth, float boundingHeight, float boundingX, float boundingY) {
         increment = collisionLayer.getTileWidth();
-        increment = player.getBoundingRectangle().getWidth() < increment ? player.getBoundingRectangle().getWidth() / 2 : increment / 2;
-        for(float step = 0; step <= player.getBoundingRectangle().getHeight(); step += increment)
-            if(isCellBlocked(player.getBoundingRectangle().getX(), player.getBoundingRectangle().getY() + step))
+        increment = boundingWidth < increment ? boundingWidth / 2 : increment / 2;
+        for(float step = 0; step <= boundingHeight; step += increment)
+            if(isCellBlocked(boundingX, boundingY + step))
                 return true;
         return false;
     }
 
-    public boolean collidesTop(Player player) {
+    public boolean collidesTop(float boundingWidth, float boundingHeight, float boundingX, float boundingY) {
         increment = collisionLayer.getTileHeight();
-        increment = player.getBoundingRectangle().getHeight() < increment ? player.getBoundingRectangle().getHeight() / 2 : increment / 2;
-        for(float step = 0; step <= player.getBoundingRectangle().getWidth(); step += increment) {
-            if (isCellBlocked(player.getBoundingRectangle().getX() + step, player.getBoundingRectangle().getY() + player.getBoundingRectangle().getHeight()))
+        increment = boundingHeight < increment ? boundingHeight / 2 : increment / 2;
+        for(float step = 0; step <= boundingWidth; step += increment) {
+            if (isCellBlocked(boundingX + step, boundingY + boundingHeight))
                 return true;
         }
         return false;
-
-
     }
 
-    public boolean collidesBottom(Player player) {
+    public boolean collidesBottom(float boundingWidth, float boundingHeight, float boundingX, float boundingY) {
         // calculate the increment for step in #collidesLeft() and #collidesRight()
         increment = collisionLayer.getTileHeight();
-        increment = player.getBoundingRectangle().getHeight() < increment ? player.getBoundingRectangle().getHeight() / 2 : increment / 2;
-        for(float step = 0; step <= player.getBoundingRectangle().getWidth(); step += increment)
-            if(isCellBlocked(player.getBoundingRectangle().getX() + step, player.getBoundingRectangle().getY()))
+        increment = boundingHeight < increment ? boundingHeight / 2 : increment / 2;
+        for(float step = 0; step <= boundingWidth; step += increment)
+            if(isCellBlocked(boundingX + step, boundingY))
                 return true;
         return false;
     }
 
-    public boolean bulletCollidesRight(Projectile proj) {
-        increment = collisionLayer.getTileWidth();
-        increment = proj.getBoundingRectangle().getWidth() < increment ? proj.getBoundingRectangle().getWidth() / 2 : increment / 2;
-        for(float step = 0; step <= proj.getBoundingRectangle().getHeight(); step += increment)
-            if(isCellBlocked(proj.getBoundingRectangle().getX() + proj.getBoundingRectangle().getWidth(), proj.getBoundingRectangle().getY() + step))
-                return true;
-        return false;
-    }
-
-    public boolean bulletCollidesLeft(Projectile proj) {
-        increment = collisionLayer.getTileWidth();
-        increment = proj.getBoundingRectangle().getWidth() < increment ? proj.getBoundingRectangle().getWidth() / 2 : increment / 2;
-        for(float step = 0; step <= proj.getBoundingRectangle().getHeight(); step += increment)
-            if(isCellBlocked(proj.getBoundingRectangle().getX(), proj.getBoundingRectangle().getY() + step))
-                return true;
-        return false;
-    }
-
-    public boolean bulletCollidesTop(Projectile proj) {
-        increment = collisionLayer.getTileHeight();
-        increment = proj.getBoundingRectangle().getHeight() < increment ? proj.getBoundingRectangle().getHeight() / 2 : increment / 2;
-        for(float step = 0; step <= proj.getBoundingRectangle().getWidth(); step += increment) {
-            if (isCellBlocked(proj.getBoundingRectangle().getX() + step, proj.getBoundingRectangle().getY() + proj.getBoundingRectangle().getHeight()))
-                return true;
-        }
-        return false;
-
-    }
-
-    public boolean bulletCollidesBottom(Projectile proj) {
-
-        increment = collisionLayer.getTileHeight();
-        increment = proj.getBoundingRectangle().getHeight() < increment ? proj.getBoundingRectangle().getHeight() / 2 : increment / 2;
-        for(float step = 0; step <= proj.getBoundingRectangle().getWidth(); step += increment)
-            if(isCellBlocked(proj.getBoundingRectangle().getX() + step, proj.getBoundingRectangle().getY()))
-                return true;
-        return false;
-    }
-
-    //Goblin Collision
-    public boolean collidesRight(Goblin player) {
-        increment = collisionLayer.getTileWidth();
-        increment = player.getBoundingRectangle().getWidth() < increment ? player.getBoundingRectangle().getWidth() / 2 : increment / 2;
-        for(float step = 0; step <= player.getBoundingRectangle().getHeight(); step += increment)
-            if(isCellBlocked(player.getBoundingRectangle().getX() + player.getBoundingRectangle().getWidth(), player.getBoundingRectangle().getY() + step))
-                return true;
-        return false;
-    }
-
-    public boolean collidesLeft(Goblin player) {
-        increment = collisionLayer.getTileWidth();
-        increment = player.getBoundingRectangle().getWidth() < increment ? player.getBoundingRectangle().getWidth() / 2 : increment / 2;
-        for(float step = 0; step <= player.getBoundingRectangle().getHeight(); step += increment)
-            if(isCellBlocked(player.getBoundingRectangle().getX(), player.getBoundingRectangle().getY() + step))
-                return true;
-        return false;
-    }
-
-    public boolean collidesTop(Goblin player) {
-        increment = collisionLayer.getTileHeight();
-        increment = player.getBoundingRectangle().getHeight() < increment ? player.getBoundingRectangle().getHeight() / 2 : increment / 2;
-        for(float step = 0; step <= player.getBoundingRectangle().getWidth(); step += increment) {
-            if (isCellBlocked(player.getBoundingRectangle().getX() + step, player.getBoundingRectangle().getY() + player.getBoundingRectangle().getHeight()))
-                return true;
-        }
-        return false;
-
-
-    }
-
-    public boolean collidesBottom(Goblin player) {
-        // calculate the increment for step in #collidesLeft() and #collidesRight()
-        increment = collisionLayer.getTileHeight();
-        increment = player.getBoundingRectangle().getHeight() < increment ? player.getBoundingRectangle().getHeight() / 2 : increment / 2;
-        for(float step = 0; step <= player.getBoundingRectangle().getWidth(); step += increment)
-            if(isCellBlocked(player.getBoundingRectangle().getX() + step, player.getBoundingRectangle().getY()))
-                return true;
-        return false;
-    }
 }
