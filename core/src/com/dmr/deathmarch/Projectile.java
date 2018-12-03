@@ -8,10 +8,12 @@ import java.util.ArrayList;
 public class Projectile extends Sprite {
     private float xVel;
     private float yVel;
+    private int bounceCount;
 
     public Projectile(){
         xVel = 0;
         yVel = 0;
+        bounceCount = 0;
     }
 
     public Projectile(Texture tex, Direction x, Direction y){
@@ -33,6 +35,10 @@ public class Projectile extends Sprite {
             this.xVel = 1;
         }
     }
+
+    public void incrementBounceCount(){ this.bounceCount++;}
+
+    public int getBounceCount(){ return this.bounceCount; }
 
     public float getxVel() {
         return xVel;
