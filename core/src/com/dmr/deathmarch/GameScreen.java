@@ -107,7 +107,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(final DeathMarch game,Player player1,Player player2){
         this.game = game;
-        mapName = "maps/demoMap.tmx";
+        mapName = "maps/billiards.tmx";
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1280, 1200);
 
@@ -150,13 +150,13 @@ public class GameScreen implements Screen {
         pOne.setOriginCenter();
         pOne.setPosition(100,100);
 //        System.out.println(pOne.getOriginX()+ " " + pOne.getOriginY());
-        pOne.setColor(Color.GRAY);
+//        pOne.setColor(Color.GRAY);
         pOne.setScale(1/8f);
         pOne.setWeapon(new BeamCannon(bmTex));
         //pTwo = player2;
         pTwo.setPosition(1000,900);
-        pTwo.setColor(Color.PURPLE);
-        pTwo.setScale(3/4f);
+//        pTwo.setColor(Color.PURPLE);
+//        pTwo.setScale(3/4f);
         pTwo.setHealth(150);
         //
         pTwo.setWeapon(new BeamCannon(bmTex));
@@ -222,7 +222,7 @@ public class GameScreen implements Screen {
         map = new TmxMapLoader().load(mapName);
 
         //float unitScale = 2f;
-        map = new TmxMapLoader().load("maps/demoMap.tmx");
+        map = new TmxMapLoader().load("maps/billiards.tmx");
 
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
         bgm_Music = Gdx.audio.newMusic(Gdx.files.internal("battle1.mp3"));

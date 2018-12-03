@@ -104,7 +104,7 @@ public class FirstTimeMenu implements Screen {
 
 
         //Vector3 posCamara = camera.position;
-        uiText.draw(game.batch, "DEATH MARCH",  +325 , 700 );
+        uiText.draw(game.batch, "The Buns and the BirdZ",  +325 , 700 );
         textyText.draw(game.batch,"Made by the DEATH MARCHERS",375, 100);
 
 
