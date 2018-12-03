@@ -55,4 +55,8 @@ public class Projectile extends Sprite {
         return vel;
     }
 
+    public static void rebound(Projectile proj){
+        proj.xVel *= -1;
+        proj.yVel *=-1;
+    }
 }
