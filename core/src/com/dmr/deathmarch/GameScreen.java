@@ -86,6 +86,8 @@ public class GameScreen implements Screen {
     private float increment;
     private Skin skin;
 
+    private Vector3 screenCoords;
+
     private Dialog dialog;
     private int[] background = new int[] {0}, foreground = new int[] {1};
     private ShapeRenderer shape;
@@ -110,7 +112,7 @@ public class GameScreen implements Screen {
         mapName = "maps/billiards.tmx";
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1280, 1200);
-
+        screenCoords = new Vector3();
         stage = new Stage(new FitViewport(1280,1200));
         shopSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
@@ -755,8 +757,21 @@ public class GameScreen implements Screen {
             init();
         }
 
+        checkBoundaries(pOne);
+
     }
-        @Override
+
+    private void checkBoundaries(Player player) {
+//        System.out.println("pOne: " + pOne.getY()+ " Height: " + camera.viewportHeight);
+        if(player.getY()>=camera.viewportHeight){
+            screenCoords = new Vector3(player.getX(), 0, 0);
+            camera.unproject(screenCoords);
+            System.out.println(screenCoords.x+ " " + screenCoords.y + " " + screenCoords.z);
+            player.setY(screenCoords.x);
+        }
+    }
+
+    @Override
         public void resize ( int width, int height){
             stage.getViewport().update(width, height, true);
         }
@@ -851,8 +866,8 @@ public class GameScreen implements Screen {
     }
 
     private boolean isCellBlocked(float x, float y) {
-        System.out.println("X: " + x);
-        System.out.println("Y : " + y );
+//        System.out.println("X: " + x);
+//        System.out.println("Y : " + y );
 
         TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()), (int) (y / collisionLayer.getTileHeight()));
 
@@ -863,8 +878,10 @@ public class GameScreen implements Screen {
         increment = collisionLayer.getTileWidth();
         increment = boundingWidth < increment ? boundingWidth / 2 : increment / 2;
         for(float step = 0; step <= boundingHeight; step += increment)
-            if(isCellBlocked(boundingX + boundingWidth, boundingY + step))
+            if(isCellBlocked(boundingX + boundingWidth, boundingY + step)){
+                System.out.println("CR: TRUE");
                 return true;
+            }
         return false;
     }
 
@@ -872,8 +889,10 @@ public class GameScreen implements Screen {
         increment = collisionLayer.getTileWidth();
         increment = boundingWidth < increment ? boundingWidth / 2 : increment / 2;
         for(float step = 0; step <= boundingHeight; step += increment)
-            if(isCellBlocked(boundingX, boundingY + step))
+            if(isCellBlocked(boundingX, boundingY + step)){
+                System.out.println("CL: True");
                 return true;
+            }
         return false;
     }
 
@@ -881,8 +900,10 @@ public class GameScreen implements Screen {
         increment = collisionLayer.getTileHeight();
         increment = boundingHeight < increment ? boundingHeight / 2 : increment / 2;
         for(float step = 0; step <= boundingWidth; step += increment) {
-            if (isCellBlocked(boundingX + step, boundingY + boundingHeight))
+            if (isCellBlocked(boundingX + step, boundingY + boundingHeight)){
+                System.out.println("Ct: True");
                 return true;
+            }
         }
         return false;
     }
@@ -892,8 +913,10 @@ public class GameScreen implements Screen {
         increment = collisionLayer.getTileHeight();
         increment = boundingHeight < increment ? boundingHeight / 2 : increment / 2;
         for(float step = 0; step <= boundingWidth; step += increment)
-            if(isCellBlocked(boundingX + step, boundingY))
+            if(isCellBlocked(boundingX + step, boundingY)){
+                System.out.println("CB: True");
                 return true;
+            }
         return false;
     }
 
