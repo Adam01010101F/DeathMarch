@@ -110,9 +110,9 @@ public class GameScreen implements Screen {
         this.game = game;
         mapName = "maps/billiards.tmx";
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1280, 1200);
+        camera.setToOrtho(false, 1280, 1280);
         screenCoords = new Vector3();
-        stage = new Stage(new FitViewport(1280, 1200));
+        stage = new Stage(new FitViewport(1280,1280));
         shopSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
         pOne = player1;
@@ -498,12 +498,7 @@ public class GameScreen implements Screen {
             }
         }
 
-
-}
-
         game.batch.setProjectionMatrix(camera.combined);
-
-
 
 
         // Load Objects onto Screen
@@ -531,7 +526,7 @@ public class GameScreen implements Screen {
         }
 
 
-        game.font.draw(game.batch, "P2 x: " + pTwo.getX() + " y: " + pTwo.getY(), 100, 150);
+        game.font.draw(game.batch, "P1 x: " + pOne.getX() + " y: " + pOne.getY(), 100, 150);
         game.font.draw(game.batch, "Projectiles: " + projectiles.size, 100, 200);
         game.font.draw(game.batch, "Projectiles: " + bile.size, 100, 100);
         pOne.draw(game.batch);
@@ -540,9 +535,9 @@ public class GameScreen implements Screen {
 //        game.batch.draw(bmTex, pOne.getX(), pOne.getY()-8);
 //        pOne.getWeapon().draw(game.batch);
 
-        for (Sprite goblin : goblins) {
-            game.batch.draw(pTwoTex, goblin.getX(), goblin.getY());
-        }
+//        for (Sprite goblin : goblins) {
+//            game.batch.draw(pTwoTex, goblin.getX(), goblin.getY());
+//        }
         for (Sprite beam : projectiles) {
             beam.draw(game.batch);
         }
@@ -575,7 +570,8 @@ public class GameScreen implements Screen {
                     pOne.setY(pOne.getY() + pOne.getSpeed() * Gdx.graphics.getDeltaTime());
                     pOne.setYDirection(Direction.Up);
                 }
-            } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 
                 if (collidesBottom(
                         pOne.getBoundingRectangle().getWidth(),
@@ -591,7 +587,8 @@ public class GameScreen implements Screen {
                     pOne.setY(pOne.getY() - pOne.getSpeed() * Gdx.graphics.getDeltaTime());
                     pOne.setYDirection(Direction.Down);
                 }
-            } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
                 if (collidesRight(
                         pOne.getBoundingRectangle().getWidth(),
                         pOne.getBoundingRectangle().getHeight(),
@@ -607,7 +604,8 @@ public class GameScreen implements Screen {
                     pOne.setX(pOne.getX() + pOne.getSpeed() * Gdx.graphics.getDeltaTime());
                     pOne.setXDirection(Direction.Right);
                 }
-            } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 if (collidesLeft(
                         pOne.getBoundingRectangle().getWidth(),
                         pOne.getBoundingRectangle().getHeight(),
@@ -738,16 +736,30 @@ public class GameScreen implements Screen {
         }
 
         checkBoundaries(pOne);
-
     }
 
     private void checkBoundaries(Player player) {
-//        System.out.println("pOne: " + pOne.getY()+ " Height: " + camera.viewportHeight);
-        if(player.getY()>=camera.viewportHeight){
+        //Handles Y coords
+        if(player.getY()+270<=0){   //Bottom of the Screen
+            screenCoords = new Vector3(player.getX(), stage.getHeight(),0);
+            stage.getViewport().project(screenCoords);
+            player.setY(screenCoords.y);
+            System.out.println("LowerBound Touched");
+        } else if(player.getY()+160>=stage.getViewport().getWorldHeight()){ //Top of the Screen
+            System.out.println("UpperBound Touched");
             screenCoords = new Vector3(player.getX(), 0, 0);
-            camera.unproject(screenCoords);
-            System.out.println(screenCoords.x+ " " + screenCoords.y + " " + screenCoords.z);
-            player.setY(screenCoords.x);
+            stage.getViewport().project(screenCoords);
+            player.setY(screenCoords.y-270);
+        }
+        //Handles X coords
+        if(player.getX()+270<=0){       //Left of the Screen
+            screenCoords = new Vector3(1280, player.getY(),0);
+            stage.getViewport().unproject(screenCoords);
+            player.setX(screenCoords.x-270);
+        } else if(player.getX()+270>=stage.getWidth()){ //Right of the screen
+            screenCoords = new Vector3(0, player.getY(),0);
+            stage.getViewport().unproject(screenCoords);
+            player.setX(screenCoords.x-270);
         }
     }
 
@@ -859,7 +871,6 @@ public class GameScreen implements Screen {
         increment = boundingWidth < increment ? boundingWidth / 2 : increment / 2;
         for(float step = 0; step <= boundingHeight; step += increment)
             if(isCellBlocked(boundingX + boundingWidth, boundingY + step)){
-                System.out.println("CR: TRUE");
                 return true;
             }
         return false;
@@ -870,7 +881,6 @@ public class GameScreen implements Screen {
         increment = boundingWidth < increment ? boundingWidth / 2 : increment / 2;
         for(float step = 0; step <= boundingHeight; step += increment)
             if(isCellBlocked(boundingX, boundingY + step)){
-                System.out.println("CL: True");
                 return true;
             }
         return false;
@@ -881,7 +891,6 @@ public class GameScreen implements Screen {
         increment = boundingHeight < increment ? boundingHeight / 2 : increment / 2;
         for(float step = 0; step <= boundingWidth; step += increment) {
             if (isCellBlocked(boundingX + step, boundingY + boundingHeight)){
-                System.out.println("Ct: True");
                 return true;
             }
         }
@@ -894,7 +903,6 @@ public class GameScreen implements Screen {
         increment = boundingHeight < increment ? boundingHeight / 2 : increment / 2;
         for(float step = 0; step <= boundingWidth; step += increment)
             if(isCellBlocked(boundingX + step, boundingY)){
-                System.out.println("CB: True");
                 return true;
             }
         return false;
