@@ -366,22 +366,66 @@ public class GameScreen implements Screen {
 //        }
 
         // Goblin Destruction
-        for (Iterator<Goblin> iter = goblins.iterator(); iter.hasNext(); ) {
-            Goblin goblin = iter.next();
+       // for (Iterator<Goblin> iter = goblins.iterator(); iter.hasNext(); ) {
+            //Goblin goblin = iter.next();
+            Player goblin = pTwo;
             float x = pOne.getX() - goblin.getX();
             float y = pOne.getY() - goblin.getY();
             float distance1 = (float) Math.sqrt((x * x) - (y * y));
-            float x2 = pTwo.getX() - goblin.getX();
-            float y2 = pTwo.getY() - goblin.getY();
-            float distance2 = (float) Math.sqrt((x2 * x2) - (y2 * y2));
-            if (goblin.isDead()) {
-                iter.remove();
-                System.out.println("Goblin is dead :D");
-                pOne.addBigKill();
-            } else {
+            //float x2 = pTwo.getX() - goblin.getX();
+           // float y2 = pTwo.getY() - goblin.getY();
+            //float distance2 = (float) Math.sqrt((x2 * x2) - (y2 * y2));
+//            if (goblin.isDead()) {
+//                iter.remove();
+//                System.out.println("Goblin is dead :D");
+//                pOne.addBigKill();
+//            } else {
+        if(collidesTop(goblin))
+        {
+            if(!collidesRight(goblin))
+            {
+                goblin.setX(goblin.getX() + (90) * Gdx.graphics.getDeltaTime());
+            }
+            else
+            {
+                goblin.setX(goblin.getX() + (-90) * Gdx.graphics.getDeltaTime());
+            }
+        }
+        else if(collidesRight(goblin))
+        {
+            if(!collidesTop(goblin))
+            {
+                goblin.setY(goblin.getY() + (90) * Gdx.graphics.getDeltaTime());
+            }
+            else {
+                goblin.setY(goblin.getY() + (-90) * Gdx.graphics.getDeltaTime());
+            }
+        }
+        else if(collidesBottom(goblin))
+        {
+            if(!collidesRight(goblin))
+            {
+                goblin.setX(goblin.getX() + (90) * Gdx.graphics.getDeltaTime());
+            }
+            else
+            {
+                goblin.setX(goblin.getX() + (-90) * Gdx.graphics.getDeltaTime());
+            }
+        }
+        else if(collidesLeft(goblin))
+        {
+            if(!collidesTop(goblin))
+            {
+                goblin.setY(goblin.getY() + (90) * Gdx.graphics.getDeltaTime());
+            }
+            else {
+                goblin.setY(goblin.getY() + (-90) * Gdx.graphics.getDeltaTime());
+            }
+        }
+        else{
                 float gX = goblin.getX();
                 float gY = goblin.getY();
-                if (distance2 > distance1) {
+                if (0 < distance1) {
                     float acc1 = (x / distance1);
                     float acc2 = (y / distance1);
                     if (x >= 0) {
@@ -406,52 +450,46 @@ public class GameScreen implements Screen {
                     }
                     goblin.setRotation(angle);
 
-                } else {
-                    if (distance2 != 0) {
-                        float acc1 = (x2 / distance2);
-                        float acc2 = (y2 / distance2);
-                        if (x2 >= 0) {
-                            acc1 = 1;
-                        } else {
-                            acc1 = -1;
-                        }
-                        if (y2 >= 0) {
-                            acc2 = 1;
-                        } else {
-                            acc2 = -1;
-                        }
-                        goblin.setX(gX + ((20 * acc1) * Gdx.graphics.getDeltaTime()));
-                        goblin.setY(gY + ((20 * acc2) * Gdx.graphics.getDeltaTime()));
-                    }
-                    goblin.checkGob(pTwo);
-                    float angle = (float) Math.toDegrees(Math.atan2(pTwo.getY() - goblin.getY(), pTwo.getX() - goblin.getX()));
-                    if (angle < 0) {
-                        angle = angle + 360;
-                    }
-                    goblin.setRotation(angle);
-
+//                } else {
+//                    if (distance2 != 0) {
+//                        float acc1 = (x2 / distance2);
+//                        float acc2 = (y2 / distance2);
+//                        if (x2 >= 0) {
+//                            acc1 = 1;
+//                        } else {
+//                            acc1 = -1;
+//                        }
+//                        if (y2 >= 0) {
+//                            acc2 = 1;
+//                        } else {
+//                            acc2 = -1;
+//                        }
+//                        goblin.setX(gX + ((20 * acc1) * Gdx.graphics.getDeltaTime()));
+//                        goblin.setY(gY + ((20 * acc2) * Gdx.graphics.getDeltaTime()));
+//                    }
+//                    goblin.checkGob(pTwo);
+//                    float angle = (float) Math.toDegrees(Math.atan2(pTwo.getY() - goblin.getY(), pTwo.getX() - goblin.getX()));
+//                    if (angle < 0) {
+//                        angle = angle + 360;
+//                    }
+//                    goblin.setRotation(angle);
+//
+//                }
+//                    if (collidesTop(goblin)) {
+//                        goblin.setX(goblin.getX() + (5) * Gdx.graphics.getDeltaTime());
+//                        goblin.setX(goblin.getY() - (200) * Gdx.graphics.getDeltaTime());
+//                        goblin.rotate(90);
+//                    } else if (collidesRight(goblin)) {
+//                        goblin.rotate(180);
+//                        goblin.setY(goblin.getY() + (-5) * Gdx.graphics.getDeltaTime());
+//                    } else if (collidesBottom(goblin)) {
+//                        goblin.rotate(270);
+//                        goblin.setX(goblin.getX() + (-5) * Gdx.graphics.getDeltaTime());
+//                    } else if (collidesLeft(goblin)) {
+//                        goblin.rotate(360);
+//                        goblin.setY(goblin.getY() + (5) * Gdx.graphics.getDeltaTime());
+//                    }
                 }
-                if(collidesTop(goblin))
-                {
-                    goblin.rotate(90);
-                    goblin.setX(goblin.getX() + (20) * Gdx.graphics.getDeltaTime());
-                }
-                if(collidesRight(goblin))
-                {
-                    goblin.rotate(180);
-                    goblin.setY(goblin.getY() + (-20) * Gdx.graphics.getDeltaTime());
-                }
-                if(collidesBottom(goblin))
-                {
-                    goblin.rotate(270);
-                    goblin.setX(goblin.getX() + (-20) * Gdx.graphics.getDeltaTime());
-                }
-                if(collidesLeft(goblin))
-                {
-                    goblin.rotate(360);
-                    goblin.setY(goblin.getY() + (20) * Gdx.graphics.getDeltaTime());
-                }
-            }
 
         }
 
@@ -491,9 +529,9 @@ public class GameScreen implements Screen {
 //        game.batch.draw(bmTex, pOne.getX(), pOne.getY()-8);
 //        pOne.getWeapon().draw(game.batch);
 
-        for (Sprite goblin : goblins) {
-            game.batch.draw(pTwoTex, goblin.getX(), goblin.getY());
-        }
+//        for (Sprite goblin : goblins) {
+//            game.batch.draw(pTwoTex, goblin.getX(), goblin.getY());
+//        }
         for (Sprite beam : projectiles) {
             beam.draw(game.batch);
         }
@@ -724,20 +762,6 @@ public class GameScreen implements Screen {
 
     }
 
-    private boolean checkColl(float x , float y, Sprite p, Array<Goblin> g)
-    {
-        Sprite q = p;
-        q.setX(q.getX() + x);
-        q.setY(q.getY() + y);
-        for(Iterator<Goblin> iter = g.iterator(); iter.hasNext();) {
-            Goblin goblin = iter.next();
-            if(p.getBoundingRectangle().overlaps(goblin.getBoundingRectangle()))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
     private void createGoblin(){
         Goblin goblin = new Goblin();
         goblin.setX(1280/2f - 16/2f);
