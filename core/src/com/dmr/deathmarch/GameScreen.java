@@ -423,7 +423,7 @@ public class GameScreen implements Screen {
             }
 
         }
-        if (collidesRight(goblin.getBoundingRectangle().getWidth(),
+        else if (collidesRight(goblin.getBoundingRectangle().getWidth(),
                 goblin.getBoundingRectangle().getHeight(),
                 goblin.getBoundingRectangle().getX(),
                 goblin.getBoundingRectangle().getY())) {
@@ -437,7 +437,7 @@ public class GameScreen implements Screen {
                 goblin.setY(goblin.getY() + (20) * Gdx.graphics.getDeltaTime());
             }
         }
-        if (collidesBottom(goblin.getBoundingRectangle().getWidth(),
+        else if (collidesBottom(goblin.getBoundingRectangle().getWidth(),
                 goblin.getBoundingRectangle().getHeight(),
                 goblin.getBoundingRectangle().getX(),
                 goblin.getBoundingRectangle().getY())) {
@@ -451,7 +451,7 @@ public class GameScreen implements Screen {
                 goblin.setX(goblin.getX() - (20) * Gdx.graphics.getDeltaTime());
             }
         }
-        if (collidesLeft(goblin.getBoundingRectangle().getWidth(),
+        else if (collidesLeft(goblin.getBoundingRectangle().getWidth(),
                 goblin.getBoundingRectangle().getHeight(),
                 goblin.getBoundingRectangle().getX(),
                 goblin.getBoundingRectangle().getY())) {
@@ -535,9 +535,9 @@ public class GameScreen implements Screen {
 //        game.batch.draw(bmTex, pOne.getX(), pOne.getY()-8);
 //        pOne.getWeapon().draw(game.batch);
 
-//        for (Sprite goblin : goblins) {
-//            game.batch.draw(pTwoTex, goblin.getX(), goblin.getY());
-//        }
+        //for (Sprite goblin : goblins) {
+        //    game.batch.draw(pTwoTex, goblin.getX(), goblin.getY());
+        //}
         for (Sprite beam : projectiles) {
             beam.draw(game.batch);
         }
