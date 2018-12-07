@@ -314,6 +314,7 @@ public class shopScreen implements Screen{
                 }
 
             }
+            //else if(Gdx.input.isKeyPressed(Input.Keys.P))
 
         }
 
@@ -337,7 +338,7 @@ public class shopScreen implements Screen{
             System.out.println("Health Increased to " + pOne.getHealth());
         }
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE) && pOne.getBoundingRectangle().overlaps(dmg.getBoundingRectangle())){
-            pOne.buffDmg();
+            pOne.setDmgMulti(2);
             System.out.println("Damage Increased to " + pOne.getDmgMulti());
         }
 

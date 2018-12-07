@@ -22,12 +22,16 @@ public class DeathMarch extends Game {
 	private PreferencesScreen preferencesScreen;
 	private MainMenuScreen menuScreen;
 	private GameScreen mainScreen;
+	private NameScreen nameScreen;
 	//private EndScreen endScreen;
 	private AppPreferences preferences;
 	private TileMapScreen tileMap;
 	private shopScreen s;
+	private HOFScreen HallOfFame;
+	private LoseScreen loseScreen;
 	private Texture playerTex;
 	private Music bgm_Music;
+	private Texture playerTex1;
 
 	public final static int MENU = 0;
 	public final static int PREFERENCES = 1;
@@ -35,7 +39,9 @@ public class DeathMarch extends Game {
 	public final static int ENDGAME = 3;
 	public final static int APP2 = 4;
 	public final static int SHOP = 5;
-
+	public final static int HOF = 6;
+	public final static int WIN = 7;
+	public final static int LOSE = 8;
 
 
 	public DeathMarch() {
@@ -54,9 +60,10 @@ public class DeathMarch extends Game {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 
-		playerTex = new Texture(Gdx.files.internal("survivor-shoot_rifle_0.png"));
-		player1 = new Player("Shredder", false, playerTex, 23, 38, 293, 191);
-		player2 = new Player("Donatello", false, playerTex, 23, 38, 293, 191);
+		playerTex = new Texture(Gdx.files.internal("icon.png"));
+		playerTex1 = new Texture(Gdx.files.internal("bunnies/bunny3.png"));
+		player1 = new Player("Shredder", false, playerTex);
+		player2 = new Player("Donatello", false, playerTex1);
 
 //		this.setScreen(new MainMenuScreen(this));
 
@@ -79,63 +86,84 @@ public class DeathMarch extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		bgm_Music.dispose();
+		//bgm_Music.dispose();
 		font.dispose();
 	}
+
 	public void changeScreen(int screen){
 
 		switch(screen){
 
+
+
 			case MENU:
 
 				if(menuScreen == null) menuScreen = new MainMenuScreen(this);
-
 				this.setScreen(menuScreen);
 
-				break;
+                break;
 
-			case PREFERENCES:
+            case PREFERENCES:
 
-				if(preferencesScreen == null) preferencesScreen = new PreferencesScreen(this);
+                if(preferencesScreen == null) preferencesScreen = new PreferencesScreen(this);
 
-				this.setScreen(preferencesScreen);
+                this.setScreen(preferencesScreen);
 
-				break;
+                break;
 
-			case APPLICATION:
+            case APPLICATION:
 
-				// always make new game screen so game can't start midway
+                // always make new game screen so game can't start midway
 
-				if(mainScreen == null){
+                if(mainScreen == null){
 
-					mainScreen = new GameScreen(this,player1,player2);
+                    mainScreen = new GameScreen(this,player1,player2);
 
-				}
+                }
 
-				this.setScreen(mainScreen);
+                this.setScreen(mainScreen);
 
-				break;
+                break;
 
-
-			case APP2:
-
-				if(mainScreen == null){
-					//test1.create();
-					tileMap = new TileMapScreen(this);
-				}
-				this.setScreen(tileMap);
-
-				break;
+            case HOF:
+                //System.out.println(nameScreen.getInputName());
+				HallOfFame = new HOFScreen(this, player1);
+                this.setScreen(HallOfFame);
+                break;
 
 
-			case SHOP:
+            case SHOP:
 
 				if(s == null) s = new shopScreen(this,player1,player2);
+
 				this.setScreen(s);
 
 				break;
-		}
 
+			case LOSE:
+
+				if(loseScreen == null) loseScreen = new LoseScreen(this,player1);
+
+				this.setScreen(loseScreen);
+
+				break;
+
+
+			case WIN:
+
+				if(nameScreen == null) nameScreen = new NameScreen(this,player1);
+				this.setScreen(nameScreen);
+
+				break;
+		}
 	}
+
+//	public void create2(){
+//		setScreen(new MainMenuScreen(this));
+//	}
+//	public void init(DeathMarch game){
+//		create2();
+//		//game.changeScreen(DeathMarch.MENU);
+//	}
 
 }

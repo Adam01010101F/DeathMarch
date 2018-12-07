@@ -5,14 +5,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.dmr.deathmarch.weapons.Weapon;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 public class Player extends Sprite {
     private String name;
     private int health;
     private int speed;
     private int kills;
-    private float dmgMulti;
+    private int dmgMulti;
     private Boolean isPlayerOne;
     private Texture playerTex;
     private Direction lastDirection[];
@@ -66,21 +65,28 @@ public class Player extends Sprite {
         this.health = 150;
     }
     public void buffSpeed(){
-        this.speed = 200;
+        this.speed = 175;
     }
     public void buffDmg(){
         this.dmgMulti = 2;
     }
     public Direction[] getDirection(){return lastDirection;}
-    public float getDmgMulti() {
+    public int getDmgMulti() {
         return dmgMulti;
     }
     public int getKills(){return kills;}
+    public void setDamage(int i){ i = i*2;}
 
-    public void takeDmg(float dmg){this.health -= dmg;}
+    public void takeDmg(int dmg){this.health -= dmg;}
+    public void setDmgMulti(int i){dmgMulti = i ;}
     public void addKill(){kills++;}
+
+    public void addHealth(){health ++;}
     public void addBigKill(){kills = kills + 250;}
+    public void resetKills(){kills = 0;}
     public void addHealth(int hp){health = health + hp;}
+    public void resetHealth(){health = 100;}
+    public void setHealth(int i){health = i;}
     public void setDirection(Direction[] directions){
         this.lastDirection = directions;
     }
@@ -93,6 +99,7 @@ public class Player extends Sprite {
         lastDirection[0] = Direction.None;
         lastDirection[1] = Direction.None;
     }
+    public void setName(String name){this.name = name;}
 
     public void checkGob(Sprite g) {
         if(this.getBoundingRectangle().overlaps(g.getBoundingRectangle()))
@@ -105,7 +112,7 @@ public class Player extends Sprite {
     public void setWeapon(Weapon weapon){this.weapon = weapon;}
     public Weapon getWeapon(){return weapon;}
     public Boolean isDead(){
-        if(health == 0) return true;
+        if(health <= 0) return true;
         else return false;
     }
 }
