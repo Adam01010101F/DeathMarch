@@ -57,9 +57,96 @@ public class Projectile extends Sprite {
     }
 
     public float[] getVel(){
-        float[] vel ={ xVel,   yVel};
+        float[] vel ={ xVel,yVel};
         return vel;
     }
+    public int getBounceCount() {
+        return bounceCount;
+
+    }
+    public void bounce(float xVel, float yVel,int y){
+    float m = (float)(Math.random()*100+1);
+    float n = (float)(Math.random()*100+1);
+
+    switch(y){
+        //left
+        case 1:
+            this.xVel = 1;
+            if(n%2 == 0)
+                this.yVel = 1;
+            else
+                this.yVel = -1;
+            bounceCount++;
+            break;
+        //right
+        case 2:
+            this.xVel = -1;
+            if(n%2 == 0)
+                this.yVel = 1;
+            else
+                this.yVel = -1;
+            bounceCount++;
+            break;
+        //south
+        case 3:
+            this.yVel = 1;
+            if(m%2 == 0)
+                this.xVel = 1;
+            else
+                this.xVel = -1;
+            bounceCount++;
+
+            break;
+        //north
+        case 4:
+            this.yVel = -1;
+            if(m%2 == 0)
+                this.xVel = 1;
+            else
+                this.xVel = -1;
+            bounceCount++;
+            break;
+    }
+
+       /* //north
+        if(yVel>= 1) {
+            this.yVel = -1;
+            if(m%2 == 0)
+                this.xVel = 1;
+            else
+                this.xVel = -1;
+
+            bounceCount++;
+        }
+        //south
+        if(yVel<= -1){
+            this.yVel = 1;
+            if(m%2 == 0)
+                this.xVel = 1;
+            else
+                this.xVel = -1;
+            bounceCount++;
+        }
+        //east
+        if(xVel>= 1){
+            this.xVel = -1;
+            if(n%2 == 0)
+                this.yVel = 1;
+            else
+                this.yVel = -1;
+            bounceCount++;
+        }
+        //west
+        if(xVel <= -1){
+            this.xVel = 1;
+            if(n%2 == 0)
+                this.yVel = 1;
+            else
+                this.yVel = -1;
+            bounceCount++;
+        }*/
+    }
+
 
     public static void rebound(Projectile proj){
         proj.xVel *= -1;

@@ -104,6 +104,7 @@ public class GameScreen implements Screen {
     //Music
     private Music bgm_Music;
     private Sound sound;
+    private Sound zsound;
 
 
 
@@ -169,6 +170,7 @@ public class GameScreen implements Screen {
         stairs = new Sprite(npcTex);
 
         sound = Gdx.audio.newSound(Gdx.files.internal("blaster.mp3"));
+        zsound = Gdx.audio.newSound(Gdx.files.internal("zombie.mp3"));
 
 
 //        pTwo.x = 1280/2 - 16/2;
@@ -303,15 +305,41 @@ public class GameScreen implements Screen {
             )) {
                 projectiles.removeIndex(i);
 
-            } else if (collidesTop(
-                    proj.getBoundingRectangle().getWidth(),
-                    proj.getBoundingRectangle().getHeight(),
-                    proj.getBoundingRectangle().getX(),
-                    proj.getBoundingRectangle().getY()
-            )) {
-                projectiles.removeIndex(i);
+        // Bullet Physics|Destruction
+        for(Iterator<Projectile> iter = projectiles.iterator(); iter.hasNext();){
+            Projectile projectile = iter.next();
+            projectile.setPosition(projectile.getX() +350 * projectile.getxVel() * Gdx.graphics.getDeltaTime()
+                    , projectile.getY() + 350 *projectile.getyVel() * Gdx.graphics.getDeltaTime());
+//            if(projectile.getX()>1280 | projectile.getY()>720 || projectile.getX() < 0 || projectile.getY() < 0){
+//                iter.remove();
+//            }
+            if(bulletCollidesLeft(projectile)){
+                if(projectile.getBounceCount()==10){
+                    iter.remove();
+                }
 
-            } else {
+                projectile.bounce(projectile.getxVel(),projectile.getyVel(),1);
+
+            }
+            else if(bulletCollidesRight(projectile)){
+                if(projectile.getBounceCount()==10){
+                    iter.remove();
+                }
+                projectile.bounce(projectile.getxVel(),projectile.getyVel(),2);
+            }
+            else if(bulletCollidesBottom(projectile)){
+                if(projectile.getBounceCount()==10){
+                    iter.remove();
+                }
+                projectile.bounce(projectile.getxVel(),projectile.getyVel(),3);
+            }
+            else if(bulletCollidesTop(projectile)){
+                if(projectile.getBounceCount()==10){
+                    iter.remove();
+                }
+                projectile.bounce(projectile.getxVel(),projectile.getyVel(),3);
+            }
+            else{
                 // do nothing
             }
             //TODO:: Give ownership of projectile to count score.
@@ -731,9 +759,10 @@ public class GameScreen implements Screen {
             }
 
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-            if (TimeUtils.nanoTime() - pTwo.getWeapon().getLastShot() > pTwo.getWeapon().getCooldown()) {
-                bile.add(pTwo.getWeapon().shoot(pTwo, lbTex, pTwo.getLastDirection()));
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+            if(TimeUtils.nanoTime() - pTwo.getWeapon().getLastShot() > pTwo.getWeapon().getCooldown()){
+                zsound.play();
+                projectiles.add(pTwo.getWeapon().shoot(pTwo.getWeapon(), lbTex, pTwo.getLastDirection()));
             }
         }
 
