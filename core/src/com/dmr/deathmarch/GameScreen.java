@@ -425,22 +425,30 @@ public class GameScreen implements Screen {
         else{
                 float gX = goblin.getX();
                 float gY = goblin.getY();
-                if (0 < distance1) {
+                if (0 != distance1) {
                     float acc1 = (x / distance1);
                     float acc2 = (y / distance1);
-                    if (x >= 0) {
+                    if (pOne.getX() > gX) {
                         acc1 = 1;
-                    } else {
+                    }
+                    else if(pOne.getX() < gX){
                         acc1 = -1;
                     }
-                    if (y >= 0) {
+                    else
+                    {
+                        acc1 = 0;
+                    }
+
+                    if (pOne.getY() > gY) {
                         acc2 = 1;
-                    } else {
-                        acc2 = -1;
+                    } else if(pOne.getY() < gY){
+                            acc2 = -1;
+                    }else{
+                        acc2 = 0;
                     }
                     if (distance1 != 0) {
-                        goblin.setX(gX + ((20 * acc1) * Gdx.graphics.getDeltaTime()));
-                        goblin.setY(gY + ((20 * acc2) * Gdx.graphics.getDeltaTime()));
+                        goblin.setX(gX + ((50 * acc1) * Gdx.graphics.getDeltaTime()));
+                        goblin.setY(gY + ((50 * acc2) * Gdx.graphics.getDeltaTime()));
 
                     }
                     goblin.checkGob(pOne);
