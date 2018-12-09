@@ -416,10 +416,10 @@ public class GameScreen implements Screen {
                     goblin.getBoundingRectangle().getHeight(),
                     goblin.getBoundingRectangle().getX(),
                     goblin.getBoundingRectangle().getY()))) {
-                goblin.setX(goblin.getX() + (20) * Gdx.graphics.getDeltaTime());
+                goblin.setX(goblin.getX() + (90) * Gdx.graphics.getDeltaTime());
             }
             else {
-                goblin.setX(goblin.getX() - (20) * Gdx.graphics.getDeltaTime());
+                goblin.setX(goblin.getX() - (90) * Gdx.graphics.getDeltaTime());
             }
 
         }
@@ -431,10 +431,10 @@ public class GameScreen implements Screen {
                     goblin.getBoundingRectangle().getHeight(),
                     goblin.getBoundingRectangle().getX(),
                     goblin.getBoundingRectangle().getY()))) {
-                goblin.setY(goblin.getY() + (-20) * Gdx.graphics.getDeltaTime());
+                goblin.setY(goblin.getY() + (-90) * Gdx.graphics.getDeltaTime());
             }
             else {
-                goblin.setY(goblin.getY() + (20) * Gdx.graphics.getDeltaTime());
+                goblin.setY(goblin.getY() + (90) * Gdx.graphics.getDeltaTime());
             }
         }
         else if (collidesBottom(goblin.getBoundingRectangle().getWidth(),
@@ -445,10 +445,10 @@ public class GameScreen implements Screen {
                     goblin.getBoundingRectangle().getHeight(),
                     goblin.getBoundingRectangle().getX(),
                     goblin.getBoundingRectangle().getY()))) {
-                goblin.setX(goblin.getX() + (20) * Gdx.graphics.getDeltaTime());
+                goblin.setX(goblin.getX() + (90) * Gdx.graphics.getDeltaTime());
             }
             else {
-                goblin.setX(goblin.getX() - (20) * Gdx.graphics.getDeltaTime());
+                goblin.setX(goblin.getX() - (90) * Gdx.graphics.getDeltaTime());
             }
         }
         else if (collidesLeft(goblin.getBoundingRectangle().getWidth(),
@@ -459,10 +459,10 @@ public class GameScreen implements Screen {
                     goblin.getBoundingRectangle().getHeight(),
                     goblin.getBoundingRectangle().getX(),
                     goblin.getBoundingRectangle().getY()))) {
-                goblin.setY(goblin.getY() + (-20) * Gdx.graphics.getDeltaTime());
+                goblin.setY(goblin.getY() + (-90) * Gdx.graphics.getDeltaTime());
             }
             else {
-                goblin.setY(goblin.getY() + (20) * Gdx.graphics.getDeltaTime());
+                goblin.setY(goblin.getY() + (90) * Gdx.graphics.getDeltaTime());
             }
         } else {
             float gX = goblin.getX();
@@ -473,18 +473,25 @@ public class GameScreen implements Screen {
             if (0 < distance1) {
                 float acc1 = (x / distance1);
                 float acc2 = (y / distance1);
-                if (x >= 0) {
+                if (x > 0) {
                     acc1 = 1;
-                } else {
+                } else if(x < 0){
                     acc1 = -1;
                 }
-                if (y >= 0) {
+                else {
+                    acc1 = 0;
+                }
+                if (y > 0) {
                     acc2 = 1;
-                } else {
+                } else if(y < 0){
                     acc2 = -1;
                 }
+                else
+                {
+                    acc2 = 0;
+                }
                 if (distance1 != 0) {
-                    goblin.setX(gX + ((20 * acc1) * Gdx.graphics.getDeltaTime()));
+                    goblin.setX(gX + ((0 * acc1) * Gdx.graphics.getDeltaTime()));
                     goblin.setY(gY + ((20 * acc2) * Gdx.graphics.getDeltaTime()));
 
                 }
