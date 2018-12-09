@@ -20,7 +20,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
-public class MainMenuScreen implements Screen {
+public class FirstTimeMenu implements Screen {
     final DeathMarch game;
     public OrthographicCamera camera;
     public Stage stage;
@@ -35,7 +35,7 @@ public class MainMenuScreen implements Screen {
 
     public TiledTest testTile;
 
-    public MainMenuScreen(final DeathMarch game) {
+    public FirstTimeMenu(final DeathMarch game) {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1280, 720);
@@ -100,6 +100,15 @@ public class MainMenuScreen implements Screen {
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
 
+        game.batch.begin();
+
+
+        //Vector3 posCamara = camera.position;
+        uiText.draw(game.batch, "DEATH MARCH",  +325 , 700 );
+        textyText.draw(game.batch,"Made by the DEATH MARCHERS",375, 100);
+
+
+        game.batch.end();
 
 
     }
@@ -155,18 +164,15 @@ public class MainMenuScreen implements Screen {
         TextButton preferences = new TextButton("Settings", skin);
         TextButton exit = new TextButton("Exit", skin);
         TextButton hof = new TextButton("Hall of Fame", skin);
-        //
 
         //table.add(uiText.draw())
 
         table.add(newGame).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
         table.add(hof).fillX().uniformX();
-        //table.row();
-        table.row().pad(10, 0, 10, 0);
+        table.row();
         table.add(preferences).fillX().uniformX();
-        //table.row();
-        table.row().pad(10, 0, 10, 0);
+        table.row();
         table.add(exit).fillX().uniformX();
 
         exit.addListener(new ChangeListener() {

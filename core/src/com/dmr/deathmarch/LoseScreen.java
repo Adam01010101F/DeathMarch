@@ -1,36 +1,40 @@
 package com.dmr.deathmarch;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class NameScreen implements Screen {
+public class LoseScreen implements Screen {
 
-    private TextField nameField;
     final DeathMarch game;
     public OrthographicCamera camera;
     public Stage stage;
-    Player p1;
+    private int score;
+    private TextureRegion backgroundTexture;
 
-    public NameScreen(final DeathMarch game, Player winner) {
-        p1 = winner;
+    public LoseScreen(final DeathMarch game, Player player) {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1280, 720);
-
+        this.score = player.getKills();
         stage = new Stage(new ScreenViewport());
+        backgroundTexture = new TextureRegion(new Texture("background.png"), 0, 0, 1280, 720);
 
     }
-
     @Override
     public void render(float delta) {
 
@@ -38,14 +42,6 @@ public class NameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
-
-        // ---GAME CONTROLS---
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            //game.setScreen(new MainMenuScreen(game));
-            //game.init(game);
-            game.changeScreen(DeathMarch.MENU);
-        }
-        // ------------------
 
 
     }
@@ -90,38 +86,32 @@ public class NameScreen implements Screen {
 
         Skin skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
-        Label winnerText = new Label("Winner Winner Chicken Dinner", skin);
-        winnerText.setFontScale(1.75f);
-        winnerText.setStyle(new Label.LabelStyle(new BitmapFont((Gdx.files.internal("fonts/spooky.fnt"))), Color.GREEN));
-        Label enterName = new Label("ENTER YOUR NAME", skin);
-        enterName.setFontScale(1.75f);
-        enterName.setStyle(new Label.LabelStyle(new BitmapFont((Gdx.files.internal("fonts/spooky.fnt"))), Color.WHITE));
-        nameField = new TextField("",skin);
-        TextButton submitButton = new TextButton("Submit", skin);
-        table.add(winnerText).fillX().uniformX();
-        table.row().pad(10, 0, 10, 0);
-        table.add(enterName).fillX().uniformX();
-        table.row().pad(10, 0, 10, 0);
-        table.add(nameField).fillX().uniform();
+        Label gameOver = new Label("You Died.",skin);
+        gameOver.setFontScale(1.75f);
+        gameOver.setStyle(new Label.LabelStyle(new BitmapFont(Gdx.files.internal("fonts/spooky.fnt")
+
+        ),Color.RED));
+        Label playerScore = new Label("Your Score: " + this.score,skin);
+        playerScore.setFontScale(1.75f);
+        playerScore.setStyle(new Label.LabelStyle(new BitmapFont((Gdx.files.internal("fonts/spooky.fnt"))),Color.RED));
+//        TextButton gameOver = new TextButton("You Died.",skin);
+//        TextButton playerScore = new TextButton("Your Score: " + player.getKills(),skin);
+        TextButton mainMenuButton = new TextButton("Back to Main Menu", skin);
+
+        table.add(gameOver).fillX().uniform();
         table.row().pad(10,0,10,0);
-        table.add(submitButton).fillX().uniform();
+        table.add(playerScore).fillX().uniform();
+        table.row().pad(10,0,10,0);
+        table.add(mainMenuButton).fillX().uniform();
         table.row().pad(10,0,10,0);
 
 
-        submitButton.addListener(new ChangeListener() {
+        mainMenuButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                p1.setName(getName());
-                //dispose();
-                //stage.clear();
-                game.changeScreen(DeathMarch.HOF);
-                //GameScreen.init();
+                game.changeScreen(DeathMarch.MENU);
             }
         });
-    }
-
-    public String getName(){
-        return nameField.getText();
     }
 
 }

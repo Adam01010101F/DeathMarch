@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.dmr.deathmarch.weapons.Weapon;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 public class Player extends Sprite {
     private String name;
