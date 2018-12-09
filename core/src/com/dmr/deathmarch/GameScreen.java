@@ -740,23 +740,25 @@ public class GameScreen implements Screen {
 
     private void checkBoundaries(Player player) {
         //Handles Y coords
-        if(player.getY()+270<=0){   //Bottom of the Screen
+        if(player.getY()+270<0){                                                   //Bottom of the Screen
             screenCoords = new Vector3(player.getX(), stage.getHeight(),0);
             stage.getViewport().project(screenCoords);
-            player.setY(screenCoords.y);
-            System.out.println("LowerBound Touched");
-        } else if(player.getY()+160>=stage.getViewport().getWorldHeight()){ //Top of the Screen
-            System.out.println("UpperBound Touched");
+            player.setY(screenCoords.y-150);
+            System.out.println("Bot->Player: "+ player.getY() + " Player+Off: " + (player.getY()-150)
+                    +" ScreenCoords: " + screenCoords.y +" ScreenCoords+Off: " + (screenCoords.y-150));
+        } else if(player.getY()+160>=stage.getViewport().getWorldHeight()){        //Top of the Screen
             screenCoords = new Vector3(player.getX(), 0, 0);
             stage.getViewport().project(screenCoords);
             player.setY(screenCoords.y-270);
+            System.out.println("Top->Player: " + player.getY() + " Player+Off: "+ (player.getY()-270)
+                    +" ScreenCoords: " + screenCoords.y + " ScreenCoords+Off" + (screenCoords.y-270));
         }
         //Handles X coords
-        if(player.getX()+270<=0){       //Left of the Screen
+        if(player.getX()+270<=0){                                                  //Left of the Screen
             screenCoords = new Vector3(1280, player.getY(),0);
             stage.getViewport().unproject(screenCoords);
             player.setX(screenCoords.x-270);
-        } else if(player.getX()+270>=stage.getWidth()){ //Right of the screen
+        } else if(player.getX()+270>=stage.getWidth()){                            //Right of the screen
             screenCoords = new Vector3(0, player.getY(),0);
             stage.getViewport().unproject(screenCoords);
             player.setX(screenCoords.x-270);
