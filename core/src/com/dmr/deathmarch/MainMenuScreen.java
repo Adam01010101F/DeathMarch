@@ -1,12 +1,15 @@
 package com.dmr.deathmarch;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.audio.Music;
@@ -77,6 +81,17 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
+
+        // ---GAME CONTROLS---
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            bgm_Music.stop();
+            //camera = new OrthographicCamera();
+            //camera.setToOrtho(false, 1280, 720);
+            //camera.update();
+            game.changeScreen(DeathMarch.GAMESMASTER);
+
+        }
+        // ------------------
 //        Gdx.gl.glClearColor(0.5f,0,0,1);
 //        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 //
@@ -142,6 +157,11 @@ public class MainMenuScreen implements Screen {
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
+        Table testTable = new Table();
+        testTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture("images/scary.jpg"))));
+        testTable.setFillParent(true);
+        testTable.setDebug(true);
+        stage.addActor(testTable);
 
         // Create a table that fills the screen. Everything else will go inside this table.
         Table table = new Table();

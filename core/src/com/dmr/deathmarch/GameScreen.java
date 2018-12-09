@@ -42,6 +42,7 @@ import com.dmr.deathmarch.weapons.BeamCannon;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
@@ -85,6 +86,10 @@ public class GameScreen implements Screen {
     private String blockedKey = "blocked";
     private float increment;
     private Skin skin;
+    private int CoinCount;
+
+    private Sprite[] coin;
+    private Texture coinSkin;
 
     private Vector3 screenCoords;
 
@@ -106,7 +111,8 @@ public class GameScreen implements Screen {
     private Sound sound;
 
 
-    public GameScreen(final DeathMarch game, Player player1, Player player2) {
+    public GameScreen(final DeathMarch game,Player player1,Player player2){
+        coin = new Sprite[4];
         this.game = game;
         mapName = "maps/billiards.tmx";
         camera = new OrthographicCamera();
@@ -118,24 +124,18 @@ public class GameScreen implements Screen {
         pOne = player1;
         pTwo = player2;
 
+        CoinCount = 0;
+
+
         map = new TmxMapLoader().load(mapName);
+
         shape = new ShapeRenderer();
+
         collisionLayer = (TiledMapTileLayer) map.getLayers().get(1);
 
-//        // only needed once
-//        assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-//        assetManager.load("level1.tmx", TiledMap.class);
-//
-//// once the asset manager is done loading
-//        TiledMap map = assetManager.get("level1.tmx");
-//
-//        float unitScale = 1 / 16f;
-//        OrthogonalTiledMapRenderer renderer = new OrthogonalTiledMapRenderer(map, unitScale);
-
-        //OrthographicCamera camera = new OrthographicCamera();
-        //camera.setToOrtho(true);
 
         skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
+
         shopSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
         lbTex = new Texture(Gdx.files.internal("laserBeam.png"));
@@ -143,13 +143,97 @@ public class GameScreen implements Screen {
         bmTex = new Texture(Gdx.files.internal("BeamCannon.png"));
 
         pTwoTex = new Texture(Gdx.files.internal("player2.png"));
+
+        coinSkin = new Texture(Gdx.files.internal("coin.png"));
+
+        ArrayList <Tuple> posBotRight = new ArrayList<Tuple>();
+        ArrayList <Tuple> posTopRight = new ArrayList<Tuple>();
+        ArrayList <Tuple> posBotLeft = new ArrayList<Tuple>();
+        ArrayList <Tuple> posTopLeft = new ArrayList<Tuple>();
+
+        posBotLeft.add(new Tuple(150,95)); //0//
+        posBotLeft.add(new Tuple(50,250)); //1//
+        posBotLeft.add(new Tuple(75,75)); //2//
+        posBotLeft.add(new Tuple(150,200)); //3//
+
+        posTopLeft.add(new Tuple(100,650)); //4
+        posTopLeft.add(new Tuple(100,800)); //5//
+        posTopLeft.add(new Tuple(125,875));//6
+        posTopLeft.add(new Tuple(10,850));//7//
+
+        posBotRight.add(new Tuple(800,100)); //8//
+        posBotRight.add(new Tuple(900,100));//9
+        posBotRight.add(new Tuple(600,250)); //10//
+        posBotRight.add(new Tuple(750,300));//11//
+
+        posTopRight.add(new Tuple(750,800));//12//
+        posTopRight.add(new Tuple(1000,800));//13//
+        posTopRight.add(new Tuple(950,850));//14//
+        posTopRight.add(new Tuple(1000,900));//15
+
+        Random rand = new Random();
+
+        //int n = rand.nextInt(15) + 0;
+
+
+        int PosX = 100;
+        int PosY = 100;
+        int arrInd = 3;
+
+
+        for(int x = 0; x<=3; x++){
+
+                coin[x] = new Sprite(coinSkin);
+
+                coin[x].setScale(1/6f);
+
+                int n = rand.nextInt(arrInd) + 0;
+
+                if(x == 0) {
+                    coin[x].setPosition(posBotLeft.get(n).getX(), posBotLeft.get(n).getY());
+                    System.out.println("the positions used are" + posBotLeft.get(n).getX() + " " + posBotLeft.get(n).getY());
+                }
+                else if(x == 1) {
+                    coin[x].setPosition(posTopLeft.get(n).getX(), posTopLeft.get(n).getY());
+                    System.out.println("the positions used are" + posTopLeft.get(n).getX() + " " + posTopLeft.get(n).getY());
+
+                }
+                else if(x == 2) {
+                    coin[x].setPosition(posBotRight.get(n).getX(), posBotRight.get(n).getY());
+                    System.out.println("the positions used are" + posBotRight.get(n).getX() + " " + posBotRight.get(n).getY());
+
+                }
+                else if(x == 3) {
+                    coin[x].setPosition(posTopRight.get(n).getX(), posTopRight.get(n).getY());
+                    System.out.println("the positions used are" + posTopRight.get(n).getX() + " " + posTopRight.get(n).getY());
+
+
+                }
+                //System.out.println("the positions used are" + positions.get(n).getX() + " " + positions.get(n).getY());
+
+//
+//            positions.remove(n);
+//            arrInd = arrInd -1;
+
+
+        }
+
+
+
+
+
+
+        //System.out.println(coin.getOriginX()+ " " + coin.getOriginY());
+//       pOne.setColor(Color.GRAY);
+
+
         Gobbi = new Goblin();
         //stage = new Stage(new ScreenViewport());
 
         //Player Creation
         //pOne = player1;
         pOne.setOriginCenter();
-        pOne.setPosition(100, 100);
+        pOne.setPosition(150,150);
 //        System.out.println(pOne.getOriginX()+ " " + pOne.getOriginY());
 //        pOne.setColor(Color.GRAY);
         pOne.setScale(1 / 8f);
@@ -159,6 +243,7 @@ public class GameScreen implements Screen {
 //        pTwo.setColor(Color.PURPLE);
 //        pTwo.setScale(3/4f);
         pTwo.setHealth(150);
+        pTwo.setScale(2f);
         //
         pTwo.setWeapon(new BeamCannon(bmTex));
 
@@ -505,11 +590,11 @@ public class GameScreen implements Screen {
         game.batch.begin();
         //sets up the timer
         Vector3 posCamara = camera.position;
-        uiText.draw(game.batch, "Time: " + (300 - (System.currentTimeMillis() - startTime) / 1000), posCamara.x - 100, posCamara.y + 580);
-        uiText.draw(game.batch, "Soldier Health: " + Math.round(pOne.getHealth()), posCamara.x - 600, posCamara.y + 580);
-        uiText.draw(game.batch, "Soldier Points: " + Math.round(pOne.getKills()), posCamara.x - 600, posCamara.y + 560);
-        uiText.draw(game.batch, "Zombie Health: " + Math.round(pTwo.getHealth()), posCamara.x + 200, posCamara.y + 580);
-        uiText.draw(game.batch, "Zombie Points: " + Math.round(pTwo.getKills()), posCamara.x + 200, posCamara.y + 560);
+        uiText.draw(game.batch, "Time: " + (500 - (System.currentTimeMillis() - startTime) / 1000), posCamara.x - 100, posCamara.y + 580);
+        uiText.draw(game.batch, "Player Health: " + Math.round(pOne.getHealth()), posCamara.x - 600, posCamara.y + 580);
+        uiText.draw(game.batch, "Player Points: " + CoinCount, posCamara.x - 600, posCamara.y + 560);
+//        uiText.draw(game.batch, "Zombie Health: " + Math.round(pTwo.getHealth()), posCamara.x + 200, posCamara.y + 580);
+//        uiText.draw(game.batch, "Zombie Points: " + Math.round(pTwo.getKills()), posCamara.x + 200, posCamara.y + 560);
 
 
         //NPC dialogue conditional statement
@@ -531,13 +616,33 @@ public class GameScreen implements Screen {
         game.font.draw(game.batch, "Projectiles: " + bile.size, 100, 100);
         pOne.draw(game.batch);
         pTwo.draw(game.batch);
+
         stairs.draw(game.batch);
 //        game.batch.draw(bmTex, pOne.getX(), pOne.getY()-8);
 //        pOne.getWeapon().draw(game.batch);
+        boolean run = true;
 
-        //for (Sprite goblin : goblins) {
-        //    game.batch.draw(pTwoTex, goblin.getX(), goblin.getY());
-        //}
+        for(int i = 0; i<=3; i++){
+            coin[i].draw(game.batch);
+        }
+
+
+        for (int y = 0; y <= 3; y++) {
+                if (coin[y].getBoundingRectangle().overlaps(pOne.getBoundingRectangle())) {
+                    coin[y].setPosition(10000, 10000);
+                    CoinCount = CoinCount + 1;
+                    System.out.println("coint count : " + CoinCount);
+                }
+        }
+
+        if (CoinCount == 4) {
+            dispose();
+            game.changeScreen(DeathMarch.GIF);
+        }
+
+        for (Sprite gob : goblins) {
+            game.batch.draw(pTwoTex, gob.getX(), gob.getY());
+        }
         for (Sprite beam : projectiles) {
             beam.draw(game.batch);
         }
@@ -545,6 +650,7 @@ public class GameScreen implements Screen {
             beam.draw(game.batch);
         }
         game.batch.end();
+
 
 
         //shape.begin(ShapeRenderer.ShapeType.Filled);
@@ -715,9 +821,11 @@ public class GameScreen implements Screen {
             }
         }
 
-        if (300 - (System.currentTimeMillis() - startTime) / 1000 == 0) {
+        if (500 - (System.currentTimeMillis() - startTime) / 1000 == 0) {
             init();
-            game.changeScreen(DeathMarch.MENU);
+            stage.dispose();
+            dispose();
+            game.changeScreen(DeathMarch.GAMESMASTER);
         }
 
 
@@ -787,7 +895,7 @@ public class GameScreen implements Screen {
 
         @Override
         public void dispose () {
-            stage.dispose();
+            //stage.dispose();
             //camera.setToOrtho(false,1280,720);
             bgm_Music.dispose();
 

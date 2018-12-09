@@ -23,6 +23,9 @@ public class DeathMarch extends Game {
 	private MainMenuScreen menuScreen;
 	private GameScreen mainScreen;
 	private NameScreen nameScreen;
+	private FirstTimeMenu bunnyscreen;
+	private GamesMasterScreen gms;
+	private GIFscreen gifscreen;
 	//private EndScreen endScreen;
 	private AppPreferences preferences;
 	private TileMapScreen tileMap;
@@ -42,6 +45,9 @@ public class DeathMarch extends Game {
 	public final static int HOF = 6;
 	public final static int WIN = 7;
 	public final static int LOSE = 8;
+	public final static int BUNNIES = 9;
+	public final static int GIF = 10;
+	public final static int GAMESMASTER = 11;
 
 
 	public DeathMarch() {
@@ -94,11 +100,37 @@ public class DeathMarch extends Game {
 
 		switch(screen){
 
+			case GAMESMASTER:
+				if(gms == null) gms = new GamesMasterScreen(this);
+				System.out.println("this is gifscreen");
+				this.setScreen(gms);
+
+				break;
+
+
+			case GIF:
+				if(gifscreen == null) gifscreen = new GIFscreen(this);
+				System.out.println("this is gifscreen");
+				this.setScreen(gifscreen);
+
+				break;
+
+
+			case BUNNIES:
+
+				if(bunnyscreen == null) bunnyscreen = new FirstTimeMenu(this);
+				System.out.println("this is screen 9 - bunnies");
+				this.setScreen(bunnyscreen);
+
+				break;
+
 
 
 			case MENU:
 
 				if(menuScreen == null) menuScreen = new MainMenuScreen(this);
+				System.out.println("this is MainMenuScreen");
+
 				this.setScreen(menuScreen);
 
                 break;
@@ -106,6 +138,7 @@ public class DeathMarch extends Game {
             case PREFERENCES:
 
                 if(preferencesScreen == null) preferencesScreen = new PreferencesScreen(this);
+				System.out.println("this is preferences screen");
 
                 this.setScreen(preferencesScreen);
 
@@ -118,8 +151,10 @@ public class DeathMarch extends Game {
                 if(mainScreen == null){
 
                     mainScreen = new GameScreen(this,player1,player2);
+					System.out.println("this is game screen");
 
-                }
+
+				}
 
                 this.setScreen(mainScreen);
 
@@ -128,13 +163,16 @@ public class DeathMarch extends Game {
             case HOF:
                 //System.out.println(nameScreen.getInputName());
 				HallOfFame = new HOFScreen(this, player1);
-                this.setScreen(HallOfFame);
+				System.out.println("this is hall of fame screen");
+
+				this.setScreen(HallOfFame);
                 break;
 
 
             case SHOP:
 
 				if(s == null) s = new shopScreen(this,player1,player2);
+				System.out.println("this is shop screen");
 
 				this.setScreen(s);
 
@@ -143,6 +181,7 @@ public class DeathMarch extends Game {
 			case LOSE:
 
 				if(loseScreen == null) loseScreen = new LoseScreen(this,player1);
+				System.out.println("this is lose screen");
 
 				this.setScreen(loseScreen);
 
@@ -152,10 +191,14 @@ public class DeathMarch extends Game {
 			case WIN:
 
 				if(nameScreen == null) nameScreen = new NameScreen(this,player1);
+				System.out.println("this is win screen");
+
 				this.setScreen(nameScreen);
 
 				break;
+
 		}
+
 	}
 
 //	public void create2(){
