@@ -42,11 +42,13 @@ import com.dmr.deathmarch.weapons.BeamCannon;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 public class GameScreen implements Screen {
+    public Random r;
     public DeathMarch game;
     private long startTime;
     private OrthographicCamera camera;
@@ -159,7 +161,7 @@ public class GameScreen implements Screen {
         //pTwo = player2;
         pTwo.setPosition(1000,900);
 //        pTwo.setColor(Color.PURPLE);
-//        pTwo.setScale(3/4f);
+        pTwo.setScale(2f);
         pTwo.setHealth(150);
         //
         pTwo.setWeapon(new BeamCannon(bmTex));
@@ -277,73 +279,80 @@ public class GameScreen implements Screen {
 
 
         camera.update();
-        // Bullet Physics|Destruction
-        for (int i = 0; i < projectiles.size; i++) {
-            Projectile proj = projectiles.get(i);
-            proj.setPosition(proj.getX() + 350 * proj.getxVel() * Gdx.graphics.getDeltaTime()
-                    , proj.getY() + 350 * proj.getyVel() * Gdx.graphics.getDeltaTime());
-            if (collidesLeft(
-                    proj.getBoundingRectangle().getWidth(),
-                    proj.getBoundingRectangle().getHeight(),
-                    proj.getBoundingRectangle().getX(),
-                    proj.getBoundingRectangle().getY()
-            )) {
-                projectiles.removeIndex(i);
-            } else if (collidesRight(
-                    proj.getBoundingRectangle().getWidth(),
-                    proj.getBoundingRectangle().getHeight(),
-                    proj.getBoundingRectangle().getX(),
-                    proj.getBoundingRectangle().getY()
-            )) {
-                projectiles.removeIndex(i);
-
-            } else if (collidesBottom(
-                    proj.getBoundingRectangle().getWidth(),
-                    proj.getBoundingRectangle().getHeight(),
-                    proj.getBoundingRectangle().getX(),
-                    proj.getBoundingRectangle().getY()
-            )) {
-                projectiles.removeIndex(i);
 
         // Bullet Physics|Destruction
-        for(Iterator<Projectile> iter = projectiles.iterator(); iter.hasNext();){
+        for(Iterator<Projectile> iter = projectiles.iterator(); iter.hasNext();) {
             Projectile projectile = iter.next();
-            projectile.setPosition(projectile.getX() +350 * projectile.getxVel() * Gdx.graphics.getDeltaTime()
-                    , projectile.getY() + 350 *projectile.getyVel() * Gdx.graphics.getDeltaTime());
+            projectile.setPosition(projectile.getX() + 350 * projectile.getxVel() * Gdx.graphics.getDeltaTime()
+                    , projectile.getY() + 350 * projectile.getyVel() * Gdx.graphics.getDeltaTime());
 //            if(projectile.getX()>1280 | projectile.getY()>720 || projectile.getX() < 0 || projectile.getY() < 0){
 //                iter.remove();
 //            }
-            if(bulletCollidesLeft(projectile)){
-                if(projectile.getBounceCount()==10){
+                if (collidesLeft(
+                    projectile.getBoundingRectangle().getWidth(),
+                    projectile.getBoundingRectangle().getHeight(),
+                    projectile.getBoundingRectangle().getX(),
+                    projectile.getBoundingRectangle().getY()
+            )) {
+                if (projectile.getBounceCount() == 10) {
                     iter.remove();
                 }
 
-                projectile.bounce(projectile.getxVel(),projectile.getyVel(),1);
+                projectile.bounce(projectile.getxVel(), projectile.getyVel(), 1);
 
-            }
-            else if(bulletCollidesRight(projectile)){
-                if(projectile.getBounceCount()==10){
-                    iter.remove();
+            } else if (collidesRight(
+                        projectile.getBoundingRectangle().getWidth(),
+                        projectile.getBoundingRectangle().getHeight(),
+                        projectile.getBoundingRectangle().getX(),
+                        projectile.getBoundingRectangle().getY()
+                )) {
+                    if (projectile.getBounceCount() == 10) {
+                        iter.remove();
+                    }
+
+                    projectile.bounce(projectile.getxVel(), projectile.getyVel(), 2);
+
+                } else if (collidesLeft(
+                        projectile.getBoundingRectangle().getWidth(),
+                        projectile.getBoundingRectangle().getHeight(),
+                        projectile.getBoundingRectangle().getX(),
+                        projectile.getBoundingRectangle().getY()
+                )) {
+                    if (projectile.getBounceCount() == 10) {
+                        iter.remove();
+                    }
+
+                    projectile.bounce(projectile.getxVel(), projectile.getyVel(), 3);
+
+                } else if (collidesLeft(
+                        projectile.getBoundingRectangle().getWidth(),
+                        projectile.getBoundingRectangle().getHeight(),
+                        projectile.getBoundingRectangle().getX(),
+                        projectile.getBoundingRectangle().getY()
+                )) {
+                    if (projectile.getBounceCount() == 10) {
+                        iter.remove();
+                    }
+
+                    projectile.bounce(projectile.getxVel(), projectile.getyVel(), 4);
+
                 }
-                projectile.bounce(projectile.getxVel(),projectile.getyVel(),2);
-            }
-            else if(bulletCollidesBottom(projectile)){
-                if(projectile.getBounceCount()==10){
-                    iter.remove();
-                }
-                projectile.bounce(projectile.getxVel(),projectile.getyVel(),3);
-            }
-            else if(bulletCollidesTop(projectile)){
-                if(projectile.getBounceCount()==10){
-                    iter.remove();
-                }
-                projectile.bounce(projectile.getxVel(),projectile.getyVel(),3);
-            }
-            else{
-                // do nothing
-            }
+            /*//Bunny hit Player 2 Hit
+            //This was for when Player Bunny had projectiles. Had to test that it could work, shoot itself.
+            if (projectile.getBoundingRectangle().overlaps(pTwo.getBoundingRectangle())) {
+//                    goblin.takeDamage(beamCannon.getDamage());
+                iter.remove();
+
+                System.out.println("Goblin has been hit");
+
+
+               *//* pTwo.transform();*//*
+
+
+            }*/
+        }
             //TODO:: Give ownership of projectile to count score.
-            for (Projectile biles : projectiles) {
+            /*for (Projectile biles : projectiles) {
                 if (biles.getBoundingRectangle().overlaps(pTwo.getBoundingRectangle())) {
 //                    goblin.takeDamage(beamCannon.getDamage());
                     projectiles.removeIndex(i);
@@ -356,7 +365,9 @@ public class GameScreen implements Screen {
                 }
             }
 
-        }
+*/
+
+
 
 
         // Bullet Physics|Destruction
@@ -409,7 +420,10 @@ public class GameScreen implements Screen {
                     pTwo.addHealth(2);
                     pOne.takeDmg(5);
                 }
+
+
             }
+
 
         }
 
@@ -707,7 +721,7 @@ public class GameScreen implements Screen {
                     pOne.setYDirection(Direction.Up);
                 } else {
                     pTwo.setRotation(90);
-                    pTwo.setY(pTwo.getY() + 200 * Gdx.graphics.getDeltaTime());
+                    pTwo.setY(pTwo.getY() + pTwo.getSpeed() * Gdx.graphics.getDeltaTime());
                     pTwo.setYDirection(Direction.Up);
                 }
 
@@ -723,7 +737,7 @@ public class GameScreen implements Screen {
                     pTwo.setYDirection(Direction.Down);
                 } else {
                     pTwo.setRotation(270);
-                    pTwo.setY(pTwo.getY() - 200 * Gdx.graphics.getDeltaTime());
+                    pTwo.setY(pTwo.getY() - pTwo.getSpeed() * Gdx.graphics.getDeltaTime());
                     pTwo.setYDirection(Direction.Down);
                 }
             } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
@@ -738,7 +752,7 @@ public class GameScreen implements Screen {
                 } else {
 
                     pTwo.setRotation(0);
-                    pTwo.setX(pTwo.getX() + 200 * Gdx.graphics.getDeltaTime());
+                    pTwo.setX(pTwo.getX() + pTwo.getSpeed() * Gdx.graphics.getDeltaTime());
                     pTwo.setXDirection(Direction.Right);
                 }
             } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
@@ -753,16 +767,16 @@ public class GameScreen implements Screen {
                 } else {
 
                     pTwo.setRotation(180);
-                    pTwo.setX(pTwo.getX() - 200 * Gdx.graphics.getDeltaTime());
+                    pTwo.setX(pTwo.getX() - pTwo.getSpeed() * Gdx.graphics.getDeltaTime());
                     pTwo.setXDirection(Direction.Left);
                 }
             }
 
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+        if(Gdx.input.isKeyPressed(Input.Keys.ENTER)){
             if(TimeUtils.nanoTime() - pTwo.getWeapon().getLastShot() > pTwo.getWeapon().getCooldown()){
                 zsound.play();
-                projectiles.add(pTwo.getWeapon().shoot(pTwo.getWeapon(), lbTex, pTwo.getLastDirection()));
+                projectiles.add(pTwo.getWeapon().shoot(pTwo, lbTex, pTwo.getLastDirection()));
             }
         }
 
@@ -791,12 +805,13 @@ public class GameScreen implements Screen {
     }
 
     private void checkBoundaries(Player player) {
+
 //        System.out.println("pOne: " + pOne.getY()+ " Height: " + camera.viewportHeight);
-        if(player.getY()>=camera.viewportHeight){
+        if(player.getY()>=Gdx.graphics.getHeight()+300){
             screenCoords = new Vector3(player.getX(), 0, 0);
             camera.unproject(screenCoords);
             System.out.println(screenCoords.x+ " " + screenCoords.y + " " + screenCoords.z);
-            player.setY(screenCoords.x);
+            player.setY(screenCoords.x-300);
         }
     }
 

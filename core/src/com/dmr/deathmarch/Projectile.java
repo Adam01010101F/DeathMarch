@@ -60,10 +60,7 @@ public class Projectile extends Sprite {
         float[] vel ={ xVel,yVel};
         return vel;
     }
-    public int getBounceCount() {
-        return bounceCount;
 
-    }
     public void bounce(float xVel, float yVel,int y){
     float m = (float)(Math.random()*100+1);
     float n = (float)(Math.random()*100+1);
