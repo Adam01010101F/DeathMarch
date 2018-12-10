@@ -255,6 +255,7 @@ public class GameScreen implements Screen {
             bunnies.get(i).setPosition(bunnies.get(i-1).getX()+50,bunnies.get(i-1).getY()+50);
             bunnies.get(i).setWeapon(new BeamCannon(bmTex));
         }
+        positionsBunnies();
 
 
         // Ghetto Managers
@@ -914,6 +915,7 @@ public class GameScreen implements Screen {
             bgm_Music.stop();
             game.changeScreen(DeathMarch.LOSE);
             positionsCoin(coin);
+            CoinCount=0;
             init();
         }
 
@@ -1207,4 +1209,73 @@ public class GameScreen implements Screen {
         return coin;
     }
 
+    public void positionsBunnies(){
+        ArrayList <Tuple> posBotRight = new ArrayList<Tuple>();
+        ArrayList <Tuple> posTopRight = new ArrayList<Tuple>();
+        ArrayList <Tuple> posBotLeft = new ArrayList<Tuple>();
+        ArrayList <Tuple> posTopLeft = new ArrayList<Tuple>();
+
+        posBotLeft.add(new Tuple(150,95)); //0//
+        posBotLeft.add(new Tuple(50,250)); //1//
+        posBotLeft.add(new Tuple(75,75)); //2//
+        posBotLeft.add(new Tuple(150,200)); //3//
+
+        posTopLeft.add(new Tuple(100,650)); //4
+        posTopLeft.add(new Tuple(100,800)); //5//
+        posTopLeft.add(new Tuple(125,875));//6
+        posTopLeft.add(new Tuple(10,850));//7//
+
+        posBotRight.add(new Tuple(800,100)); //8//
+        posBotRight.add(new Tuple(900,100));//9
+        posBotRight.add(new Tuple(600,250)); //10//
+        posBotRight.add(new Tuple(750,300));//11//
+
+        posTopRight.add(new Tuple(750,800));//12//
+        posTopRight.add(new Tuple(1000,800));//13//
+        posTopRight.add(new Tuple(950,850));//14//
+        posTopRight.add(new Tuple(1000,900));//15
+
+        Random rand = new Random();
+
+        //int n = rand.nextInt(15) + 0;
+
+
+        int PosX = 100;
+        int PosY = 100;
+        int arrInd = 3;
+
+
+        for(int x = 0; x<=3; x++){
+
+            int n = rand.nextInt(arrInd) + 0;
+
+            if(x == 0) {
+                bunnies.get(x).setPosition(posBotLeft.get(n).getX(), posBotLeft.get(n).getY());
+                System.out.println("the positions used are" + posBotLeft.get(n).getX() + " " + posBotLeft.get(n).getY());
+            }
+            else if(x == 1) {
+                bunnies.get(x).setPosition(posTopLeft.get(n).getX(), posTopLeft.get(n).getY());
+                System.out.println("the positions used are" + posTopLeft.get(n).getX() + " " + posTopLeft.get(n).getY());
+
+            }
+            else if(x == 2) {
+                bunnies.get(x).setPosition(posBotRight.get(n).getX(), posBotRight.get(n).getY());
+                System.out.println("the positions used are" + posBotRight.get(n).getX() + " " + posBotRight.get(n).getY());
+
+            }
+            else if(x == 3) {
+                bunnies.get(x).setPosition(posTopRight.get(n).getX(), posTopRight.get(n).getY());
+                System.out.println("the positions used are" + posTopRight.get(n).getX() + " " + posTopRight.get(n).getY());
+
+
+            }
+            //System.out.println("the positions used are" + positions.get(n).getX() + " " + positions.get(n).getY());
+
+//
+//            positions.remove(n);
+//            arrInd = arrInd -1;
+
+
+        }
+    }
 }
