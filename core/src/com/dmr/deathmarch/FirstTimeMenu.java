@@ -45,7 +45,7 @@ public class FirstTimeMenu implements Screen {
     public FirstTimeMenu(final DeathMarch game) {
         this.game = game;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1280, 720);
+        camera.setToOrtho(false, 1280, 1280);
 
         stage = new Stage(new ScreenViewport());
 

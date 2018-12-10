@@ -330,7 +330,7 @@ public class GameScreen implements Screen {
             //camera = new OrthographicCamera();
             //camera.setToOrtho(false, 1280, 720);
             //camera.update();
-            game.changeScreen(DeathMarch.MENU);
+            game.changeScreen(DeathMarch.BUNNIES);
 
         }
         // ------------------

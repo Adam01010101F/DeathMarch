@@ -46,10 +46,10 @@ public abstract class Weapon extends Rectangle {
                 ||projectile.getxVel()==1&&projectile.getyVel() ==-1) {
             projectile.rotate(135);
         }
-//        else if(projectile.getxVel()==1 && projectile.getyVel()==1
-//                ||projectile.getxVel()==-1 &&projectile.getyVel()==-1){
-//            projectile.rotate(45);
-//        }
+        else if(projectile.getxVel()==1 && projectile.getyVel()==1
+                ||projectile.getxVel()==-1 &&projectile.getyVel()==-1){
+            projectile.rotate(45);
+        }
         else {
             projectile.rotate(0);
         }
