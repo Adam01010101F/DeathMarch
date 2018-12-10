@@ -57,6 +57,7 @@ public class GameScreen implements Screen {
     private Texture lbTex;
     public static Player pOne;
     public static Player pTwo;
+    public static Player goblin;
     private Goblin Gobbi;
     private BeamCannon beamCannon;
     public static Array<Projectile> projectiles;
@@ -125,6 +126,7 @@ public class GameScreen implements Screen {
 
         pOne = player1;
         pTwo = player2;
+        goblin = new Player("Rabbid", false, pTwo.getTexture());
 
         CoinCount = 0;
 
@@ -233,21 +235,18 @@ public class GameScreen implements Screen {
         //stage = new Stage(new ScreenViewport());
 
         //Player Creation
-        //pOne = player1;
         pOne.setOriginCenter();
         pOne.setPosition(150,150);
-//        System.out.println(pOne.getOriginX()+ " " + pOne.getOriginY());
-//        pOne.setColor(Color.GRAY);
         pOne.setScale(1 / 8f);
         pOne.setWeapon(new BeamCannon(bmTex));
-        //pTwo = player2;
+        //
         pTwo.setPosition(1000, 900);
-//        pTwo.setColor(Color.PURPLE);
-//        pTwo.setScale(3/4f);
         pTwo.setHealth(150);
         pTwo.setScale(2f);
-        //
         pTwo.setWeapon(new BeamCannon(bmTex));
+        //
+        goblin.setOriginCenter();
+        goblin.setPosition(350,134);
 
         // Ghetto Managers
         //npc
@@ -387,7 +386,7 @@ public class GameScreen implements Screen {
 
                 projectile.bounce(projectile.getxVel(), projectile.getyVel(), 2);
 
-            } else if (collidesLeft(
+            } else if (collidesBottom(
                     projectile.getBoundingRectangle().getWidth(),
                     projectile.getBoundingRectangle().getHeight(),
                     projectile.getBoundingRectangle().getX(),
@@ -399,7 +398,7 @@ public class GameScreen implements Screen {
 
                 projectile.bounce(projectile.getxVel(), projectile.getyVel(), 3);
 
-            } else if (collidesLeft(
+            } else if (collidesTop(
                     projectile.getBoundingRectangle().getWidth(),
                     projectile.getBoundingRectangle().getHeight(),
                     projectile.getBoundingRectangle().getX(),
@@ -439,7 +438,6 @@ public class GameScreen implements Screen {
             Projectile proj = bile.get(i);
             proj.rotate(-20);
             checkBoundaries(proj);
-
             proj.setPosition(proj.getX() + 350 * proj.getxVel() * Gdx.graphics.getDeltaTime()
                     , proj.getY() + 350 * proj.getyVel() * Gdx.graphics.getDeltaTime());
 
@@ -449,14 +447,22 @@ public class GameScreen implements Screen {
                     proj.getBoundingRectangle().getX(),
                     proj.getBoundingRectangle().getY()
             )) {
-                bile.removeIndex(i);
+                if(proj.getBounceCount() == 20)
+                    bile.removeIndex(i);
+                else {
+                    proj.bounce(proj.getxVel(), proj.getyVel(), 1);
+                }
             } else if (collidesRight(
                     proj.getBoundingRectangle().getWidth(),
                     proj.getBoundingRectangle().getHeight(),
                     proj.getBoundingRectangle().getX(),
                     proj.getBoundingRectangle().getY()
             )) {
-                bile.removeIndex(i);
+                if(proj.getBounceCount() == 20)
+                    bile.removeIndex(i);
+                else {
+                    proj.bounce(proj.getxVel(), proj.getyVel(), 2);
+                }
 
             } else if (collidesBottom(
                     proj.getBoundingRectangle().getWidth(),
@@ -464,7 +470,11 @@ public class GameScreen implements Screen {
                     proj.getBoundingRectangle().getX(),
                     proj.getBoundingRectangle().getY()
             )) {
-                bile.removeIndex(i);
+                if (proj.getBounceCount() == 20) {
+                    bile.removeIndex(i);
+                }
+
+                proj.bounce(proj.getxVel(), proj.getyVel(), 3);
 
             } else if (collidesTop(
                     proj.getBoundingRectangle().getWidth(),
@@ -472,7 +482,11 @@ public class GameScreen implements Screen {
                     proj.getBoundingRectangle().getX(),
                     proj.getBoundingRectangle().getY()
             )) {
-                bile.removeIndex(i);
+                if (proj.getBounceCount() == 20) {
+                    bile.removeIndex(i);
+                }
+
+                proj.bounce(proj.getxVel(), proj.getyVel(), 4);
 
             } else {
                 // do nothing
@@ -525,8 +539,7 @@ public class GameScreen implements Screen {
 //            }
 //        }
 
-        // Goblin Destruction
-        Player goblin = pTwo;
+        // Goblin AI
         if (collidesTop(goblin.getBoundingRectangle().getWidth(),
                 goblin.getBoundingRectangle().getHeight(),
                 goblin.getBoundingRectangle().getX(),
@@ -584,30 +597,35 @@ public class GameScreen implements Screen {
                 goblin.setY(goblin.getY() + (20) * Gdx.graphics.getDeltaTime());
             }
         } else {
+//            System.out.println("Touched AI");
+
             float gX = goblin.getX();
             float gY = goblin.getY();
-            float x = pOne.getX() - gX;
-            float y = pOne.getY() - gY;
-            float distance1 = (float) Math.sqrt((x*x)-(y*y));
-            if (0 < distance1) {
-                float acc1 = (x / distance1);
-                float acc2 = (y / distance1);
-                if (x >= 0) {
+            float difX = pOne.getX() - gX;
+            float difY = pOne.getY() - gY;
+            float distance1 = (float) Math.sqrt((difX*difX)-(difY*difY));
+            if (Math.abs(distance1) > 0) {
+                float acc1;
+                float acc2;
+                if (difX >= 0) {
                     acc1 = 1;
                 } else {
                     acc1 = -1;
                 }
-                if (y >= 0) {
+                if (difY >= 0) {
                     acc2 = 1;
                 } else {
                     acc2 = -1;
                 }
-                if (distance1 != 0) {
+//                if (distance1 != 0) {
+                    System.out.println(" gY:("+gX+", "+gY+")"+ " pOne:("+pOne.getX()+", "+pOne.getY()+")"
+                            +" \ndifX: " + difX + " difY: " + difY + " dist: " + distance1);
+//                            +"\nBunny Acc-> X:" + acc1 +" Y:" + acc2);
                     goblin.setX(gX + ((20 * acc1) * Gdx.graphics.getDeltaTime()));
                     goblin.setY(gY + ((20 * acc2) * Gdx.graphics.getDeltaTime()));
 
-                }
-                goblin.checkGob(pOne);
+//                }
+//                goblin.checkGob(pOne);
                 float angle = (float) Math.toDegrees(Math.atan2(pOne.getY() - goblin.getY(), pOne.getX() - goblin.getX()));
                 if (angle < 0) {
                     angle = angle + 360;
@@ -618,7 +636,7 @@ public class GameScreen implements Screen {
         }
 
         game.batch.setProjectionMatrix(camera.combined);
-
+        stage.getBatch().setProjectionMatrix(camera.combined);
 
         // Load Objects onto Screen
         game.batch.begin();
@@ -646,10 +664,12 @@ public class GameScreen implements Screen {
 
 
         game.font.draw(game.batch, "P1 x: " + pOne.getX() + " y: " + pOne.getY(), 100, 150);
+        game.font.draw(game.batch,"P2 x:("+goblin.getX()+", "+goblin.getY()+")", 100, 250);
         game.font.draw(game.batch, "Projectiles: " + projectiles.size, 100, 200);
         game.font.draw(game.batch, "Projectiles: " + bile.size, 100, 100);
         pOne.draw(game.batch);
         pTwo.draw(game.batch);
+        goblin.draw(game.batch);
 
         stairs.draw(game.batch);
 //        game.batch.draw(bmTex, pOne.getX(), pOne.getY()-8);
@@ -665,7 +685,7 @@ public class GameScreen implements Screen {
                 if (coin[y].getBoundingRectangle().overlaps(pOne.getBoundingRectangle())) {
                     coin[y].setPosition(10000, 10000);
                     CoinCount = CoinCount + 1;
-                    System.out.println("coint count : " + CoinCount);
+                    System.out.println("coin count : " + CoinCount);
                 }
         }
 
@@ -685,12 +705,12 @@ public class GameScreen implements Screen {
         }
         game.batch.end();
 
-
-
-        //shape.begin(ShapeRenderer.ShapeType.Filled);
-        //shape.setColor(Color.BLACK);
-        //shape.rect(pOne.getBoundingRectangle().getX(), pOne.getBoundingRectangle().getY(), pOne.getBoundingRectangle().getWidth(), pOne.getBoundingRectangle().getHeight());
-        //shape.end();
+        for(Projectile proj: projectiles){
+            shape.begin(ShapeRenderer.ShapeType.Filled);
+            shape.setColor(Color.BLACK);
+            shape.rect(proj.getX(), proj.getY(), proj.getWidth(), proj.getHeight());
+            shape.end();
+        }
 
         //Player 1 Keybindings
         if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.D) ||
@@ -929,7 +949,7 @@ public class GameScreen implements Screen {
                     +" ScreenCoords: " + screenCoords.y + " ScreenCoords+Off" + (screenCoords.y-270));
         }
         //Handles X coords
-        if(boundSprite.getX()+270<0){                                                  //Left of the Screen
+        else if(boundSprite.getX()+270<0){                                                  //Left of the Screen
             screenCoords = new Vector3(1280, boundSprite.getY(),0);
             stage.getViewport().unproject(screenCoords)
             ;            boundSprite.setX(screenCoords.x-270);
