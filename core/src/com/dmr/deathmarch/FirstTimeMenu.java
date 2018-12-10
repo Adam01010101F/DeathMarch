@@ -137,7 +137,6 @@ public class FirstTimeMenu implements Screen {
         uiText.draw(game.batch, "The Buns and the BirdZ",  +325 , 700 );
         textyText.draw(game.batch,"Made by the DEATH MARCHERS",375, 100);
 
-
         game.batch.end();
 
 

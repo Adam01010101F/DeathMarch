@@ -74,7 +74,6 @@ public class Projectile extends Sprite {
                 else
                     this.yVel = -1;
                 bounceCount++;
-                this.flip(true, false);
                 break;
             //right
             case 2:

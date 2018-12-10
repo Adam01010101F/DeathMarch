@@ -138,7 +138,7 @@ public class GameScreen implements Screen {
 
         shopSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
-        lbTex = new Texture(Gdx.files.internal("laserBeam.png"));
+        lbTex = new Texture(Gdx.files.internal("fireball.png"));
 
         bmTex = new Texture(Gdx.files.internal("BeamCannon.png"));
 
@@ -347,7 +347,7 @@ public class GameScreen implements Screen {
 
 
         camera.update();
-        for(Iterator<Projectile> iter = projectiles.iterator(); iter.hasNext();) {
+        for (Iterator<Projectile> iter = projectiles.iterator(); iter.hasNext(); ) {
             Projectile projectile = iter.next();
             projectile.setPosition(projectile.getX() + 350 * projectile.getxVel() * Gdx.graphics.getDeltaTime()
                     , projectile.getY() + 350 * projectile.getyVel() * Gdx.graphics.getDeltaTime());
@@ -360,7 +360,7 @@ public class GameScreen implements Screen {
                     projectile.getBoundingRectangle().getX(),
                     projectile.getBoundingRectangle().getY()
             )) {
-                if (projectile.getBounceCount() == 10) {
+                if (projectile.getBounceCount() == 20) {
                     iter.remove();
                 }
 
@@ -372,7 +372,7 @@ public class GameScreen implements Screen {
                     projectile.getBoundingRectangle().getX(),
                     projectile.getBoundingRectangle().getY()
             )) {
-                if (projectile.getBounceCount() == 10) {
+                if (projectile.getBounceCount() == 20) {
                     iter.remove();
                 }
 
@@ -384,7 +384,7 @@ public class GameScreen implements Screen {
                     projectile.getBoundingRectangle().getX(),
                     projectile.getBoundingRectangle().getY()
             )) {
-                if (projectile.getBounceCount() == 10) {
+                if (projectile.getBounceCount() == 20) {
                     iter.remove();
                 }
 
@@ -396,7 +396,7 @@ public class GameScreen implements Screen {
                     projectile.getBoundingRectangle().getX(),
                     projectile.getBoundingRectangle().getY()
             )) {
-                if (projectile.getBounceCount() == 10) {
+                if (projectile.getBounceCount() == 20) {
                     iter.remove();
                 }
 
@@ -416,23 +416,15 @@ public class GameScreen implements Screen {
 
 
             }*/
-        }
-        //TODO:: Give ownership of projectile to count score.
-            /*for (Projectile biles : projectiles) {
-                if (biles.getBoundingRectangle().overlaps(pTwo.getBoundingRectangle())) {
-//                    goblin.takeDamage(beamCannon.getDamage());
-                    projectiles.removeIndex(i);
 
-                    System.out.println("Goblin takes damage");
+            if (projectile.getBoundingRectangle().overlaps(pTwo.getBoundingRectangle())) {
+//                    goblin.takeDamage(beamCannon.getDamage());
+                    iter.remove();
                     pOne.addKill();
                     pOne.addHealth();
                     pTwo.takeDmg(5 * pOne.getDmgMulti());
-
                 }
-            }
-
-*/
-
+        }
 
         // Bullet Physics|Destruction
         for (int i = 0; i < bile.size; i++) {
@@ -487,7 +479,6 @@ public class GameScreen implements Screen {
             }
 
         }
-
 
 //        // Bullet Physics|Destruction
 //        for(Iterator<Projectile> iter = projectiles.iterator(); iter.hasNext();){
