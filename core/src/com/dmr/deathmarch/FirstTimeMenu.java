@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
@@ -36,8 +35,6 @@ public class FirstTimeMenu implements Screen {
     FreeTypeFontGenerator g;
     FreeTypeFontParameter p;
     BitmapFont textyText;
-    Texture backgroundTexture;
-    Sprite backgroundSprite;
 
 
     public TiledTest testTile;
@@ -45,13 +42,9 @@ public class FirstTimeMenu implements Screen {
     public FirstTimeMenu(final DeathMarch game) {
         this.game = game;
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1280, 1280);
+        camera.setToOrtho(false, 1280, 1200);
 
         stage = new Stage(new ScreenViewport());
-
-        backgroundTexture = new Texture(Gdx.files.internal("images/bunny.jpg"));
-        backgroundSprite = new Sprite(backgroundTexture);
-
 
         //b = new SpriteBatch();
         //text for NPC
@@ -74,9 +67,9 @@ public class FirstTimeMenu implements Screen {
         g = new FreeTypeFontGenerator((Gdx.files.internal("fonts/joystix.ttf")));
         p = new FreeTypeFontParameter();
         p.size = 20;
-        p.color= Color.BLACK;
+        p.color= Color.YELLOW;
         //p.borderColor = Color.RED;
-        //p.borderWidth = 3;
+        p.borderWidth = 3;
 
         textyText = g.generateFont(p);
 
@@ -85,14 +78,6 @@ public class FirstTimeMenu implements Screen {
 
 
     }
-    public void create() {
-        stage = new Stage();
-        Table testTable = new Table();
-        testTable.setBackground(new TextureRegionDrawable(new TextureRegion(new Texture("badlogic.jpg"))));
-        testTable.setFillParent(true);
-        testTable.setDebug(true);
-        stage.addActor(testTable);
-    }
 
     @Override
     public void render(float delta) {
@@ -100,11 +85,7 @@ public class FirstTimeMenu implements Screen {
         // ---GAME CONTROLS---
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             bgm_Music.stop();
-            //camera = new OrthographicCamera();
-            //camera.setToOrtho(false, 1280, 720);
-            //camera.update();
             game.changeScreen(DeathMarch.GAMESMASTER);
-
         }
         // ------------------
 //        Gdx.gl.glClearColor(0.5f,0,0,1);
@@ -124,7 +105,7 @@ public class FirstTimeMenu implements Screen {
 //            dispose();
 //        }
 
-        Gdx.gl.glClearColor( 1f, 1f, 1f, 1f );
+        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
@@ -134,7 +115,7 @@ public class FirstTimeMenu implements Screen {
 
 
         //Vector3 posCamara = camera.position;
-        uiText.draw(game.batch, "The Buns and the BirdZ",  +325 , 700 );
+        uiText.draw(game.batch, "BRAZY BUNNIES",  +275 , 1000 );
         textyText.draw(game.batch,"Made by the DEATH MARCHERS",375, 100);
 
         game.batch.end();
@@ -213,7 +194,7 @@ public class FirstTimeMenu implements Screen {
         table.row().pad(10, 0, 10, 0);
         //table.add(hof).fillX().uniformX();
         table.row();
-        table.add(preferences).fillX().uniformX();
+        //table.add(preferences).fillX().uniformX();
         table.row();
         table.add(exit).fillX().uniformX();
         table.row();
@@ -251,9 +232,7 @@ public class FirstTimeMenu implements Screen {
             }
 
         });
+
     }
 
-    public void renderBackground() {
-        backgroundSprite.draw(game.batch);
-    }
 }

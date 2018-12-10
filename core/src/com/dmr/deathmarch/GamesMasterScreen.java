@@ -109,7 +109,7 @@ public class GamesMasterScreen implements Screen {
 
         //Vector3 posCamara = camera.position;
         //renderBackground();
-        uiText.draw(game.batch, "GamesMaster",  +95 , 700 );
+        uiText.draw(game.batch, "GamesMaster",  +95 , 1000 );
         textyText.draw(game.batch,"Made by the DEATH MARCHERS for BIRDSTUFF INC.",255, 100);
 
 

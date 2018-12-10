@@ -9,7 +9,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title="Death March";
 		config.width=1280;
-		config.height=720;
+		config.height=1200;
 		new LwjglApplication(new DeathMarch(), config);
 	}
 }

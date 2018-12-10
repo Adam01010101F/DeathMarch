@@ -111,7 +111,9 @@ public class GameScreen implements Screen {
     private Sound sound;
 
 
+
     public GameScreen(final DeathMarch game,Player player1,Player player2){
+
         coin = new Sprite[4];
         this.game = game;
         mapName = "maps/billiards.tmx";
@@ -272,6 +274,9 @@ public class GameScreen implements Screen {
         goblins = new Array<Goblin>();
 
 
+
+
+
         //text for NPC
         generator = new FreeTypeFontGenerator((Gdx.files.internal("fonts/joystix.ttf")));
         parameters = new FreeTypeFontParameter();
@@ -279,6 +284,7 @@ public class GameScreen implements Screen {
         parameters.color = Color.BLACK;
 //        parameters.borderColor = Color.WHITE;
 //        parameters.borderWidth = 0.5f;
+
 
 
         uiText = generator.generateFont(parameters);
@@ -291,6 +297,7 @@ public class GameScreen implements Screen {
 
 
     public void create() {
+
 
 
     }

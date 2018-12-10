@@ -47,7 +47,7 @@ public class GIFscreen implements Screen {
 
 
         //batch.draw(ttrSplash, 400, 0, Gdx.graphics.getWidth()- 800, Gdx.graphics.getHeight());
-        batch.draw(animation.getKeyFrame(elapsed), 375.0f, 225.0f);
+        batch.draw(animation.getKeyFrame(elapsed), 375.0f, 425.0f);
         batch.end();
 
 
