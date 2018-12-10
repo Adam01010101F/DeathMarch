@@ -1,6 +1,7 @@
 package com.dmr.deathmarch.weapons;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.dmr.deathmarch.Direction;
@@ -34,10 +35,10 @@ public abstract class Weapon extends Rectangle {
     }
 
     //TODO:: Make Rotation logic less ugly? Does it impact perf?
-    public Projectile shoot(Player player
+    public Projectile shoot(Sprite sprite
             , Texture lbTex, Direction dir[]){
         Projectile projectile = new Projectile(lbTex, dir[0], dir[1]);
-        projectile.setPosition(player.getBoundingRectangle().x , player.getBoundingRectangle().y);
+        projectile.setPosition(sprite.getBoundingRectangle().x , sprite.getBoundingRectangle().y);
         //Laser Direction Logic
         if(projectile.getxVel()==0&&projectile.getyVel()==1
                 ||projectile.getxVel()==0&&projectile.getyVel()==-1)
@@ -57,6 +58,7 @@ public abstract class Weapon extends Rectangle {
         lastShot = TimeUtils.nanoTime();
         return projectile;
     }
+
 
 
     public float getLastShot(){

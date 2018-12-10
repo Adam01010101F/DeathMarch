@@ -58,7 +58,7 @@ public class GameScreen implements Screen {
     private Texture lbTex;
     public static Player pOne;
     public static Player pTwo;
-    public static Bunny bunny;
+    public static Array<Bunny> bunnies;
     private Goblin Gobbi;
     private BeamCannon beamCannon;
     public static Array<Projectile> projectiles;
@@ -127,7 +127,7 @@ public class GameScreen implements Screen {
 
         pOne = player1;
         pTwo = player2;
-        bunny = new Bunny(pTwo.getTexture());
+        bunnies = new Array<Bunny>();
 
         CoinCount = 0;
 
@@ -246,8 +246,16 @@ public class GameScreen implements Screen {
         pTwo.setScale(2f);
         pTwo.setWeapon(new BeamCannon(bmTex));
         //
-        bunny.setOriginCenter();
-        bunny.setPosition(350,134);
+        Bunny buu = new Bunny(pTwo.getTexture());
+        buu.setPosition(350, 134);
+        buu.setWeapon(new BeamCannon(bmTex));
+        bunnies.add(buu);
+        for(int i = 1; i<5; i++) {
+            bunnies.add(new Bunny(pTwo.getTexture()));
+            bunnies.get(i).setPosition(bunnies.get(i-1).getX()+5,bunnies.get(i-1).getY()+5);
+            bunnies.get(i).setWeapon(new BeamCannon(bmTex));
+        }
+
 
         // Ghetto Managers
         //npc
@@ -541,98 +549,101 @@ public class GameScreen implements Screen {
 //        }
 
         // Goblin AI
-        if (collidesTop(bunny.getBoundingRectangle().getWidth(),
-                bunny.getBoundingRectangle().getHeight(),
-                bunny.getBoundingRectangle().getX(),
-                bunny.getBoundingRectangle().getY())) {
-            if (!(collidesRight(bunny.getBoundingRectangle().getWidth(),
+        for(Bunny bunny: bunnies) {
+            if (collidesTop(bunny.getBoundingRectangle().getWidth(),
                     bunny.getBoundingRectangle().getHeight(),
                     bunny.getBoundingRectangle().getX(),
-                    bunny.getBoundingRectangle().getY()))) {
-                bunny.setX(bunny.getX() + (20) * Gdx.graphics.getDeltaTime());
-            }
-            else {
-                bunny.setX(bunny.getX() - (20) * Gdx.graphics.getDeltaTime());
-            }
-
-        }
-        else if (collidesRight(bunny.getBoundingRectangle().getWidth(),
-                bunny.getBoundingRectangle().getHeight(),
-                bunny.getBoundingRectangle().getX(),
-                bunny.getBoundingRectangle().getY())) {
-            if (!(collidesRight(bunny.getBoundingRectangle().getWidth(),
-                    bunny.getBoundingRectangle().getHeight(),
-                    bunny.getBoundingRectangle().getX(),
-                    bunny.getBoundingRectangle().getY()))) {
-                bunny.setY(bunny.getY() + (-20) * Gdx.graphics.getDeltaTime());
-            }
-            else {
-                bunny.setY(bunny.getY() + (20) * Gdx.graphics.getDeltaTime());
-            }
-        }
-        else if (collidesBottom(bunny.getBoundingRectangle().getWidth(),
-                bunny.getBoundingRectangle().getHeight(),
-                bunny.getBoundingRectangle().getX(),
-                bunny.getBoundingRectangle().getY())) {
-            if (!(collidesRight(bunny.getBoundingRectangle().getWidth(),
-                    bunny.getBoundingRectangle().getHeight(),
-                    bunny.getBoundingRectangle().getX(),
-                    bunny.getBoundingRectangle().getY()))) {
-                bunny.setX(bunny.getX() + (20) * Gdx.graphics.getDeltaTime());
-            }
-            else {
-                bunny.setX(bunny.getX() - (20) * Gdx.graphics.getDeltaTime());
-            }
-        }
-        else if (collidesLeft(bunny.getBoundingRectangle().getWidth(),
-                bunny.getBoundingRectangle().getHeight(),
-                bunny.getBoundingRectangle().getX(),
-                bunny.getBoundingRectangle().getY())) {
-            if (!(collidesRight(bunny.getBoundingRectangle().getWidth(),
-                    bunny.getBoundingRectangle().getHeight(),
-                    bunny.getBoundingRectangle().getX(),
-                    bunny.getBoundingRectangle().getY()))) {
-                bunny.setY(bunny.getY() + (-20) * Gdx.graphics.getDeltaTime());
-            }
-            else {
-                bunny.setY(bunny.getY() + (20) * Gdx.graphics.getDeltaTime());
-            }
-        } else {
-//            System.out.println("Touched AI");
-
-            float gX = bunny.getX();
-            float gY = bunny.getY();
-            float difX = pOne.getX() - gX;
-            float difY = pOne.getY() - gY;
-            float distance1 = (float) Math.sqrt((difX*difX)-(difY*difY));
-            if (Math.abs(distance1) > 0) {
-                float acc1;
-                float acc2;
-                if (difX >= 0) {
-                    acc1 = 1;
+                    bunny.getBoundingRectangle().getY())) {
+                if (!(collidesRight(bunny.getBoundingRectangle().getWidth(),
+                        bunny.getBoundingRectangle().getHeight(),
+                        bunny.getBoundingRectangle().getX(),
+                        bunny.getBoundingRectangle().getY()))) {
+                    bunny.setX(bunny.getX() + (20) * Gdx.graphics.getDeltaTime());
                 } else {
-                    acc1 = -1;
+                    bunny.setX(bunny.getX() - (20) * Gdx.graphics.getDeltaTime());
                 }
-                if (difY >= 0) {
-                    acc2 = 1;
+
+            } else if (collidesRight(bunny.getBoundingRectangle().getWidth(),
+                    bunny.getBoundingRectangle().getHeight(),
+                    bunny.getBoundingRectangle().getX(),
+                    bunny.getBoundingRectangle().getY())) {
+                if (!(collidesRight(bunny.getBoundingRectangle().getWidth(),
+                        bunny.getBoundingRectangle().getHeight(),
+                        bunny.getBoundingRectangle().getX(),
+                        bunny.getBoundingRectangle().getY()))) {
+                    bunny.setY(bunny.getY() + (-20) * Gdx.graphics.getDeltaTime());
                 } else {
-                    acc2 = -1;
+                    bunny.setY(bunny.getY() + (20) * Gdx.graphics.getDeltaTime());
                 }
-//                if (distance1 != 0) {
-                    System.out.println(" gY:("+gX+", "+gY+")"+ " pOne:("+pOne.getX()+", "+pOne.getY()+")"
-                            +" \ndifX: " + difX + " difY: " + difY + " dist: " + distance1);
-//                            +"\nBunny Acc-> X:" + acc1 +" Y:" + acc2);
-                bunny.setX(gX + ((20 * acc1) * Gdx.graphics.getDeltaTime()));
-                bunny.setY(gY + ((20 * acc2) * Gdx.graphics.getDeltaTime()));
-
-//                }
-//                goblin.checkGob(pOne);
-                float angle = (float) Math.toDegrees(Math.atan2(pOne.getY() - bunny.getY(), pOne.getX() - bunny.getX()));
-                if (angle < 0) {
-                    angle = angle + 360;
+            } else if (collidesBottom(bunny.getBoundingRectangle().getWidth(),
+                    bunny.getBoundingRectangle().getHeight(),
+                    bunny.getBoundingRectangle().getX(),
+                    bunny.getBoundingRectangle().getY())) {
+                if (!(collidesRight(bunny.getBoundingRectangle().getWidth(),
+                        bunny.getBoundingRectangle().getHeight(),
+                        bunny.getBoundingRectangle().getX(),
+                        bunny.getBoundingRectangle().getY()))) {
+                    bunny.setX(bunny.getX() + (20) * Gdx.graphics.getDeltaTime());
+                } else {
+                    bunny.setX(bunny.getX() - (20) * Gdx.graphics.getDeltaTime());
                 }
-                bunny.setRotation(angle);
+            } else if (collidesLeft(bunny.getBoundingRectangle().getWidth(),
+                    bunny.getBoundingRectangle().getHeight(),
+                    bunny.getBoundingRectangle().getX(),
+                    bunny.getBoundingRectangle().getY())) {
+                if (!(collidesRight(bunny.getBoundingRectangle().getWidth(),
+                        bunny.getBoundingRectangle().getHeight(),
+                        bunny.getBoundingRectangle().getX(),
+                        bunny.getBoundingRectangle().getY()))) {
+                    bunny.setY(bunny.getY() + (-20) * Gdx.graphics.getDeltaTime());
+                } else {
+                    bunny.setY(bunny.getY() + (20) * Gdx.graphics.getDeltaTime());
+                }
+            } else {
+                //            System.out.println("Touched AI");
+                float gX = bunny.getX();
+                float gY = bunny.getY();
+                float difX = pOne.getX() - gX;
+                float difY = pOne.getY() - gY;
+                float distance1 = (float) Math.sqrt((difX * difX) - (difY * difY));
+                if (Math.abs(distance1) > 0) {
+                    float accX;
+                    float accY;
+                    Direction[] bunDir = new Direction[2];
+                    if (difX >= 0) {
+                        accX = 1;
+                        bunDir[0] = Direction.Right;
+                    } else {
+                        accX = -1;
+                        bunDir[0] = Direction.Left;
+                    }
+                    if (difY >= 0) {
+                        accY = 1;
+                        bunDir[1] = Direction.Up;
+                    } else {
+                        accY = -1;
+                        bunDir[1] = Direction.Down;
 
+                    }
+                    bunny.incrCounter();
+                    if (bunny.getCounter() % 50 == 0) {
+                        bile.add(bunny.getWeapon().shoot(bunny, lbTex, bunDir));
+                    }
+
+                    //                if (distance1 != 0) {
+                    //                    System.out.println(" gY:("+gX+", "+gY+")"+ " pOne:("+pOne.getX()+", "+pOne.getY()+")"
+                    //                            +" \ndifX: " + difX + " difY: " + difY + " dist: " + distance1);
+                    //                            +"\nBunny Acc-> X:" + acc1 +" Y:" + acc2);
+                    bunny.setX(gX + ((20 * accX) * Gdx.graphics.getDeltaTime()));
+                    bunny.setY(gY + ((20 * accY) * Gdx.graphics.getDeltaTime()));
+
+                    //                }
+                    float angle = (float) Math.toDegrees(Math.atan2(pOne.getY() - bunny.getY(), pOne.getX() - bunny.getX()));
+                    if (angle < 0) {
+                        angle = angle + 360;
+                    }
+                    bunny.setRotation(angle);
+                }
             }
         }
 
@@ -665,12 +676,13 @@ public class GameScreen implements Screen {
 
 
         game.font.draw(game.batch, "P1 x: " + pOne.getX() + " y: " + pOne.getY(), 100, 150);
-        game.font.draw(game.batch,"P2 x:("+bunny.getX()+", "+bunny.getY()+")", 100, 250);
         game.font.draw(game.batch, "Projectiles: " + projectiles.size, 100, 200);
         game.font.draw(game.batch, "Projectiles: " + bile.size, 100, 100);
         pOne.draw(game.batch);
         pTwo.draw(game.batch);
-        bunny.draw(game.batch);
+        for(Bunny bunny: bunnies){
+            bunny.draw(game.batch);
+        }
 
         stairs.draw(game.batch);
 //        game.batch.draw(bmTex, pOne.getX(), pOne.getY()-8);
