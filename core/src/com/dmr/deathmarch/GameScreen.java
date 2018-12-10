@@ -469,17 +469,17 @@ public class GameScreen implements Screen {
             if (0 < distance1) {
                 float acc1 = (x / distance1);
                 float acc2 = (y / distance1);
-                if (x > 0) {
+                if (pOne.getX() > gX) {
                     acc1 = 1;
-                } else if(x < 0){
+                } else if(pOne.getX() < gX){
                     acc1 = -1;
                 }
                 else {
                     acc1 = 0;
                 }
-                if (y > 0) {
+                if (pOne.getY() > gY) {
                     acc2 = 1;
-                } else if(y < 0){
+                } else if(pOne.getY() < gY){
                     acc2 = -1;
                 }
                 else
