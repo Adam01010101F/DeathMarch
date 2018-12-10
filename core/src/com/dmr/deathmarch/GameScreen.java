@@ -480,74 +480,35 @@ public class GameScreen implements Screen {
                     goblin.getBoundingRectangle().getY()))) {
                 goblin.setY(goblin.getY() + (-90) * Gdx.graphics.getDeltaTime());
             }
+            else {
+                goblin.setY(goblin.getY() + (90) * Gdx.graphics.getDeltaTime());
+            }
         }
         else{
                 float gX = goblin.getX();
                 float gY = goblin.getY();
-                if (0 < distance1) {
                     float acc1 = (x / distance1);
                     float acc2 = (y / distance1);
-                    if (pOne.getX() > gX) {
+                    if (pOne.getX() >= gX) {
                         acc1 = 1;
                     } else if(pOne.getX() < gX){
                         acc1 = -1;
                     }
-                    else {
-                        acc1 = 0;
-                    }
-                    if (pOne.getY() > gY) {
+                    if (pOne.getY() >= gY) {
                         acc2 = 1;
                     } else if(pOne.getY() < gY){
                         acc2 = -1;
                     }
-                    else
-                    {
-                        acc2 = 0;
-                    }
-                    if (distance1 != 0) {
-                        goblin.setX(gX + ((20 * acc1) * Gdx.graphics.getDeltaTime()));
-                        goblin.setY(gY + ((20 * acc2) * Gdx.graphics.getDeltaTime()));
+                        goblin.setX(gX + ((50 * acc1) * Gdx.graphics.getDeltaTime()));
+                        goblin.setY(gY + ((50 * acc2) * Gdx.graphics.getDeltaTime()));
 
-                    }
                     goblin.checkGob(pOne);
                     float angle = (float) Math.toDegrees(Math.atan2(pOne.getY() - goblin.getY(), pOne.getX() - goblin.getX()));
                     if (angle < 0) {
                         angle = angle + 360;
                     }
                     goblin.setRotation(angle);
-                }
-                if(collidesTop(goblin.getBoundingRectangle().getWidth(),
-                        goblin.getBoundingRectangle().getHeight(),
-                        goblin.getBoundingRectangle().getX(),
-                        goblin.getBoundingRectangle().getY()))
-                {
-                    goblin.rotate(90);
-                    goblin.setX(goblin.getX() + (20) * Gdx.graphics.getDeltaTime());
-                }
-                if(collidesRight(goblin.getBoundingRectangle().getWidth(),
-                        goblin.getBoundingRectangle().getHeight(),
-                        goblin.getBoundingRectangle().getX(),
-                        goblin.getBoundingRectangle().getY()))
-                {
-                    goblin.rotate(180);
-                    goblin.setY(goblin.getY() + (-20) * Gdx.graphics.getDeltaTime());
-                }
-                if(collidesBottom(goblin.getBoundingRectangle().getWidth(),
-                        goblin.getBoundingRectangle().getHeight(),
-                        goblin.getBoundingRectangle().getX(),
-                        goblin.getBoundingRectangle().getY()))
-                {
-                    goblin.rotate(270);
-                    goblin.setX(goblin.getX() + (-20) * Gdx.graphics.getDeltaTime());
-                }
-                if(collidesLeft(goblin.getBoundingRectangle().getWidth(),
-                        goblin.getBoundingRectangle().getHeight(),
-                        goblin.getBoundingRectangle().getX(),
-                        goblin.getBoundingRectangle().getY()))
-                {
-                    goblin.rotate(360);
-                    goblin.setY(goblin.getY() + (20) * Gdx.graphics.getDeltaTime());
-                }
+
 
         }
 
