@@ -112,7 +112,7 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 1280, 1280);
         screenCoords = new Vector3();
-        stage = new Stage(new FitViewport(1280,1280));
+        stage = new Stage(new FitViewport(1280, 1280));
         shopSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
         pOne = player1;
@@ -314,12 +314,12 @@ public class GameScreen implements Screen {
 
                 }
             }
-
         }
 
 
+
         // Bullet Physics|Destruction
-        for (int i = 0; i < bile.size; i++) {
+        for(int i = 0; i < bile.size; i++) {
             Projectile proj = bile.get(i);
             proj.setPosition(proj.getX() + 350 * proj.getxVel() * Gdx.graphics.getDeltaTime()
                     , proj.getY() + 350 * proj.getyVel() * Gdx.graphics.getDeltaTime());
@@ -460,10 +460,6 @@ public class GameScreen implements Screen {
                     goblin.getBoundingRectangle().getX(),
                     goblin.getBoundingRectangle().getY()))) {
                 goblin.setY(goblin.getY() + (-90) * Gdx.graphics.getDeltaTime());
-            }
-            else {
-                goblin.setY(goblin.getY() + (90) * Gdx.graphics.getDeltaTime());
-            }
         } else {
             float gX = goblin.getX();
             float gY = goblin.getY();
@@ -743,7 +739,7 @@ public class GameScreen implements Screen {
         }
 
         checkBoundaries(pOne);
-    }
+    }}
 
     private void checkBoundaries(Player player) {
         //Handles Y coords
