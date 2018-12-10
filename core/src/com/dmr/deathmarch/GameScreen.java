@@ -347,47 +347,78 @@ public class GameScreen implements Screen {
 
 
         camera.update();
-        // Bullet Physics|Destruction
-        for (int i = 0; i < projectiles.size; i++) {
-            Projectile proj = projectiles.get(i);
-            proj.setPosition(proj.getX() + 350 * proj.getxVel() * Gdx.graphics.getDeltaTime()
-                    , proj.getY() + 350 * proj.getyVel() * Gdx.graphics.getDeltaTime());
+        for(Iterator<Projectile> iter = projectiles.iterator(); iter.hasNext();) {
+            Projectile projectile = iter.next();
+            projectile.setPosition(projectile.getX() + 350 * projectile.getxVel() * Gdx.graphics.getDeltaTime()
+                    , projectile.getY() + 350 * projectile.getyVel() * Gdx.graphics.getDeltaTime());
+//            if(projectile.getX()>1280 | projectile.getY()>720 || projectile.getX() < 0 || projectile.getY() < 0){
+//                iter.remove();
+//            }
             if (collidesLeft(
-                    proj.getBoundingRectangle().getWidth(),
-                    proj.getBoundingRectangle().getHeight(),
-                    proj.getBoundingRectangle().getX(),
-                    proj.getBoundingRectangle().getY()
+                    projectile.getBoundingRectangle().getWidth(),
+                    projectile.getBoundingRectangle().getHeight(),
+                    projectile.getBoundingRectangle().getX(),
+                    projectile.getBoundingRectangle().getY()
             )) {
-                projectiles.removeIndex(i);
+                if (projectile.getBounceCount() == 10) {
+                    iter.remove();
+                }
+
+                projectile.bounce(projectile.getxVel(), projectile.getyVel(), 1);
+
             } else if (collidesRight(
-                    proj.getBoundingRectangle().getWidth(),
-                    proj.getBoundingRectangle().getHeight(),
-                    proj.getBoundingRectangle().getX(),
-                    proj.getBoundingRectangle().getY()
+                    projectile.getBoundingRectangle().getWidth(),
+                    projectile.getBoundingRectangle().getHeight(),
+                    projectile.getBoundingRectangle().getX(),
+                    projectile.getBoundingRectangle().getY()
             )) {
-                projectiles.removeIndex(i);
+                if (projectile.getBounceCount() == 10) {
+                    iter.remove();
+                }
 
-            } else if (collidesBottom(
-                    proj.getBoundingRectangle().getWidth(),
-                    proj.getBoundingRectangle().getHeight(),
-                    proj.getBoundingRectangle().getX(),
-                    proj.getBoundingRectangle().getY()
+                projectile.bounce(projectile.getxVel(), projectile.getyVel(), 2);
+
+            } else if (collidesLeft(
+                    projectile.getBoundingRectangle().getWidth(),
+                    projectile.getBoundingRectangle().getHeight(),
+                    projectile.getBoundingRectangle().getX(),
+                    projectile.getBoundingRectangle().getY()
             )) {
-                projectiles.removeIndex(i);
+                if (projectile.getBounceCount() == 10) {
+                    iter.remove();
+                }
 
-            } else if (collidesTop(
-                    proj.getBoundingRectangle().getWidth(),
-                    proj.getBoundingRectangle().getHeight(),
-                    proj.getBoundingRectangle().getX(),
-                    proj.getBoundingRectangle().getY()
+                projectile.bounce(projectile.getxVel(), projectile.getyVel(), 3);
+
+            } else if (collidesLeft(
+                    projectile.getBoundingRectangle().getWidth(),
+                    projectile.getBoundingRectangle().getHeight(),
+                    projectile.getBoundingRectangle().getX(),
+                    projectile.getBoundingRectangle().getY()
             )) {
-                projectiles.removeIndex(i);
+                if (projectile.getBounceCount() == 10) {
+                    iter.remove();
+                }
 
-            } else {
-                // do nothing
+                projectile.bounce(projectile.getxVel(), projectile.getyVel(), 4);
+
             }
-            //TODO:: Give ownership of projectile to count score.
-            for (Projectile biles : projectiles) {
+            /*//Bunny hit Player 2 Hit
+            //This was for when Player Bunny had projectiles. Had to test that it could work, shoot itself.
+            if (projectile.getBoundingRectangle().overlaps(pTwo.getBoundingRectangle())) {
+//                    goblin.takeDamage(beamCannon.getDamage());
+                iter.remove();
+
+                System.out.println("Goblin has been hit");
+
+
+               *//* pTwo.transform();*//*
+
+
+            }*/
+        }
+        //TODO:: Give ownership of projectile to count score.
+            /*for (Projectile biles : projectiles) {
                 if (biles.getBoundingRectangle().overlaps(pTwo.getBoundingRectangle())) {
 //                    goblin.takeDamage(beamCannon.getDamage());
                     projectiles.removeIndex(i);
@@ -400,7 +431,7 @@ public class GameScreen implements Screen {
                 }
             }
 
-        }
+*/
 
 
         // Bullet Physics|Destruction
