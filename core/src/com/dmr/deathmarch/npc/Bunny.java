@@ -14,7 +14,7 @@ public class Bunny extends Sprite{
     private Direction lastDirection[];
     private Weapon weapon;
     private boolean isDead;
-
+    private int moveCounter;
 
     public Bunny(Texture texture){
         super(texture);
@@ -23,6 +23,7 @@ public class Bunny extends Sprite{
         kills = 0;
         dmgMulti = 1;
         lastDirection = new Direction[2];
+        moveCounter = 0;
     }
     public Bunny(Texture texture, int width, int height){
         super(texture, width, height);
@@ -31,6 +32,8 @@ public class Bunny extends Sprite{
         kills = 0;
         dmgMulti = 1;
         lastDirection = new Direction[2];
+        moveCounter = 0;
+
     }
     public Bunny(Texture texture, int x, int y, int width, int height){
         super(texture, x, y, width, height);
@@ -39,6 +42,8 @@ public class Bunny extends Sprite{
         kills = 0;
         dmgMulti = 1;
         lastDirection = new Direction[2];
+        moveCounter = 0;
+
     }
 
 
@@ -88,18 +93,18 @@ public class Bunny extends Sprite{
         lastDirection[1] = Direction.None;
     }
 
-    public void checkGob(Sprite g) {
-        if(this.getBoundingRectangle().overlaps(g.getBoundingRectangle()))
-        {
-            this.setX(this.getX() - 100);
-            this.setY(this.getY() -100);
-        }
-    }
-
     public void setWeapon(Weapon weapon){this.weapon = weapon;}
     public Weapon getWeapon(){return weapon;}
     public Boolean isDead(){
         if(health <= 0) return true;
         else return false;
     }
+
+    public void incrCounter(){
+        ++moveCounter;
+    }
+    public int getCounter(){
+        return moveCounter;
+    }
+
 }
