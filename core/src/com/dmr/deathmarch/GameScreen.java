@@ -401,7 +401,6 @@ public class GameScreen implements Screen {
                 }
 
                 projectile.bounce(projectile.getxVel(), projectile.getyVel(), 4);
-
             }
             /*//Bunny hit Player 2 Hit
             //This was for when Player Bunny had projectiles. Had to test that it could work, shoot itself.
