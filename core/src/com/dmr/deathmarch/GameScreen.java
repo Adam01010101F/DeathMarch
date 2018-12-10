@@ -118,9 +118,9 @@ public class GameScreen implements Screen {
         this.game = game;
         mapName = "maps/billiards.tmx";
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 1280, 1280);
+        camera.setToOrtho(false, 1280, 1200);
         screenCoords = new Vector3();
-        stage = new Stage(new FitViewport(1280,1280));
+        stage = new Stage(new FitViewport(1280,1200));
         shopSkin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
         pOne = player1;
@@ -356,6 +356,8 @@ public class GameScreen implements Screen {
         camera.update();
         for (Iterator<Projectile> iter = projectiles.iterator(); iter.hasNext(); ) {
             Projectile projectile = iter.next();
+            projectile.rotate(-20);
+            checkBoundaries(projectile);
             projectile.setPosition(projectile.getX() + 350 * projectile.getxVel() * Gdx.graphics.getDeltaTime()
                     , projectile.getY() + 350 * projectile.getyVel() * Gdx.graphics.getDeltaTime());
 //            if(projectile.getX()>1280 | projectile.getY()>720 || projectile.getX() < 0 || projectile.getY() < 0){
@@ -435,8 +437,12 @@ public class GameScreen implements Screen {
         // Bullet Physics|Destruction
         for (int i = 0; i < bile.size; i++) {
             Projectile proj = bile.get(i);
+            proj.rotate(-20);
+            checkBoundaries(proj);
+
             proj.setPosition(proj.getX() + 350 * proj.getxVel() * Gdx.graphics.getDeltaTime()
                     , proj.getY() + 350 * proj.getyVel() * Gdx.graphics.getDeltaTime());
+
             if (collidesLeft(
                     proj.getBoundingRectangle().getWidth(),
                     proj.getBoundingRectangle().getHeight(),
@@ -874,30 +880,69 @@ public class GameScreen implements Screen {
         checkBoundaries(pOne);
     }
 
-    private void checkBoundaries(Player player) {
+//    private void checkBoundaries(Player player) {
+//        //Handles Y coords
+//        if(player.getY()+270<0){                                                   //Bottom of the Screen
+//            screenCoords = new Vector3(player.getX(), stage.getHeight(),0);
+//            stage.getViewport().project(screenCoords);
+//            player.setY(screenCoords.y-150);
+//            System.out.println("Bot->Player: "+ player.getY() + " Player+Off: " + (player.getY()-150)
+//                    +" ScreenCoords: " + screenCoords.y +" ScreenCoords+Off: " + (screenCoords.y-150));
+//        } else if(player.getY()+160>=stage.getViewport().getWorldHeight()){        //Top of the Screen
+//            screenCoords = new Vector3(player.getX(), 0, 0);
+//            stage.getViewport().project(screenCoords);
+//            player.setY(screenCoords.y-270);
+//            System.out.println("Top->Player: " + player.getY() + " Player+Off: "+ (player.getY()-270)
+//                    +" ScreenCoords: " + screenCoords.y + " ScreenCoords+Off" + (screenCoords.y-270));
+//        }
+//        //Handles X coords
+//        if(player.getX()+270<0){                                                  //Left of the Screen
+//            screenCoords = new Vector3(1280, player.getY(),0);
+//            stage.getViewport().unproject(screenCoords);
+//            player.setX(screenCoords.x-270);
+//            System.out.println("Left->Player: "+ player.getX() + " Player+Off: " + (player.getX()-150)
+//                    +" ScreenCoords: " + screenCoords.x +" ScreenCoords+Off: " + (screenCoords.x-150));
+//
+//        } else if(player.getX()+270>=stage.getWidth()){                            //Right of the screen
+//            screenCoords = new Vector3(0, player.getY(),0);
+//            stage.getViewport().unproject(screenCoords);
+//            player.setX(screenCoords.x-270);
+//            System.out.println("Right->Player: " + player.getX() + " Player+Off: "+ (player.getX()-270)
+//                    +" ScreenCoords: " + screenCoords.x + " ScreenCoords+Off" + (screenCoords.x-270));
+//
+//        }
+//    }
+
+    private void checkBoundaries(Sprite boundSprite) {
         //Handles Y coords
-        if(player.getY()+270<0){                                                   //Bottom of the Screen
-            screenCoords = new Vector3(player.getX(), stage.getHeight(),0);
+        if(boundSprite.getY()+270<0){                                                   //Bottom of the Screen
+            screenCoords = new Vector3(boundSprite.getX(), stage.getHeight(),0);
             stage.getViewport().project(screenCoords);
-            player.setY(screenCoords.y-150);
-            System.out.println("Bot->Player: "+ player.getY() + " Player+Off: " + (player.getY()-150)
+            boundSprite.setY(screenCoords.y-150);
+            System.out.println("Bot->Sprite: "+ boundSprite.getY() + " Sprite+Off: " + (boundSprite.getY()-150)
                     +" ScreenCoords: " + screenCoords.y +" ScreenCoords+Off: " + (screenCoords.y-150));
-        } else if(player.getY()+160>=stage.getViewport().getWorldHeight()){        //Top of the Screen
-            screenCoords = new Vector3(player.getX(), 0, 0);
+        } else if(boundSprite.getY()+160>=stage.getViewport().getWorldHeight()){        //Top of the Screen
+            screenCoords = new Vector3(boundSprite.getX(), 0, 0);
             stage.getViewport().project(screenCoords);
-            player.setY(screenCoords.y-270);
-            System.out.println("Top->Player: " + player.getY() + " Player+Off: "+ (player.getY()-270)
+            boundSprite.setY(screenCoords.y-270);
+            System.out.println("Top->Sprite: " + boundSprite.getY() + " Sprite+Off: "+ (boundSprite.getY()-270)
                     +" ScreenCoords: " + screenCoords.y + " ScreenCoords+Off" + (screenCoords.y-270));
         }
         //Handles X coords
-        if(player.getX()+270<=0){                                                  //Left of the Screen
-            screenCoords = new Vector3(1280, player.getY(),0);
+        if(boundSprite.getX()+270<0){                                                  //Left of the Screen
+            screenCoords = new Vector3(1280, boundSprite.getY(),0);
+            stage.getViewport().unproject(screenCoords)
+            ;            boundSprite.setX(screenCoords.x-270);
+            System.out.println("Left->Sprite: "+ boundSprite.getX() + " Sprite+Off: " + (boundSprite.getX()-150)
+                    +" ScreenCoords: " + screenCoords.x +" ScreenCoords+Off: " + (screenCoords.x-150));
+
+        } else if(boundSprite.getX()+270>=stage.getWidth()){                            //Right of the screen
+            screenCoords = new Vector3(0, boundSprite.getY(),0);
             stage.getViewport().unproject(screenCoords);
-            player.setX(screenCoords.x-270);
-        } else if(player.getX()+270>=stage.getWidth()){                            //Right of the screen
-            screenCoords = new Vector3(0, player.getY(),0);
-            stage.getViewport().unproject(screenCoords);
-            player.setX(screenCoords.x-270);
+            boundSprite.setX(screenCoords.x-270);
+            System.out.println("Right->Sprite: " + boundSprite.getX() + " Sprite+Off: "+ (boundSprite.getX()-270)
+                    +" ScreenCoords: " + screenCoords.x + " ScreenCoords+Off" + (screenCoords.x-270));
+
         }
     }
 
